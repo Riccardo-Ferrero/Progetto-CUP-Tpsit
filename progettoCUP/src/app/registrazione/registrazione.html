@@ -1,0 +1,126 @@
+<div class="registration-page py-5">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-12 col-lg-10 col-xl-9">
+				<div class="registration-card shadow-sm">
+					<div class="registration-header">
+						<span class="badge rounded-pill text-bg-primary mb-2">Area Pazienti</span>
+						<h1 class="h3 mb-2">Registrazione Paziente</h1>
+						<p class="text-muted mb-0">Compila i dati richiesti per creare il tuo account in modo semplice e veloce.</p>
+					</div>
+
+					<div class="registration-body p-4 p-md-5">
+						<form (ngSubmit)="onSubmit()" #f="ngForm">
+							<section class="mb-4">
+								<h2 class="section-title">Dati anagrafici</h2>
+								<div class="row g-3">
+									<div class="col-md-6">
+										<label class="form-label" for="nome">Nome</label>
+										<input class="form-control" id="nome" type="text" placeholder="Es. Mario">
+									</div>
+									<div class="col-md-6">
+										<label class="form-label" for="cognome">Cognome</label>
+										<input class="form-control" id="cognome" type="text" placeholder="Es. Rossi">
+									</div>
+									<div class="col-md-4">
+										<label class="form-label" for="dataNascita">Data di nascita</label>
+										<input class="form-control" id="dataNascita" type="date">
+									</div>
+									<div class="col-md-4">
+										<label class="form-label" for="genere">Genere</label>
+										<select class="form-select" id="genere">
+											<option selected>Seleziona</option>
+											<option>Maschio</option>
+											<option>Femmina</option>
+											<option>Altro</option>
+										</select>
+									</div>
+									<div class="col-md-4">
+										<label class="form-label" for="codiceFiscale">Codice Fiscale</label>
+										<input class="form-control text-uppercase" id="codiceFiscale" type="text" maxlength="16" placeholder="RSSMRA80A01H501U">
+									</div>
+								</div>
+							</section>
+
+							<section class="mb-4">
+								<h2 class="section-title">Contatti e accesso</h2>
+								<div class="row g-3">
+									<div class="col-md-6">
+										<label class="form-label" for="email">Email</label>
+										<input class="form-control" id="email" type="email" placeholder="nome.cognome@email.it">
+									</div>
+									<div class="col-md-6">
+										<label class="form-label" for="telefono">Telefono</label>
+										<input class="form-control" id="telefono" type="tel" placeholder="Es. 3331234567">
+									</div>
+									<div class="col-md-6">
+										<label class="form-label" for="password">Password</label>
+										<input class="form-control" id="password" type="password" placeholder="Almeno 8 caratteri">
+									</div>
+									<div class="col-md-6">
+										<label class="form-label" for="confirmPassword">Conferma Password</label>
+										<input class="form-control" id="confirmPassword" type="password" placeholder="Ripeti la password">
+									</div>
+								</div>
+							</section>
+
+							<section class="mb-4">
+								<h2 class="section-title">Residenza</h2>
+								<div class="row g-3">
+									<div class="col-md-3">
+										<label class="form-label" for="toponimo">ID Toponimo</label>
+										<input class="form-control" id="toponimo" type="number" min="1" placeholder="Es. 1">
+									</div>
+									<div class="col-md-5">
+										<label class="form-label" for="indirizzo">Indirizzo</label>
+										<input class="form-control" id="indirizzo" type="text" placeholder="Es. Via Roma">
+									</div>
+									<div class="col-md-2">
+										<label class="form-label" for="ncivico">N. Civico</label>
+										<input class="form-control" id="ncivico" type="text" placeholder="Es. 12A">
+									</div>
+									<div class="col-md-2">
+										<label class="form-label" for="comune">ID Comune</label>
+										<input class="form-control" id="comune" type="number" min="1" placeholder="Es. 45">
+									</div>
+								</div>
+							</section>
+
+							<section class="mb-4">
+								<h2 class="section-title">Informazioni paziente</h2>
+								<div class="row g-3">
+									<div class="col-md-4">
+										<label class="form-label" for="gruppo">Gruppo sanguigno</label>
+										<select class="form-select" id="gruppo">
+											<option selected>Seleziona</option>
+											<option>0+</option>
+											<option>0-</option>
+											<option>A+</option>
+											<option>A-</option>
+											<option>B+</option>
+											<option>B-</option>
+											<option>AB+</option>
+											<option>AB-</option>
+										</select>
+									</div>
+									<div class="col-md-4">
+										<label class="form-label" for="peso">Peso (kg)</label>
+										<input class="form-control" id="peso" type="number" step="0.1" placeholder="Es. 72.5">
+									</div>
+									<div class="col-md-4">
+										<label class="form-label" for="altezza">Altezza (cm)</label>
+										<input class="form-control" id="altezza" type="number" step="0.1" placeholder="Es. 175">
+									</div>
+								</div>
+							</section>
+
+							<div class="d-flex justify-content-end pt-2">
+								<button type="button" class="btn btn-primary px-4 py-2">Crea account paziente</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
