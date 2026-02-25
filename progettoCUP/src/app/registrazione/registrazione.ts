@@ -10,6 +10,7 @@ export class Registrazione {
   paziente = {
     
   };
+  
   onSubmit(f: NgForm) {
 
   }
