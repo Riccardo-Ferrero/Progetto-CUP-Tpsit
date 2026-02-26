@@ -4,7 +4,6 @@
 			<div class="col-12 col-lg-10 col-xl-9">
 				<div class="registration-card shadow-sm">
 					<div class="registration-header">
-						<span class="badge rounded-pill text-bg-primary mb-2">Area Pazienti</span>
 						<h1 class="h3 mb-2">Registrazione Paziente</h1>
 						<p class="text-muted mb-0">Compila i dati richiesti per creare il tuo account in modo semplice e veloce.</p>
 					</div>
@@ -30,9 +29,9 @@
 										<label class="form-label" for="genere">Genere</label>
 										<select class="form-select" id="genere">
 											<option selected>Seleziona</option>
-											<option>Maschio</option>
-											<option>Femmina</option>
-											<option>Altro</option>
+											<option value="M">Maschio</option>
+											<option value="F">Femmina</option>
+											<option value="O">Altro</option>
 										</select>
 									</div>
 									<div class="col-md-4">
@@ -68,8 +67,14 @@
 								<h2 class="section-title">Residenza</h2>
 								<div class="row g-3">
 									<div class="col-md-3">
-										<label class="form-label" for="toponimo">ID Toponimo</label>
-										<input class="form-control" id="toponimo" type="number" min="1" placeholder="Es. 1">
+										<label class="form-label" for="toponimo">Toponimo</label>
+										<select class="form-select" id="toponimo" name="toponimo"  required>
+											<option [ngValue]="null">Seleziona</option>
+											@for(let t of toponimi; track $index){
+<option [value]="t.ID">{{ t.Toponimo }}</option>
+											}
+											
+										</select>
 									</div>
 									<div class="col-md-5">
 										<label class="form-label" for="indirizzo">Indirizzo</label>
@@ -93,14 +98,14 @@
 										<label class="form-label" for="gruppo">Gruppo sanguigno</label>
 										<select class="form-select" id="gruppo">
 											<option selected>Seleziona</option>
-											<option>0+</option>
-											<option>0-</option>
-											<option>A+</option>
-											<option>A-</option>
-											<option>B+</option>
-											<option>B-</option>
-											<option>AB+</option>
-											<option>AB-</option>
+											<option value="0+">0+</option>
+											<option value="0-">0-</option>
+											<option value="A+">A+</option>
+											<option value="A-">A-</option>
+											<option value="B+">B+</option>
+											<option value="B-">B-</option>
+											<option value="AB+">AB+</option>
+											<option value="AB-">AB-</option>
 										</select>
 									</div>
 									<div class="col-md-4">
