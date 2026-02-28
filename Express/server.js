@@ -18,18 +18,47 @@ app.listen(porta, ()=>{
 });
 
 app.use(express.json());
-
+connection.connect();
 app.get("/toponimi", (richiesta, risposta)=>{
     query = "SELECT * FROM toponimi";
-    connection.connect();
+    console.log("/toponimi");
+    
     connection.query(query, 
         function (error, results, fields) {
             if(error){
                 risposta.statusCode = 500
                 risposta.statusMessage = "Errore di connessione con il db"
-                risposta.send("Errore nell'esecuzione della query")
+                risposta.send("Errore nell'esecuzione della query" + error)
             }else
                 risposta.send(results)
-            connection.end();
+    });
+})
+
+app.get("/province", (richiesta, risposta)=>{
+    query = "SELECT * FROM province";
+    console.log("/province");
+    
+    connection.query(query, 
+        function (error, results, fields) {
+            if(error){
+                risposta.statusCode = 500
+                risposta.statusMessage = "Errore di connessione con il db"
+                risposta.send("Errore nell'esecuzione della query" + error)
+            }else
+                risposta.send(results)
+    });
+})
+
+app.post("/comuni", (richiesta, risposta)=>{
+    query = "SELECT * FROM comuni WHERE IDProvincia = " + richiesta.body.idProvincia;
+    console.log("/comuni", richiesta.body.idProvincia);
+    connection.query(query, 
+        function (error, results, fields) {
+            if(error){
+                risposta.statusCode = 500
+                risposta.statusMessage = "Errore di connessione con il db"
+                risposta.send("Errore nell'esecuzione della query" + error)
+            }else
+                risposta.send(results)
     });
 })

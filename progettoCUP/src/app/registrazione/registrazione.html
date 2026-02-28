@@ -15,20 +15,20 @@
 								<div class="row g-3">
 									<div class="col-md-6">
 										<label class="form-label" for="nome">Nome</label>
-										<input class="form-control" id="nome" type="text" placeholder="Es. Mario">
+										<input class="form-control" id="nome" name="nome" type="text" [(ngModel)]="Paziente.nome" placeholder="Es. Mario">
 									</div>
 									<div class="col-md-6">
 										<label class="form-label" for="cognome">Cognome</label>
-										<input class="form-control" id="cognome" type="text" placeholder="Es. Rossi">
+										<input class="form-control" id="cognome" name="cognome" type="text" [(ngModel)]="Paziente.cognome" placeholder="Es. Rossi">
 									</div>
 									<div class="col-md-4">
 										<label class="form-label" for="dataNascita">Data di nascita</label>
-										<input class="form-control" id="dataNascita" type="date">
+										<input class="form-control" id="dataNascita" name="dataNascita" type="date" [(ngModel)]="Paziente.dataNascita">
 									</div>
 									<div class="col-md-4">
 										<label class="form-label" for="genere">Genere</label>
-										<select class="form-select" id="genere">
-											<option selected>Seleziona</option>
+										<select class="form-select" id="genere" name="genere" [(ngModel)]="Paziente.genere">
+											<option value="">Seleziona</option>
 											<option value="M">Maschio</option>
 											<option value="F">Femmina</option>
 											<option value="O">Altro</option>
@@ -36,7 +36,7 @@
 									</div>
 									<div class="col-md-4">
 										<label class="form-label" for="codiceFiscale">Codice Fiscale</label>
-										<input class="form-control text-uppercase" id="codiceFiscale" type="text" maxlength="16" placeholder="RSSMRA80A01H501U">
+										<input class="form-control text-uppercase" id="codiceFiscale" name="codiceFiscale" type="text" maxlength="16" [(ngModel)]="Paziente.codiceFiscale" placeholder="Es. RSSMRA80A01H501U">
 									</div>
 								</div>
 							</section>
@@ -46,19 +46,19 @@
 								<div class="row g-3">
 									<div class="col-md-6">
 										<label class="form-label" for="email">Email</label>
-										<input class="form-control" id="email" type="email" placeholder="nome.cognome@email.it">
+										<input class="form-control" id="email" name="email" type="email" [(ngModel)]="Paziente.email" placeholder="Es. mario.rossi@email.it">
 									</div>
 									<div class="col-md-6">
 										<label class="form-label" for="telefono">Telefono</label>
-										<input class="form-control" id="telefono" type="tel" placeholder="Es. 3331234567">
+										<input class="form-control" id="telefono" name="telefono" type="tel" [(ngModel)]="Paziente.telefono" placeholder="Es. 3331234567">
 									</div>
 									<div class="col-md-6">
 										<label class="form-label" for="password">Password</label>
-										<input class="form-control" id="password" type="password" placeholder="Almeno 8 caratteri">
+										<input class="form-control" id="password" name="password" type="password" [(ngModel)]="Paziente.password" placeholder="Almeno 8 caratteri">
 									</div>
 									<div class="col-md-6">
 										<label class="form-label" for="confirmPassword">Conferma Password</label>
-										<input class="form-control" id="confirmPassword" type="password" placeholder="Ripeti la password">
+										<input class="form-control" id="confirmPassword" name="confermaPassword" type="password" [(ngModel)]="confermaPassword" placeholder="Ripeti la password">
 									</div>
 								</div>
 							</section>
@@ -66,27 +66,42 @@
 							<section class="mb-4">
 								<h2 class="section-title">Residenza</h2>
 								<div class="row g-3">
-									<div class="col-md-3">
+									<div class="col-12 col-md-3">
 										<label class="form-label" for="toponimo">Toponimo</label>
-										<select class="form-select" id="toponimo" name="toponimo"  required>
-											<option [ngValue]="null">Seleziona</option>
-											@for(let t of toponimi; track $index){
-<option [value]="t.ID">{{ t.Toponimo }}</option>
+										<select class="form-select" id="toponimo" name="toponimo" [(ngModel)]="Paziente.idToponimo" required>
+											<option value="">Seleziona...</option>
+											@for(t of toponimi; track $index){
+												<option [value]="t.ID">{{ t.Toponimo }}</option>
 											}
 											
 										</select>
 									</div>
-									<div class="col-md-5">
+									<div class="col-12 col-md-7">
 										<label class="form-label" for="indirizzo">Indirizzo</label>
-										<input class="form-control" id="indirizzo" type="text" placeholder="Es. Via Roma">
+										<input class="form-control" id="indirizzo" name="indirizzo" type="text" [(ngModel)]="Paziente.indirizzo" placeholder="Es. Via Roma">
 									</div>
-									<div class="col-md-2">
+									<div class="col-12 col-md-2">
 										<label class="form-label" for="ncivico">N. Civico</label>
-										<input class="form-control" id="ncivico" type="text" placeholder="Es. 12A">
+										<input class="form-control" id="ncivico" name="ncivico" type="text" [(ngModel)]="Paziente.ncivico" placeholder="Es. 12A">
 									</div>
-									<div class="col-md-2">
-										<label class="form-label" for="comune">ID Comune</label>
-										<input class="form-control" id="comune" type="number" min="1" placeholder="Es. 45">
+									<div class="col-12 col-md-6">
+										<label class="form-label" for="provincia">Provincia</label>
+										<select class="form-select" id="provincia" name="provincia"
+											[(ngModel)]="Paziente.idProvincia" required (change)="onProvinciaChange($event)">
+											<option value="">Seleziona...</option>
+											@for(pr of province; track $index){
+												<option [value]="pr.ID">{{ pr.Provincia }}</option>
+											}
+										</select>
+									</div>
+									<div class="col-12 col-md-6">
+										<label class="form-label" for="comune">Comune</label>
+										<select class="form-select" id="comune" name="comune" [(ngModel)]="Paziente.idComune" disabled>
+											<option value="">Seleziona...</option>
+											@for(comune of comuni; track $index){
+												<option [value]="comune.ID">{{ comune.Comune }}</option>
+											}
+										</select>
 									</div>
 								</div>
 							</section>
@@ -96,8 +111,8 @@
 								<div class="row g-3">
 									<div class="col-md-4">
 										<label class="form-label" for="gruppo">Gruppo sanguigno</label>
-										<select class="form-select" id="gruppo">
-											<option selected>Seleziona</option>
+										<select class="form-select" id="gruppo" name="gruppoSanguigno" [(ngModel)]="Paziente.gruppoSanguigno">
+											<option [ngValue]="''">Seleziona</option>
 											<option value="0+">0+</option>
 											<option value="0-">0-</option>
 											<option value="A+">A+</option>
@@ -110,17 +125,17 @@
 									</div>
 									<div class="col-md-4">
 										<label class="form-label" for="peso">Peso (kg)</label>
-										<input class="form-control" id="peso" type="number" step="0.1" placeholder="Es. 72.5">
+										<input class="form-control" id="peso" name="peso" type="number" step="0.1" [(ngModel)]="Paziente.peso" placeholder="Es. 72.5">
 									</div>
 									<div class="col-md-4">
 										<label class="form-label" for="altezza">Altezza (cm)</label>
-										<input class="form-control" id="altezza" type="number" step="0.1" placeholder="Es. 175">
+										<input class="form-control" id="altezza" name="altezza" type="number" step="0.1" [(ngModel)]="Paziente.altezza" placeholder="Es. 175">
 									</div>
 								</div>
 							</section>
 
 							<div class="d-flex justify-content-end pt-2">
-								<button type="button" class="btn btn-primary px-4 py-2">Crea account paziente</button>
+								<button type="submit" class="btn btn-primary px-4 py-2">Crea account paziente</button>
 							</div>
 						</form>
 					</div>
