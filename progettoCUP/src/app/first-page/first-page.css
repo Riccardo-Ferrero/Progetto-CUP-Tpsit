@@ -29,25 +29,37 @@
 	color: #466582;
 }
 
-.btn-primary {
-	background: linear-gradient(180deg,#007bff 0%, #0069d9 100%);
-	border: none;
-	box-shadow: 0 6px 14px rgba(0,123,255,0.18);
-	transition: transform .08s ease, box-shadow .12s ease;
-}
-.btn-primary:focus, .btn-primary:active {
-	outline: 3px solid rgba(0,123,255,0.18);
-	transform: translateY(-1px);
-}
-
-.btn-outline-secondary {
-	border-radius: 8px;
-}
-
 .first-card .btn {
 	border-radius: 10px;
 	padding-left: 1.4rem;
 	padding-right: 1.4rem;
+	transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+
+.first-card .btn-login {
+	color: #41566f;
+	border-color: #cfd9e6;
+	background-color: #ffffff;
+}
+
+.first-card .btn-login:hover {
+	color: #2d4158;
+	border-color: #b7c7dc;
+	background-color: #f7fbff;
+	transform: translateY(-1px);
+	box-shadow: 0 8px 16px rgba(24,39,75,0.11);
+}
+
+.first-card .btn-register {
+	background: linear-gradient(180deg,#007bff 0%, #0069d9 100%);
+	border: none;
+	box-shadow: 0 6px 14px rgba(0,123,255,0.18);
+}
+
+.first-card .btn-register:hover {
+	background: linear-gradient(180deg,#1888ff 0%, #0074ec 100%);
+	transform: translateY(-1px);
+	box-shadow: 0 9px 18px rgba(0,123,255,0.24);
 }
 
 @media (max-width: 576px) {
@@ -71,5 +83,5 @@
 }
 
 
-.first-card a { color: #fff; }
+.first-card .btn-register { color: #fff; }
 

@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule,NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'registrazione',
@@ -18,7 +19,7 @@ export class Registrazione{
     email: '',
     telefono: '',
     password: '',
-    
+    confermaPassword: '',
 
     idToponimo: '',
     indirizzo: '',
@@ -30,18 +31,76 @@ export class Registrazione{
     peso: null,
     altezza: null
   };
-  confermaPassword: string = '';
+
+ 
   toponimi: any[] = [];
   province: any[] = [];
   comuni: any[] = [];
-  
-  onSubmit(f: NgForm) {
+  maxDate: string = '';
+  erroreRegistrazione: string = '';
 
+  async onSubmit(f: NgForm) {
+    this.erroreRegistrazione = '';
+    this.cdr.detectChanges();
+
+    try {
+      const risposta = await fetch("http://localhost:8081/registrazione", {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(this.Paziente)
+      });
+
+      const rispostaTesto = await risposta.text();
+      let ris: any = null;
+      try {
+        ris = rispostaTesto ? JSON.parse(rispostaTesto) : null;
+      } catch {
+        ris = { result: 'error', message: rispostaTesto || 'Errore durante la registrazione' };
+      }
+
+      if(risposta.ok && ris.result === 'success') {
+        console.log('Paziente registrato con successo');
+        f.resetForm();
+        this.router.navigate(['/home']);
+        localStorage.setItem("user", JSON.stringify(ris.idUtente));
+        return;
+      }
+
+      if (ris?.field === 'email') {
+        this.erroreRegistrazione = 'Questa email è già in uso';
+        this.cdr.detectChanges();
+        return;
+      }
+
+      if (ris?.field === 'codiceFiscale') {
+        this.erroreRegistrazione = 'Questo codice fiscale è già in uso';
+        this.cdr.detectChanges();
+        return;
+      }
+
+      if (risposta.status === 409) {
+        this.erroreRegistrazione = ris?.message || 'Email o codice fiscale già in uso';
+        this.cdr.detectChanges();
+        return;
+      }
+
+      this.erroreRegistrazione = ris?.message || 'Registrazione non riuscita';
+      this.cdr.detectChanges();
+    } catch {
+      this.erroreRegistrazione = 'Errore di connessione al server';
+      this.cdr.detectChanges();
+    }
+  }
+
+  onCodiceFiscaleChange(value: string) {
+    this.Paziente.codiceFiscale = (value ?? '').toUpperCase().replace(/\s+/g, '');
   }
   
-  constructor(private cdr: ChangeDetectorRef) {
+  constructor(private cdr: ChangeDetectorRef, private router: Router) {
     this.getToponimi();
     this.getProvince();
+    const today = new Date();
+    this.maxDate = today.toISOString().split('T')[0];
   }
 
   async getToponimi(){
@@ -108,5 +167,6 @@ export class Registrazione{
       this.cdr.detectChanges();
     }
   }
+
 
 }

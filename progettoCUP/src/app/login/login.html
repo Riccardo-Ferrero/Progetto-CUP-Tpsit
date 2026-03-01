@@ -1,0 +1,58 @@
+<div class="login-page py-5">
+    <div class="container">
+        <div class="login-shell mx-auto">
+            <div class="login-card shadow-sm">
+                <div class="login-header">
+                    <h1 class="h3 mb-2">Accesso</h1>
+                    <p class="text-muted mb-0">Inserisci email e password per entrare nel tuo account.</p>
+                </div>
+
+                <div class="login-body p-4 p-md-5 pt-md-4">
+                    <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+                        <div class="mb-3">
+                            <label class="form-label" for="email">Email</label>
+                            <input class="form-control" id="email" name="email" type="email"
+                                placeholder="Es. mario.rossi@email.it" [(ngModel)]="Login.email" required
+                                pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" #email="ngModel">
+                            @if(email.invalid && email.dirty){
+                            <div style="color:red;font-weight:bold">
+                                @if(email.errors?.["required"]){
+                                <small>Il campo email è obbligatorio</small>
+                                }
+                                @if(email.errors?.["pattern"]){
+                                <small>Il campo email inserito non è valido</small>
+                                }
+                            </div>
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="password">Password</label>
+                            <input class="form-control" id="password" name="password" type="password"
+                                placeholder="Inserisci la password" [(ngModel)]="Login.password" required
+                                minlength="8" #password="ngModel">
+                            @if(password.invalid && password.dirty){
+                            <div style="color:red;font-weight:bold">
+                                @if(password.errors?.["required"]){
+                                <small>Il campo password è obbligatorio</small>
+                                }
+                                @if(password.errors?.["minlength"]){
+                                <small>La password deve essere lunga almeno 8 caratteri</small>
+                                }
+                            </div>
+                            }
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-4">
+                            <a href="#" class="small text-decoration-none">Password dimenticata? TO DO</a>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary py-2" [disabled]="f.invalid">Accedi</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
