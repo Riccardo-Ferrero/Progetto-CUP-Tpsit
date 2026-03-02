@@ -3,10 +3,12 @@ import { Registrazione } from './registrazione/registrazione';
 import { FirstPage } from './first-page/first-page';
 import { HomePage } from './home-page/home-page';
 import { Login } from './login/login';
+import { NuovaPrenotazione } from './nuova-prenotazione/nuova-prenotazione';
 
 export const routes: Routes = [
   { path: 'registrazione', component: Registrazione },
   { path: '', component: FirstPage},
   { path: 'home', component: HomePage},
-  { path: 'login', component: Login}
+  { path: 'login', component: Login},
+  { path: 'nuova-prenotazione', component: NuovaPrenotazione}
 ];
