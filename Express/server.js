@@ -314,3 +314,30 @@ app.post("/recentToPay", (richiesta, risposta) => {
     })
 })
 
+app.get("/reparti", (richiesta, risposta)=>{
+    query = "SELECT * FROM reparti WHERE ValReparto = ' '";
+    console.log("/reparti");
+        connection.query(query, 
+        function (error, results, fields) {
+            if(error){
+                risposta.statusCode = 500
+                risposta.statusMessage = "Errore di connessione con il db"
+                risposta.send("Errore nell'esecuzione della query" + error)
+            }else
+                risposta.send(results)
+    });
+})
+
+app.get("/dottoriReparto", (richiesta, risposta)=>{
+    query = "SELECT d.ID, u.Nome, u.Cognome FROM dottori d JOIN utenti u ON d.IDUtente = u.ID WHERE d.ValDottore = ' ' AND u.ValUtente = ' ' AND d.IDReparto = ?";
+    console.log("/dottoriReparto", richiesta.query);
+    connection.query(query, [richiesta.query.repartoId], (error, results) => {
+        if (error) {
+            risposta.statusCode = 500
+            risposta.statusMessage = "Errore di connessione con il db"
+            risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
+        } else {
+            risposta.send({result: "success", dottori: results})
+        }
+    })
+})
