@@ -341,3 +341,17 @@ app.get("/dottoriReparto", (richiesta, risposta)=>{
         }
     })
 })
+
+app.post("/prenotazioni", (richiesta, risposta) => {
+    const query = `SELECT * FROM Prenotazioni WHERE IDDottore= ? AND ValPrenotazione = ' ' ORDER BY DataOra DESC`;
+    console.log("/prenotazioni", richiesta.body);
+    connection.query(query, [richiesta.body.idDottore], (error, results) => {
+        if (error) {
+            risposta.statusCode = 500
+            risposta.statusMessage = "Errore di connessione con il db"
+            risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
+        } else {
+            risposta.send({result: "success", prenotazioni: results})
+        }
+    })
+})
