@@ -445,11 +445,11 @@ INSERT INTO Comuni (ID, Comune, IDProvincia, CAP, ValComune) VALUES
 (350,'Balmuccia',8,'13010',' ');
 
 
-
+-- NON USABILI O LA PASSWORD NON VA
 INSERT INTO Utenti
 (Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
 VALUES
-('Luca', 'Bianchi', '1980-05-12', 'M', '+39 3331234501', 'luca.bianchi.dottore@example.com', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8eA4fCjQ9vDOMkMt2rt7NmBGG99nm.', 'BNCLCU80E12H501A', 1, 'Roma', '12', 'S', 181, ' ');
+('Luca', 'Bianchi', '1980-05-12', 'M', '+39 3331234501', 'luca.bianchi.dottore@example.com', '$2b$10$ai6t6X3mHevmd0LPrIc1gemBFCfOuBPicpXrVvYiWqq...', 'BNCLCU80E12H501A', 1, 'Roma', '12', 'S', 181, ' ');
 
 INSERT INTO Dottori
 (IDUtente, IDReparto, Ruolo, PrezzoVisita, ValDottore)
@@ -460,7 +460,7 @@ VALUES
 INSERT INTO Utenti
 (Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
 VALUES
-('Mario', 'Rossi', '1992-04-18', 'M', '+39 3331234503', 'mario.rossi.paziente@example.com', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8eA4fCjQ9vDOMkMt2rt7NmBGG99nm.', 'RSSMRA92D18H501C', 1, 'Garibaldi', '21', ' ', 181, ' ');
+('Mario', 'Rossi', '1992-04-18', 'M', '+39 3331234503', 'mario.rossi.paziente@example.com', '$2b$10$ai6t6X3mHevmd0LPrIc1gemBFCfOuBPicpXrVvYiWqq...', 'RSSMRA92D18H501C', 1, 'Garibaldi', '21', ' ', 181, ' ');
 
 INSERT INTO Pazienti
 (IDUtente, GruppoSanguigno, Peso, Altezza, ValPaziente)
@@ -471,14 +471,14 @@ VALUES
 INSERT INTO Utenti
 (Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
 VALUES
-('Elisa', 'Verdi', '1985-09-20', 'F', '+39 3331234502', 'elisa.verdi.dottore@example.com', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8eA4fCjQ9vDOMkMt2rt7NmBGG99nm.', 'VRDLSA85P60H501B', 2, 'Milano', '8A', 'S', 182, ' ');
+('Elisa', 'Verdi', '1985-09-20', 'F', '+39 3331234502', 'elisa.verdi.dottore@example.com', '$2b$10$ai6t6X3mHevmd0LPrIc1gemBFCfOuBPicpXrVvYiWqq...', 'VRDLSA85P60H501B', 2, 'Milano', '8A', 'S', 182, ' ');
 
 INSERT INTO Dottori
 (IDUtente, IDReparto, Ruolo, PrezzoVisita, ValDottore)
 VALUES
 (LAST_INSERT_ID(), 2, 'Specialista', 80.00, ' ');
 
-
+-- SISTEMARE GLI INDICI AD OGNI UTILIZZO
 INSERT INTO Prenotazioni
 (IDPaziente, IDDottore, DataOra, Pagata, TipoVisita, ValPrenotazione)
 VALUES
