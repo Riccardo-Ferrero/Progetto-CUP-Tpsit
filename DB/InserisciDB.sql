@@ -449,7 +449,7 @@ INSERT INTO Comuni (ID, Comune, IDProvincia, CAP, ValComune) VALUES
 INSERT INTO Utenti
 (Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
 VALUES
-('Luca', 'Bianchi', '1980-05-12', 'M', '+39 3331234501', 'luca.bianchi.dottore@example.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'BNCLCU80E12H501A', 1, 'Roma', '12', 'S', 181, ' ');
+('Luca', 'Bianchi', '1980-05-12', 'M', '+39 3331234501', 'luca.bianchi.dottore@example.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'BNCLCU80E12H501A', 1, 'Roma', '12', ' ', 181, ' ');
 
 INSERT INTO Dottori
 (IDUtente, IDReparto, Ruolo, PrezzoVisita, ValDottore)
@@ -471,7 +471,7 @@ VALUES
 INSERT INTO Utenti
 (Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
 VALUES
-('Elisa', 'Verdi', '1985-09-20', 'F', '+39 3331234502', 'elisa.verdi.dottore@example.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'VRDLSA85P60H501B', 2, 'Milano', '8A', 'S', 182, ' ');
+('Elisa', 'Verdi', '1985-09-20', 'F', '+39 3331234502', 'elisa.verdi.dottore@example.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'VRDLSA85P60H501B', 2, 'Milano', '8A', ' ', 182, ' ');
 
 INSERT INTO Dottori
 (IDUtente, IDReparto, Ruolo, PrezzoVisita, ValDottore)

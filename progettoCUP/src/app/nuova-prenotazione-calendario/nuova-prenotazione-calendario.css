@@ -1,0 +1,26 @@
+/* calendar styles for nuova-prenotazione-calendario - copied from nuova-prenotazione.css */
+.calendar-panel { display:flex; flex-direction:column; }
+.calendar-grid { display:block; }
+.calendar-row { display:grid; grid-template-columns: 90px repeat(5, 1fr); gap: .7rem; align-items:center; }
+.calendar-row.header { align-items:end; }
+.calendar-cell { padding: .35rem .45rem; }
+.calendar-cell.time-col { font-weight:700; color:#2e4f73; text-align:right; padding-right:1rem; font-size:.95rem; }
+.calendar-cell.day { font-weight:700; color:#24364b; text-align:center; }
+.calendar-cell .day-num { display:block; font-size:1.1rem; font-weight:800; color:#173b64; margin-top: .15rem; }
+
+.hour-row { margin-top:.45rem; }
+.slot { width:100%; border-radius:.6rem; padding:.45rem .55rem; text-align:center; font-weight:600; border:1px solid transparent; transition:transform .12s ease, box-shadow .12s ease, background .12s ease, border-color .12s ease; }
+.slot:hover { transform:translateY(-2px); box-shadow:0 8px 18px rgba(24,39,75,0.06); }
+
+.slot.free { background: linear-gradient(90deg,#f3fbf6 0%,#e9f8ee 100%); border:1px solid #cfead6; color:#13613a; }
+.slot.taken { background: linear-gradient(90deg,#fff6f0 0%,#fff1ea 100%); border:1px solid #f4d0b8; color:#8a5b3a; }
+.slot.selected { background: linear-gradient(90deg,#dbeeff 0%,#cfe9ff 100%); border:1px solid #9fc9ff; color:#08385b; }
+
+.legend-dot { display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:.5rem; box-shadow:0 2px 6px rgba(24,39,75,.08); }
+.free-dot { background: linear-gradient(90deg,#dff7e9 0%,#bfeed6 100%); border:1px solid #cfead6; }
+.taken-dot { background: linear-gradient(90deg,#fff1e8 0%,#ffdcc7 100%); border:1px solid #f4d0b8; }
+.selected-dot { background: linear-gradient(90deg,#dbeeff 0%,#cfe9ff 100%); border:1px solid #9fc9ff; }
+
+@media (max-width:992px) { .calendar-row { grid-template-columns:70px repeat(5,1fr); } .calendar-cell.time-col { text-align:left; padding-left:.6rem; } }
+@media (max-width:576px) { .calendar-row { grid-template-columns:60px repeat(5,1fr); gap:.45rem } .slot{ padding:.35rem .45rem; font-size:.82rem } }
+

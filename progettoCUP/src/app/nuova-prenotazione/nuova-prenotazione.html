@@ -1,1 +1,63 @@
-<p>nuova-prenotazione works!</p>
+<div class="nuova-prenotazione py-4">
+  <div class="container-fluid">
+    <header class="dashboard-header mb-3">
+      <div class="d-flex flex-column align-items-center text-center gap-2">
+        <div>
+          <p class="intestazione mb-1">Nuova prenotazione</p>
+          <h1 class="h4 mb-0">Dettagli prenotazione</h1>
+          <p class="text-muted small mb-0">Compila le informazioni qui sotto poi clicca <strong>Avanti</strong> per scegliere data e orario.</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="row g-3 justify-content-center">
+      <div class="col-12 col-lg-8 mx-auto">
+        <section class="panel">
+          <div class="panel-head mb-2">
+            <h2 class="panel-title">Informazioni prenotazione</h2>
+          </div>
+
+          <form class="mt-3">
+            <!-- Paziente: omit (logged user) -->
+            <div class="mb-3">
+              <label class="form-label small">Reparto</label>
+              <select class="form-select form-select-sm">
+                <option>Cardiologia</option>
+                <option>Oculistica</option>
+                <option>Ortopedia</option>
+                <option>Pediatria</option>
+                <option>Chirurgia</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small">Dottore</label>
+              <select class="form-select form-select-sm">
+                <option>-- Seleziona dottore --</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small">Tipo visita</label>
+              <select class="form-select form-select-sm">
+                <option>Visita specialistica</option>
+                <option>Prima visita</option>
+                <option>Visita di controllo</option>
+                <option>Follow-up</option>
+                <option>Esame diagnostico</option>
+                <option>Consulenza</option>
+                <option>Teleconsulto</option>
+              </select>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+              <a class="btn btn-outline-secondary btn-sm flex-fill" href="#">Annulla</a>
+              <a class="btn btn-primary btn-sm flex-fill" href="/nuova-prenotazione-calendario">Avanti</a>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+

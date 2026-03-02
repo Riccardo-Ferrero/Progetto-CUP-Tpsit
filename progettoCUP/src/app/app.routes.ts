@@ -4,11 +4,13 @@ import { FirstPage } from './first-page/first-page';
 import { HomePage } from './home-page/home-page';
 import { Login } from './login/login';
 import { NuovaPrenotazione } from './nuova-prenotazione/nuova-prenotazione';
+import { NuovaPrenotazioneCalendario } from './nuova-prenotazione-calendario/nuova-prenotazione-calendario';
 
 export const routes: Routes = [
   { path: 'registrazione', component: Registrazione },
   { path: '', component: FirstPage},
   { path: 'home', component: HomePage},
   { path: 'login', component: Login},
-  { path: 'nuova-prenotazione', component: NuovaPrenotazione}
+  { path: 'nuova-prenotazione', component: NuovaPrenotazione},
+  { path: 'nuova-prenotazione-calendario', component: NuovaPrenotazioneCalendario}
 ];

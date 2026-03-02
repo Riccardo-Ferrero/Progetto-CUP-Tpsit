@@ -1,0 +1,80 @@
+<div class="nuova-prenotazione-calendario py-3 py-lg-3">
+	<div class="container-fluid">
+		<header class="dashboard-header mb-3">
+			<div class="d-flex justify-content-between align-items-center">
+				<div>
+					<p class="intestazione mb-1">Nuova prenotazione</p>
+					<h1 class="h4 mb-0">Seleziona giorno e orario</h1>
+					<p class="text-muted small mb-0">Calendario: lun-vend · 08:00–17:00</p>
+				</div>
+				<div class="d-flex gap-2 align-items-center">
+					<select class="form-select form-select-sm" style="width:180px; display:inline-block">
+						<option>Questa settimana</option>
+						<option>Prossima settimana</option>
+						<option>Tra 1 mese</option>
+						<option>Tra 1 anno</option>
+					</select>
+					<div class="input-group input-group-sm ms-1">
+						<input type="date" class="form-control form-control-sm" aria-label="Vai a data">
+						<button class="btn btn-outline-secondary" type="button">Vai a data</button>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<section class="panel h-100 calendar-panel">
+			<div class="panel-head d-flex justify-content-between align-items-center mb-2">
+				<h2 class="panel-title mb-0">Calendario disponibilità</h2>
+				<div class="d-flex gap-2 align-items-center">
+					<div class="btn-group btn-group-sm" role="group">
+						<button class="btn btn-outline-secondary">‹</button>
+						<button class="btn btn-outline-secondary">›</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="calendar-grid mt-3">
+				<div class="calendar-row header align-items-end">
+					<div class="calendar-cell time-col"></div>
+					<div class="calendar-cell day text-center">Lunedì<br><span class="day-num">12</span><br><small class="text-muted">Mar</small></div>
+					<div class="calendar-cell day text-center">Martedì<br><span class="day-num">13</span><br><small class="text-muted">Mar</small></div>
+					<div class="calendar-cell day text-center">Mercoledì<br><span class="day-num">14</span><br><small class="text-muted">Mar</small></div>
+					<div class="calendar-cell day text-center">Giovedì<br><span class="day-num">15</span><br><small class="text-muted">Mar</small></div>
+					<div class="calendar-cell day text-center">Venerdì<br><span class="day-num">16</span><br><small class="text-muted">Mar</small></div>
+				</div>
+
+				<div class="calendar-hours">
+					<!-- full 08-17 rows -->
+					<div class="calendar-row hour-row">
+						<div class="calendar-cell time-col">08:00</div>
+						<div class="calendar-cell"><button class="btn slot free">08:00</button></div>
+						<div class="calendar-cell"><button class="btn slot taken">08:00</button></div>
+						<div class="calendar-cell"><button class="btn slot free">08:00</button></div>
+						<div class="calendar-cell"><button class="btn slot free">08:00</button></div>
+						<div class="calendar-cell"><button class="btn slot free">08:00</button></div>
+					</div>
+					<!-- ... (other hours similar) ... -->
+					<div class="calendar-row hour-row">
+						<div class="calendar-cell time-col">09:00</div>
+						<div class="calendar-cell"><button class="btn slot free">09:00</button></div>
+						<div class="calendar-cell"><button class="btn slot free">09:00</button></div>
+						<div class="calendar-cell"><button class="btn slot selected">09:00</button></div>
+						<div class="calendar-cell"><button class="btn slot free">09:00</button></div>
+						<div class="calendar-cell"><button class="btn slot free">09:00</button></div>
+					</div>
+					<!-- rest omitted for brevity in template; UI-only mockup -->
+				</div>
+
+				<div class="d-flex gap-3 align-items-center mt-3">
+					<div class="legend d-flex gap-3 align-items-center">
+						<span class="legend-item"><span class="legend-dot free-dot"></span> Libero</span>
+						<span class="legend-item"><span class="legend-dot taken-dot"></span> Occupato</span>
+						<span class="legend-item"><span class="legend-dot selected-dot"></span> Selezionato</span>
+					</div>
+				</div>
+
+				<p class="mt-3 small text-muted">Mockup grafico: colori per evidenziare stato slot. Pulsanti e input sono UI-only.</p>
+			</div>
+		</section>
+	</div>
+</div>
