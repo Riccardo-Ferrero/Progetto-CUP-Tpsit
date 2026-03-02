@@ -8,6 +8,16 @@ DELETE FROM Province;
 DELETE FROM Reparti;
 DELETE FROM Toponimi;
 
+ALTER TABLE Toponimi AUTO_INCREMENT = 1;
+ALTER TABLE Reparti AUTO_INCREMENT = 1;
+ALTER TABLE Province AUTO_INCREMENT = 1;
+ALTER TABLE Comuni AUTO_INCREMENT = 1;
+ALTER TABLE Utenti AUTO_INCREMENT = 1;
+ALTER TABLE Pazienti AUTO_INCREMENT = 1;
+ALTER TABLE Dottori AUTO_INCREMENT = 1;
+ALTER TABLE Prenotazioni AUTO_INCREMENT = 1;
+ALTER TABLE Pagamenti AUTO_INCREMENT = 1;
+
 INSERT INTO Toponimi (ID, Toponimo, ValToponimo) VALUES
 (1,'Via',' '),
 (2,'Viale',' '),
@@ -433,3 +443,50 @@ INSERT INTO Comuni (ID, Comune, IDProvincia, CAP, ValComune) VALUES
 (348,'Gattinara',8,'13045',' '),
 (349,'Civiasco',8,'13010',' '),
 (350,'Balmuccia',8,'13010',' ');
+
+
+
+INSERT INTO Utenti
+(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
+VALUES
+('Luca', 'Bianchi', '1980-05-12', 'M', '+39 3331234501', 'luca.bianchi.dottore@example.com', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8eA4fCjQ9vDOMkMt2rt7NmBGG99nm.', 'BNCLCU80E12H501A', 1, 'Roma', '12', 'S', 181, ' ');
+
+INSERT INTO Dottori
+(IDUtente, IDReparto, Ruolo, PrezzoVisita, ValDottore)
+VALUES
+(LAST_INSERT_ID(), 1, 'Specialista', 95.00, ' ');
+
+
+INSERT INTO Utenti
+(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
+VALUES
+('Mario', 'Rossi', '1992-04-18', 'M', '+39 3331234503', 'mario.rossi.paziente@example.com', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8eA4fCjQ9vDOMkMt2rt7NmBGG99nm.', 'RSSMRA92D18H501C', 1, 'Garibaldi', '21', ' ', 181, ' ');
+
+INSERT INTO Pazienti
+(IDUtente, GruppoSanguigno, Peso, Altezza, ValPaziente)
+VALUES
+(LAST_INSERT_ID(), 'A+', 72.50, 178.00, ' ');
+
+
+INSERT INTO Utenti
+(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
+VALUES
+('Elisa', 'Verdi', '1985-09-20', 'F', '+39 3331234502', 'elisa.verdi.dottore@example.com', '$2b$10$CwTycUXWue0Thq9StjUM0uJ8eA4fCjQ9vDOMkMt2rt7NmBGG99nm.', 'VRDLSA85P60H501B', 2, 'Milano', '8A', 'S', 182, ' ');
+
+INSERT INTO Dottori
+(IDUtente, IDReparto, Ruolo, PrezzoVisita, ValDottore)
+VALUES
+(LAST_INSERT_ID(), 2, 'Specialista', 80.00, ' ');
+
+
+INSERT INTO Prenotazioni
+(IDPaziente, IDDottore, DataOra, Pagata, TipoVisita, ValPrenotazione)
+VALUES
+(1, 1, '2026-03-10 09:00:00', 'N', 'Visita cardiologica di controllo', ' '),
+(1, 2, '2026-03-12 10:00:00', 'N', 'Visita dermatologica', ' '),
+(1, 1, '2026-03-18 11:00:00', 'S', 'Follow-up ortopedico', ' '),
+(1, 2, '2026-03-25 16:00:00', 'N', 'Ecografia addome', ' ');
+
+
+
+

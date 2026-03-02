@@ -74,6 +74,7 @@ CREATE TABLE IF NOT EXISTS Prenotazioni (
     IDDottore INT NOT NULL,
     DataOra DATETIME NOT NULL,
     Pagata CHAR(1),
+    TipoVisita VARCHAR(255) NOT NULL,
     ValPrenotazione CHAR(1),
     FOREIGN KEY (IDPaziente) REFERENCES Pazienti(ID),
     FOREIGN KEY (IDDottore) REFERENCES Dottori(ID)

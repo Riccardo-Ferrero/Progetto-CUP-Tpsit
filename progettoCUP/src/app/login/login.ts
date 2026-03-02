@@ -25,7 +25,10 @@ export class Login {
     const ris = await risposta.json();
 
     if(ris.result == "success"){
-      localStorage.setItem("user", JSON.stringify(ris.idUtente));
+      localStorage.setItem("utenteId", String(ris.idUtente));
+      localStorage.setItem("utenteNome", ris.nome || '');
+      localStorage.setItem("utenteCognome", ris.cognome || '');
+      localStorage.setItem("utenteEmail", ris.email || '');
       this.router.navigate(['/home']);
     }
 

@@ -21,7 +21,7 @@ app.listen(porta, ()=>{
 app.use(express.json());
 connection.connect();
 app.get("/toponimi", (richiesta, risposta)=>{
-    query = "SELECT * FROM toponimi";
+    query = "SELECT * FROM toponimi WHERE ValToponimo = ' '";
     console.log("/toponimi");
     
     connection.query(query, 
@@ -36,7 +36,7 @@ app.get("/toponimi", (richiesta, risposta)=>{
 })
 
 app.get("/province", (richiesta, risposta)=>{
-    query = "SELECT * FROM province";
+    query = "SELECT * FROM province WHERE ValProvincia = ' '";
     console.log("/province");
     
     connection.query(query, 
@@ -51,9 +51,9 @@ app.get("/province", (richiesta, risposta)=>{
 })
 
 app.post("/comuni", (richiesta, risposta)=>{
-    query = "SELECT * FROM comuni WHERE IDProvincia = " + richiesta.body.idProvincia;
+    query = "SELECT * FROM comuni WHERE IDProvincia = ? AND ValComune = ' '";
     console.log("/comuni", richiesta.body.idProvincia);
-    connection.query(query, 
+    connection.query(query, [richiesta.body.idProvincia],
         function (error, results, fields) {
             if(error){
                 risposta.statusCode = 500
@@ -159,7 +159,7 @@ app.post("/registrazione", (richiesta, risposta)=>{
 })
 
 app.post("/login", (richiesta, risposta)=>{
-    const query = "SELECT ID, Email, Password FROM utenti WHERE Email = ? LIMIT 1";
+    const query = "SELECT ID, Nome, Cognome, Email, Password FROM utenti WHERE Email = ? AND ValUtente = ' ' LIMIT 1";
     console.log("/login", richiesta.body);
 
     connection.query(query, [richiesta.body.email], (error, results) => {
@@ -189,7 +189,127 @@ app.post("/login", (richiesta, risposta)=>{
                 return;
             }
 
-            risposta.send({ result: "success", idUtente: utente.ID })
+            risposta.send({
+                result: "success",
+                idUtente: utente.ID,
+                nome: utente.Nome,
+                cognome: utente.Cognome,
+                email: utente.Email
+            })
         })
+    })
+})
+
+app.post("/nextThreeAppointments", (richiesta, risposta) => {
+        const query = `SELECT pr.*, u.Nome AS NomeDottore, u.Cognome AS CognomeDottore
+                                     FROM Prenotazioni pr
+                                     JOIN Pazienti p ON pr.IDPaziente = p.ID
+                                     JOIN Dottori d ON pr.IDDottore = d.ID
+                                     JOIN Utenti u ON d.IDUtente = u.ID
+                                     WHERE p.IDUtente = ?
+                                         AND pr.DataOra > NOW()
+                                         AND pr.ValPrenotazione = ' '
+                                         AND p.ValPaziente = ' '
+                                         AND d.ValDottore = ' '
+                                         AND u.ValUtente = ' '
+                   ORDER BY pr.DataOra ASC
+                   LIMIT 3`;
+    console.log("/nextThreeAppointments", richiesta.body);
+    connection.query(query, [richiesta.body.idUtente], (error, results) => {
+        if (error) {
+            risposta.statusCode = 500
+            risposta.statusMessage = "Errore di connessione con il db"
+            risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
+        } else {
+            risposta.send({result: "success", prenotazioni: results})
+        }
+    })
+})
+
+app.post("/countNextMothAppointments", (richiesta, risposta) => {
+        const query = `SELECT COUNT(*) AS count
+                                     FROM Prenotazioni pr
+                                     JOIN Pazienti p ON pr.IDPaziente = p.ID
+                                     WHERE p.IDUtente = ?
+                                         AND pr.DataOra > NOW()
+                                         AND pr.DataOra < DATE_ADD(NOW(), INTERVAL 1 MONTH)
+                                         AND pr.ValPrenotazione = ' '
+                                         AND p.ValPaziente = ' '`;
+    
+    console.log("/countNextMothAppointments", richiesta.body);
+    connection.query(query, [richiesta.body.idUtente], (error, results) => {
+        if (error) {
+            risposta.statusCode = 500
+            risposta.statusMessage = "Errore di connessione con il db"
+            risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
+        } else {
+            const count = results[0].count || 0;
+            risposta.send({result: "success", count: count})
+        }
+    })
+})
+
+app.post("/totalToPay", (richiesta, risposta) => {
+    const query = `SELECT SUM(d.PrezzoVisita) AS total
+                   FROM Prenotazioni pr
+                   JOIN Pazienti p ON pr.IDPaziente = p.ID
+                   JOIN Dottori d ON pr.IDDottore = d.ID
+                   WHERE p.IDUtente = ? AND pr.Pagata = 'N' AND pr.ValPrenotazione = ' ' AND p.ValPaziente = ' ' AND d.ValDottore = ' '`;
+    console.log("/totalToPay", richiesta.body);
+    connection.query(query, [richiesta.body.idUtente], (error, results) => {
+        if (error) {
+            risposta.statusCode = 500
+            risposta.statusMessage = "Errore di connessione con il db"
+            risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
+        } else {
+            const total = results[0].total || 0;
+            risposta.send({result: "success", total: total})
+        }
+    })
+})
+
+app.post("/countToPayAppointments", (richiesta, risposta) => {
+    const query = `SELECT COUNT(*) AS count
+                   FROM Prenotazioni pr
+                   JOIN Pazienti p ON pr.IDPaziente = p.ID
+                   JOIN Dottori d ON pr.IDDottore = d.ID
+                   WHERE p.IDUtente = ? AND pr.Pagata = 'N' AND pr.ValPrenotazione = ' ' AND p.ValPaziente = ' ' AND d.ValDottore = ' '`;
+    console.log("/countToPayAppointments", richiesta.body);
+    connection.query(query, [richiesta.body.idUtente], (error, results) => {
+        if (error) {
+            risposta.statusCode = 500
+            risposta.statusMessage = "Errore di connessione con il db"
+            risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
+        } else {
+            const count = results[0].count || 0;
+            risposta.send({result: "success", count: count})
+        }
+    })
+})
+
+app.post("/recentToPay", (richiesta, risposta) => {
+        const query = `SELECT pr.*, d.PrezzoVisita, u.Nome AS NomeDottore, u.Cognome AS CognomeDottore
+                                     FROM Prenotazioni pr
+                                     JOIN Pazienti p ON pr.IDPaziente = p.ID
+                                     JOIN Dottori d ON pr.IDDottore = d.ID
+                                     JOIN Utenti u ON d.IDUtente = u.ID
+                   WHERE p.IDUtente = ?
+                    AND pr.Pagata = 'N'
+                    AND pr.ValPrenotazione = ' '
+                    AND p.ValPaziente = ' '
+                    AND d.ValDottore = ' '
+                    AND u.ValUtente = ' '
+                    AND pr.DataOra >= NOW()
+                    AND pr.DataOra < DATE_ADD(NOW(), INTERVAL 2 WEEK)
+                   ORDER BY pr.DataOra ASC`;
+    console.log("/recentToPay", richiesta.body);
+    connection.query(query, [richiesta.body.idUtente], (error, results) => {
+        if (error) {
+            risposta.statusCode = 500
+            risposta.statusMessage = "Errore di connessione con il db"
+            risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
+        } else {
+            risposta.send({result: "success", prenotazioni: results, prenotazione: results[0] || null})
+        }
     })
 })

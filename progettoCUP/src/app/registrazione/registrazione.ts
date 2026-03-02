@@ -60,9 +60,12 @@ export class Registrazione{
 
       if(risposta.ok && ris.result === 'success') {
         console.log('Paziente registrato con successo');
+        localStorage.setItem("utenteId", String(ris.idUtente));
+        localStorage.setItem("utenteNome", ris.nome || this.Paziente.nome || '');
+        localStorage.setItem("utenteCognome", ris.cognome || this.Paziente.cognome || '');
+        localStorage.setItem("utenteEmail", ris.email || this.Paziente.email || '');
         f.resetForm();
         this.router.navigate(['/home']);
-        localStorage.setItem("user", JSON.stringify(ris.idUtente));
         return;
       }
 
