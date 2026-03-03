@@ -35,7 +35,7 @@ export class NuovaPrenotazioneCalendario {
   creaOrariCalendario(): string[] {
     const orari: string[] = [];
 
-    for (let ora = 8; ora <= 17; ora++) {
+    for (let ora = 9; ora <= 17; ora++) {
       orari.push(`${String(ora).padStart(2, '0')}:00`);
     }
 

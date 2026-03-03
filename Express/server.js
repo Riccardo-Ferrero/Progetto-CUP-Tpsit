@@ -555,3 +555,22 @@ app.post("/pagaPrenotazione", (richiesta, risposta) => {
         }
     })
 })
+
+app.post("/logout", (richiesta, risposta) => {
+    if (!richiesta.session) {
+        risposta.status(200).send({ result: "success" });
+        return;
+    }
+
+    richiesta.session.destroy(err => {
+        if (err) {
+            console.error("Errore logout:", err);
+            risposta.status(500).send({ result: "error", message: "Impossibile terminare la sessione" });
+            return;
+        }
+
+        risposta.clearCookie('connect.sid'); // cambiare se hai un nome cookie personalizzato
+        console.log("/logout");
+        risposta.send({ result: "success" });
+    });
+});

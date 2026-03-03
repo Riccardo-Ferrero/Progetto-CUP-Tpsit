@@ -92,5 +92,14 @@ export class VisualizzaPrenotazioni {
     localStorage.setItem('idPrenotazionePagamento', String(id));
     this.router.navigate(['/pagamento']);
   }
+  
+  async onModificaClick(idPrenotazione: number) {
+    const id = Number(idPrenotazione || 0);
+    if (!id) {
+      return;
+    }
 
+    localStorage.setItem('idPrenotazioneModifica', String(id));
+    this.router.navigate(['/modifica-prenotazione']);
+  }
 }

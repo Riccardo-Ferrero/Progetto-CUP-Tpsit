@@ -9,7 +9,7 @@
 				</div>
 				<div class="d-flex gap-2">
 					<a routerLink="/nuova-prenotazione" class="btn btn-primary btn-sm">Nuova prenotazione</a>
-					<button type="button" class="btn btn-outline-danger btn-sm">Logout</button>
+					<button type="button" class="btn btn-outline-danger btn-sm" (click)="onLogoutClick()">Logout</button>
 				</div>
 			</div>
 		</header>
@@ -63,7 +63,7 @@
 								<p class="row-main mb-1">{{ appuntamento.TipoVisita }}</p>
 								<p class="row-sub mb-0">Dott. {{ appuntamento.CognomeDottore }} {{ appuntamento.NomeDottore }}</p>
 								<div class="d-flex justify-content-end mt-2">
-									<button class="btn btn-outline-warning btn-sm modifica-btn" type="button">Modifica</button>
+									<button class="btn btn-outline-warning btn-sm modifica-btn" type="button" (click)="onModificaClick(appuntamento.ID)">Modifica</button>
 								</div>
 							</div>
 						</div>
@@ -99,7 +99,7 @@
 							<strong>{{ formatEuro(prenotazione.PrezzoVisita) }}</strong>
 						</div>
 						<div class="d-flex justify-content-end mt-2 gap-2">
-							<button class="btn btn-outline-warning btn-sm modifica-btn" type="button">Modifica</button>
+							<button class="btn btn-outline-warning btn-sm modifica-btn" type="button" (click)="onModificaClick(prenotazione.ID)">Modifica</button>
 							<button class="btn btn-outline-primary btn-sm" type="button" (click)="onPagaPrenotazione(prenotazione.ID)">Paga ora</button>
 						</div>
 					</div>

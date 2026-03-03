@@ -46,7 +46,7 @@
 							</div>
 						</div>
 						<div class="prenotazione-actions">
-							<button type="button" class="btn btn-outline-warning btn-sm modifica-btn">Modifica</button>
+							<button type="button" class="btn btn-outline-warning btn-sm modifica-btn" (click)="onModificaClick(prenotazione.ID)">Modifica</button>
 							@if(!isPrenotazionePagata(prenotazione) && !isPrenotazioneAnnullata(prenotazione)){
 							<button type="button" class="btn btn-outline-primary btn-sm paga-btn" (click)="onPagaPrenotazione(prenotazione.ID)">Paga</button>
 							}

@@ -7,6 +7,7 @@ import { NuovaPrenotazione } from './nuova-prenotazione/nuova-prenotazione';
 import { NuovaPrenotazioneCalendario } from './nuova-prenotazione-calendario/nuova-prenotazione-calendario';
 import { VisualizzaPrenotazioni } from './visualizza-prenotazioni/visualizza-prenotazioni';
 import { Pagamento } from './pagamento/pagamento';
+import { ModificaPrenotazione } from './modifica-prenotazione/modifica-prenotazione';
 
 export const routes: Routes = [
   { path: 'registrazione', component: Registrazione },
@@ -16,5 +17,6 @@ export const routes: Routes = [
   { path: 'nuova-prenotazione', component: NuovaPrenotazione},
   { path: 'nuova-prenotazione-calendario', component: NuovaPrenotazioneCalendario},
   { path: 'visualizza-prenotazioni', component: VisualizzaPrenotazioni},
-  { path: 'pagamento', component: Pagamento}
+  { path: 'pagamento', component: Pagamento},
+  { path: 'modifica-prenotazione', component: ModificaPrenotazione}
 ];

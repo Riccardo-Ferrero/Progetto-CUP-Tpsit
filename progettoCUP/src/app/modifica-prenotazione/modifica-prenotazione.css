@@ -1,0 +1,299 @@
+.modifica-prenotazione-page {
+	min-height: 100%;
+	width: 100%;
+}
+
+.dashboard-header {
+	padding: 1.1rem 1.25rem;
+	border: 1px solid #e6edf8;
+	border-radius: 0.9rem;
+	background: #ffffff;
+}
+
+.intestazione {
+	font-size: 0.76rem;
+	font-weight: 700;
+	letter-spacing: 0.45px;
+	color: #607a96;
+	text-transform: uppercase;
+}
+
+.step-badge {
+	padding: 0.35rem 0.75rem;
+	border: 1px solid #d8e6f8;
+	border-radius: 999px;
+	background: #f3f8ff;
+	color: #36597e;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.35px;
+	text-transform: uppercase;
+}
+
+.panel {
+	background: #ffffff;
+	border: 1px solid #e6edf8;
+	border-radius: 0.95rem;
+	padding: 1.1rem 1.15rem;
+	box-shadow: 0 8px 22px rgba(24, 39, 75, 0.06);
+}
+
+.panel-head {
+	padding-bottom: 0.65rem;
+	border-bottom: 1px solid #edf2f8;
+}
+
+.panel-title {
+	font-size: 1rem;
+	font-weight: 700;
+	color: #24364b;
+}
+
+.readonly-card {
+	padding: 0.75rem 0.85rem;
+	border: 1px solid #e7eef8;
+	border-radius: 0.75rem;
+	background: linear-gradient(140deg, #fbfdff 0%, #f4f9ff 100%);
+}
+
+.readonly-label {
+	font-size: 0.75rem;
+	font-weight: 700;
+	color: #5f7897;
+	letter-spacing: 0.25px;
+	text-transform: uppercase;
+}
+
+.readonly-value {
+	font-size: 0.95rem;
+	font-weight: 600;
+	color: #2a3e57;
+}
+
+.form-label {
+	font-weight: 700;
+	color: #3d5874;
+	letter-spacing: 0.2px;
+	margin-bottom: 0.35rem;
+}
+
+.form-select {
+	height: 2.45rem;
+	border-radius: 0.65rem;
+	border-color: #d8e4f3;
+	background-color: #fbfdff;
+	font-size: 0.92rem;
+	color: #2a435e;
+	transition: border-color 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
+}
+
+.form-select:hover {
+	border-color: #bcd2ef;
+	background-color: #ffffff;
+}
+
+.form-select:focus {
+	border-color: #84b5f4;
+	box-shadow: 0 0 0 0.22rem rgba(13, 110, 253, 0.15);
+	background-color: #ffffff;
+}
+
+.helper-note {
+	padding: 0.7rem 0.8rem;
+	border: 1px solid #d6e7f4;
+	border-radius: 0.7rem;
+	background: #f7fbff;
+	color: #4e6f8f;
+	font-size: 0.83rem;
+	font-weight: 600;
+}
+
+.btn-primary,
+.btn-outline-secondary {
+	border-radius: 0.65rem;
+	font-weight: 600;
+}
+
+.calendario-toolbar {
+	white-space: nowrap;
+}
+
+/* calendar styles copied from nuova-prenotazione-calendario */
+.calendar-panel {
+	display: flex;
+	flex-direction: column;
+}
+
+.calendar-grid {
+	display: block;
+}
+
+.calendar-row {
+	display: grid;
+	grid-template-columns: 90px repeat(5, 1fr);
+	gap: .5rem;
+	align-items: center;
+}
+
+.calendar-row.header {
+	align-items: end;
+}
+
+.calendar-cell {
+	padding: .2rem .35rem;
+}
+
+.calendar-cell.time-col {
+	font-weight: 700;
+	color: #2e4f73;
+	text-align: right;
+	padding-right: .75rem;
+	font-size: .88rem;
+}
+
+.calendar-cell.day {
+	font-weight: 700;
+	color: #24364b;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: .1rem;
+	line-height: 1.15;
+}
+
+.calendar-cell.day .day-name {
+	display: block;
+}
+
+.calendar-cell .day-num {
+	display: block;
+	font-size: 1rem;
+	font-weight: 800;
+	color: #173b64;
+	margin: 0;
+}
+
+.calendar-cell.day .day-month {
+	display: block;
+	margin: 0;
+	line-height: 1.15;
+}
+
+.hour-row {
+	margin-top: .25rem;
+}
+
+.slot {
+	width: 100%;
+	border-radius: .6rem;
+	padding: .36rem .46rem;
+	text-align: center;
+	font-weight: 600;
+	font-size: .84rem;
+	line-height: 1.1;
+	border: 1px solid transparent;
+	transition: transform .12s ease, box-shadow .12s ease, background .12s ease, border-color .12s ease;
+}
+
+.slot:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 18px rgba(24, 39, 75, 0.06);
+}
+
+.slot.free {
+	background: linear-gradient(90deg, #f3fbf6 0%, #e9f8ee 100%);
+	border: 1px solid #cfead6;
+	color: #13613a;
+}
+
+.slot.taken {
+	background: linear-gradient(90deg, #fff6f0 0%, #fff1ea 100%);
+	border: 1px solid #f4d0b8;
+	color: #8a5b3a;
+}
+
+.slot.selected {
+	background: linear-gradient(90deg, #dbeeff 0%, #cfe9ff 100%);
+	border: 1px solid #9fc9ff;
+	color: #08385b;
+}
+
+.slot.past {
+	background: linear-gradient(90deg, #f1f4f7 0%, #e9edf2 100%);
+	border: 1px solid #d7dde5;
+	color: #7a8795;
+	cursor: not-allowed;
+	box-shadow: none;
+}
+
+.slot:disabled {
+	opacity: 1;
+}
+
+.slot:disabled:hover,
+.slot.past:hover {
+	transform: none;
+	box-shadow: none;
+}
+
+.legend-dot {
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	margin-right: .5rem;
+	box-shadow: 0 2px 6px rgba(24, 39, 75, .08);
+}
+
+.free-dot {
+	background: linear-gradient(90deg, #dff7e9 0%, #bfeed6 100%);
+	border: 1px solid #cfead6;
+}
+
+.taken-dot {
+	background: linear-gradient(90deg, #fff1e8 0%, #ffdcc7 100%);
+	border: 1px solid #f4d0b8;
+}
+
+.selected-dot {
+	background: linear-gradient(90deg, #dbeeff 0%, #cfe9ff 100%);
+	border: 1px solid #9fc9ff;
+}
+
+@media (max-width:992px) {
+	.calendar-row {
+		grid-template-columns: 70px repeat(5, 1fr);
+		gap: .4rem;
+	}
+
+	.calendar-cell.time-col {
+		text-align: left;
+		padding-left: .4rem;
+	}
+}
+
+@media (max-width:576px) {
+	.calendar-row {
+		grid-template-columns: 60px repeat(5, 1fr);
+		gap: .45rem
+	}
+
+	.slot {
+		padding: .35rem .45rem;
+		font-size: .82rem
+	}
+}
+
+@media (max-width:768px) {
+
+	.dashboard-header,
+	.panel {
+		padding: 0.95rem;
+	}
+
+	.step-badge {
+		font-size: 0.7rem;
+	}
+}
