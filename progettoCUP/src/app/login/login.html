@@ -47,8 +47,9 @@
                             <a href="#" class="small text-decoration-none">Password dimenticata? TO DO</a>
                         </div>
 
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary py-2" [disabled]="f.invalid">Accedi</button>
+                        <div class="d-flex gap-2">
+                            <a routerLink="/" class="btn btn-outline-secondary py-2 flex-fill">Indietro</a>
+                            <button type="submit" class="btn btn-primary py-2 flex-fill" [disabled]="f.invalid">Accedi</button>
                         </div>
                     </form>
                 </div>

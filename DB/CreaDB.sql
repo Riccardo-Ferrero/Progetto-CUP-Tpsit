@@ -79,14 +79,3 @@ CREATE TABLE IF NOT EXISTS Prenotazioni (
     FOREIGN KEY (IDPaziente) REFERENCES Pazienti(ID),
     FOREIGN KEY (IDDottore) REFERENCES Dottori(ID)
 );
-
-CREATE TABLE IF NOT EXISTS Pagamenti (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    IDPrenotazione INT NOT NULL UNIQUE,
-    DataPagamento DATETIME NOT NULL,
-    MetodoPagamento VARCHAR(50) NOT NULL,
-    IBAN VARCHAR(34),
-    DataScadenzaCarta DATE,
-    ValPagamento CHAR(1),
-    FOREIGN KEY (IDPrenotazione) REFERENCES Prenotazioni(ID)
-);

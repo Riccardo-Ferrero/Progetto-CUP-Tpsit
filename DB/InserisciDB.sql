@@ -1,4 +1,3 @@
-DELETE FROM Pagamenti;
 DELETE FROM Prenotazioni;
 DELETE FROM Dottori;
 DELETE FROM Pazienti;
@@ -16,7 +15,6 @@ ALTER TABLE Utenti AUTO_INCREMENT = 1;
 ALTER TABLE Pazienti AUTO_INCREMENT = 1;
 ALTER TABLE Dottori AUTO_INCREMENT = 1;
 ALTER TABLE Prenotazioni AUTO_INCREMENT = 1;
-ALTER TABLE Pagamenti AUTO_INCREMENT = 1;
 
 INSERT INTO Toponimi (ID, Toponimo, ValToponimo) VALUES
 (1,'Via',' '),
@@ -482,10 +480,10 @@ VALUES
 INSERT INTO Prenotazioni
 (IDPaziente, IDDottore, DataOra, Pagata, TipoVisita, ValPrenotazione)
 VALUES
-(1, 1, '2026-03-10 09:00:00', 'N', 'Visita cardiologica di controllo', ' '),
-(1, 2, '2026-03-12 10:00:00', 'N', 'Visita dermatologica', ' '),
-(1, 1, '2026-03-18 11:00:00', 'S', 'Follow-up ortopedico', ' '),
-(1, 2, '2026-03-25 16:00:00', 'N', 'Ecografia addome', ' ');
+(1, 1, '2026-03-10 09:00:00', 'N', 'Visita di controllo', ' '),
+(1, 2, '2026-03-12 10:00:00', 'N', 'Visita di controllo', ' '),
+(1, 1, '2026-03-18 11:00:00', 'S', 'Follow-up', ' '),
+(1, 2, '2026-03-25 16:00:00', 'N', 'Esame diagnostico', ' ');
 
 
 

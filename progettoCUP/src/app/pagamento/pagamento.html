@@ -1,0 +1,114 @@
+<div class="pagamento-page py-3 py-lg-4">
+	<div class="container-fluid">
+		<header class="dashboard-header mb-3">
+			<div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3">
+				<div>
+					<p class="intestazione mb-1">Pagamento</p>
+					<h1 class="h3 mb-1">Pagamento Online</h1>
+					<p class="text-muted mb-0">Inserisci i dati della carta per effettuare il pagamento online in modo sicuro.</p>
+				</div>
+			</div>
+		</header>
+
+		<div class="row g-3">
+			<div class="col-12">
+				<section class="panel border-primary-subtle h-100">
+					<div class="panel-head mb-3">
+						<h2 class="panel-title mb-1 text-primary-emphasis">Dati carta</h2>
+						<p class="text-muted mb-0 small">Compila i campi richiesti come in un normale pagamento online.</p>
+					</div>
+
+					<div class="totale-inline mb-3">
+						<span class="totale-inline-label">Totale da pagare</span>
+						<span class="totale-inline-value">€ 80,00</span>
+					</div>
+
+					<form class="pagamento-form" #f="ngForm" (ngSubmit)="onSubmit(f)">
+						<div class="mb-3">
+							<label class="form-label small">Intestatario carta</label>
+							<input type="text" class="form-control form-control-sm" placeholder="Nome Cognome" #nomeIntestatario="ngModel" [(ngModel)]="pagamento.nomeIntestatario" name="nomeIntestatario" required />
+                            @if(nomeIntestatario.invalid && nomeIntestatario.dirty){
+										<div style="color:red;font-weight:bold">
+											@if(nomeIntestatario.errors?.["required"]){
+											<small>Il campo nome intestatario è obbligatorio</small>
+											}
+										</div>
+										}
+						</div>
+
+						<div class="mb-3">
+							<label class="form-label small">Numero carta</label>
+							<input type="text" class="form-control form-control-sm" placeholder="0000 0000 0000 0000" pattern="[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}" #numeroCarta="ngModel" [(ngModel)]="pagamento.numeroCarta" name="numeroCarta" required />
+                            @if(numeroCarta.invalid && numeroCarta.dirty){
+										<div style="color:red;font-weight:bold">
+											@if(numeroCarta.errors?.["required"]){
+											<small>Il campo numero carta è obbligatorio</small>
+											}
+                                            @if(numeroCarta.errors?.["pattern"]){
+											<small>Il campo numero carta inserito non è valido</small>
+											}
+										</div>
+										}
+						</div>
+
+						<div class="row g-3">
+							<div class="col-12 col-sm-4">
+								<label class="form-label small">Scadenza</label>
+								<input type="text" class="form-control form-control-sm" placeholder="MM/AA" pattern="^(0[1-9]|1[0-2])\/?([0-9]{2})$" [(ngModel)]="pagamento.scadenza" #scadenza="ngModel" name="scadenza" required />
+                                @if(scadenza.invalid && scadenza.dirty){
+										<div style="color:red;font-weight:bold">
+											@if(scadenza.errors?.["required"]){
+											<small>Il campo scadenza è obbligatorio</small>
+											}
+                                            @if(scadenza.errors?.["pattern"]){
+											<small>Il campo scadenza inserito non è valido</small>
+											}
+										</div>
+										}
+							</div>
+							<div class="col-12 col-sm-4">
+								<label class="form-label small">CVV</label>
+								<input type="password" class="form-control form-control-sm" placeholder="***" [(ngModel)]="pagamento.cvv" #cvv="ngModel" name="cvv" required minlength="3" maxlength="3"/>
+                                @if(cvv.invalid && cvv.dirty){
+										<div style="color:red;font-weight:bold">
+											@if(cvv.errors?.["required"]){
+											<small>Il campo CVV è obbligatorio</small>
+											}
+                                            @if(cvv.errors?.["minlength"] || cvv.errors?.["maxlength"]){
+                                            <small>Il campo CVV deve essere di 3 cifre</small>
+                                            }
+										</div>
+										}
+							</div>
+							<div class="col-12 col-sm-4">
+								<label class="form-label small">Circuito</label>
+								<select class="form-select form-select-sm" [(ngModel)]="pagamento.circuito" name="circuito" #circuito="ngModel" required>
+                                    <option value="" selected>Seleziona circuito</option>
+									<option value="visa">Visa</option>
+									<option value="mastercard">Mastercard</option>
+									<option value="american-express">American Express</option>
+								</select>
+                                @if(circuito.invalid && circuito.dirty){
+										<div style="color:red;font-weight:bold">
+											@if(circuito.errors?.["required"]){
+											<small>Il campo circuito è obbligatorio</small>
+											}
+										</div>
+										}
+							</div>
+						</div>
+
+						<div class="mt-3 helper-note">
+							Pagamento protetto: i dati della carta sono cifrati e gestiti in modo sicuro.
+						</div>
+
+						<div class="d-flex justify-content-end gap-2 mt-4">
+							<a routerLink="/visualizza-prenotazioni" class="btn btn-outline-secondary btn-sm px-4">Indietro</a>
+							<button type="submit" [disabled]="f.invalid" class="btn btn-primary btn-sm px-4">Conferma pagamento</button>
+						</div>
+					</form>
+				</section>
+			</div>
+		</div>
+	</div>
+</div>

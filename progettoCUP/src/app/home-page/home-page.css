@@ -17,6 +17,17 @@
 	text-transform: uppercase;
 }
 
+.custom-success-alert {
+	padding: 0.7rem 0.9rem;
+	border-radius: 0.75rem;
+	border: 1px solid #bfe7cc;
+	background: linear-gradient(140deg, #eefcf3 0%, #e7f9ee 100%);
+	color: #1f6a43;
+	font-size: 0.9rem;
+	font-weight: 600;
+	box-shadow: 0 6px 16px rgba(24, 39, 75, 0.05);
+}
+
 .info-card {
 	background: #ffffff;
 	border: 1px solid #e6edf8;
@@ -177,6 +188,11 @@
 .btn-primary,
 .btn-outline-primary,
 .btn-outline-secondary {
+	border-radius: 0.65rem;
+	font-weight: 600;
+}
+
+.modifica-btn {
 	border-radius: 0.65rem;
 	font-weight: 600;
 }

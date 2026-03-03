@@ -2,10 +2,24 @@ var express = require("express");
 var mysql = require("mysql")
 var cors = require("cors")
 var bcrypt = require("bcrypt")
+var session = require('express-session')
 var app = express();
 var porta = 8081
 
-app.use(cors());
+app.use(cors({
+    origin: true,
+    credentials: true
+}));
+
+app.use(session({
+    secret: 'cupSession',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false,
+        maxAge: 24 * 60 * 60 * 1000 
+    }
+}))
 
 var connection = mysql.createConnection({
   host     : 'localhost',
@@ -20,6 +34,16 @@ app.listen(porta, ()=>{
 
 app.use(express.json());
 connection.connect();
+
+function getIdUtenteDaRichiesta(richiesta) {
+    const idDaSessione = Number(richiesta.session?.utente?.idUtente || 0)
+    if (idDaSessione) {
+        return idDaSessione
+    }
+
+    return Number(richiesta.body?.idUtente || 0)
+}
+
 app.get("/toponimi", (richiesta, risposta)=>{
     query = "SELECT * FROM toponimi WHERE ValToponimo = ' '";
     console.log("/toponimi");
@@ -148,7 +172,20 @@ app.post("/registrazione", (richiesta, risposta)=>{
                         risposta.statusMessage = "Errore di connessione con il db"
                         risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
                     }else{
-                        risposta.send({result: "success", idUtente: idUtente})
+                        richiesta.session.utente = {
+                            idUtente: idUtente,
+                            nome: richiesta.body.nome,
+                            cognome: richiesta.body.cognome,
+                            email: richiesta.body.email
+                        }
+
+                        risposta.send({
+                            result: "success",
+                            idUtente: idUtente,
+                            nome: richiesta.body.nome,
+                            cognome: richiesta.body.cognome,
+                            email: richiesta.body.email
+                        })
                     }
                 })
             }
@@ -189,6 +226,13 @@ app.post("/login", (richiesta, risposta)=>{
                 return;
             }
 
+            richiesta.session.utente = {
+                idUtente: utente.ID,
+                nome: utente.Nome,
+                cognome: utente.Cognome,
+                email: utente.Email
+            }
+
             risposta.send({
                 result: "success",
                 idUtente: utente.ID,
@@ -200,7 +244,30 @@ app.post("/login", (richiesta, risposta)=>{
     })
 })
 
+app.get("/utenteSessione", (richiesta, risposta) => {
+    const utenteSessione = richiesta.session?.utente;
+
+    if (!utenteSessione) {
+        risposta.status(401).send({ result: "unauthorized" })
+        return;
+    }
+
+    risposta.send({
+        result: "success",
+        idUtente: utenteSessione.idUtente,
+        nome: utenteSessione.nome,
+        cognome: utenteSessione.cognome,
+        email: utenteSessione.email
+    })
+})
+
 app.post("/nextThreeAppointments", (richiesta, risposta) => {
+        const idUtente = getIdUtenteDaRichiesta(richiesta);
+        if (!idUtente) {
+            risposta.status(401).send({result: "unauthorized"})
+            return;
+        }
+
         const query = `SELECT pr.*, u.Nome AS NomeDottore, u.Cognome AS CognomeDottore
                                      FROM Prenotazioni pr
                                      JOIN Pazienti p ON pr.IDPaziente = p.ID
@@ -215,7 +282,7 @@ app.post("/nextThreeAppointments", (richiesta, risposta) => {
                    ORDER BY pr.DataOra ASC
                    LIMIT 3`;
     console.log("/nextThreeAppointments", richiesta.body);
-    connection.query(query, [richiesta.body.idUtente], (error, results) => {
+    connection.query(query, [idUtente], (error, results) => {
         if (error) {
             risposta.statusCode = 500
             risposta.statusMessage = "Errore di connessione con il db"
@@ -227,6 +294,12 @@ app.post("/nextThreeAppointments", (richiesta, risposta) => {
 })
 
 app.post("/countNextMothAppointments", (richiesta, risposta) => {
+    const idUtente = getIdUtenteDaRichiesta(richiesta);
+    if (!idUtente) {
+        risposta.status(401).send({result: "unauthorized"})
+        return;
+    }
+
         const query = `SELECT COUNT(*) AS count
                                      FROM Prenotazioni pr
                                      JOIN Pazienti p ON pr.IDPaziente = p.ID
@@ -237,7 +310,7 @@ app.post("/countNextMothAppointments", (richiesta, risposta) => {
                                          AND p.ValPaziente = ' '`;
     
     console.log("/countNextMothAppointments", richiesta.body);
-    connection.query(query, [richiesta.body.idUtente], (error, results) => {
+    connection.query(query, [idUtente], (error, results) => {
         if (error) {
             risposta.statusCode = 500
             risposta.statusMessage = "Errore di connessione con il db"
@@ -250,13 +323,19 @@ app.post("/countNextMothAppointments", (richiesta, risposta) => {
 })
 
 app.post("/totalToPay", (richiesta, risposta) => {
+    const idUtente = getIdUtenteDaRichiesta(richiesta);
+    if (!idUtente) {
+        risposta.status(401).send({result: "unauthorized"})
+        return;
+    }
+
     const query = `SELECT SUM(d.PrezzoVisita) AS total
                    FROM Prenotazioni pr
                    JOIN Pazienti p ON pr.IDPaziente = p.ID
                    JOIN Dottori d ON pr.IDDottore = d.ID
                    WHERE p.IDUtente = ? AND pr.Pagata = 'N' AND pr.ValPrenotazione = ' ' AND p.ValPaziente = ' ' AND d.ValDottore = ' '`;
     console.log("/totalToPay", richiesta.body);
-    connection.query(query, [richiesta.body.idUtente], (error, results) => {
+    connection.query(query, [idUtente], (error, results) => {
         if (error) {
             risposta.statusCode = 500
             risposta.statusMessage = "Errore di connessione con il db"
@@ -269,13 +348,19 @@ app.post("/totalToPay", (richiesta, risposta) => {
 })
 
 app.post("/countToPayAppointments", (richiesta, risposta) => {
+    const idUtente = getIdUtenteDaRichiesta(richiesta);
+    if (!idUtente) {
+        risposta.status(401).send({result: "unauthorized"})
+        return;
+    }
+
     const query = `SELECT COUNT(*) AS count
                    FROM Prenotazioni pr
                    JOIN Pazienti p ON pr.IDPaziente = p.ID
                    JOIN Dottori d ON pr.IDDottore = d.ID
                    WHERE p.IDUtente = ? AND pr.Pagata = 'N' AND pr.ValPrenotazione = ' ' AND p.ValPaziente = ' ' AND d.ValDottore = ' '`;
     console.log("/countToPayAppointments", richiesta.body);
-    connection.query(query, [richiesta.body.idUtente], (error, results) => {
+    connection.query(query, [idUtente], (error, results) => {
         if (error) {
             risposta.statusCode = 500
             risposta.statusMessage = "Errore di connessione con il db"
@@ -288,6 +373,12 @@ app.post("/countToPayAppointments", (richiesta, risposta) => {
 })
 
 app.post("/recentToPay", (richiesta, risposta) => {
+    const idUtente = getIdUtenteDaRichiesta(richiesta);
+    if (!idUtente) {
+        risposta.status(401).send({result: "unauthorized"})
+        return;
+    }
+
         const query = `SELECT pr.*, d.PrezzoVisita, u.Nome AS NomeDottore, u.Cognome AS CognomeDottore
                                      FROM Prenotazioni pr
                                      JOIN Pazienti p ON pr.IDPaziente = p.ID
@@ -300,10 +391,10 @@ app.post("/recentToPay", (richiesta, risposta) => {
                     AND d.ValDottore = ' '
                     AND u.ValUtente = ' '
                     AND pr.DataOra >= NOW()
-                    AND pr.DataOra < DATE_ADD(NOW(), INTERVAL 2 WEEK)
+                    AND pr.DataOra < DATE_ADD(NOW(), INTERVAL 1 WEEK)
                    ORDER BY pr.DataOra ASC`;
     console.log("/recentToPay", richiesta.body);
-    connection.query(query, [richiesta.body.idUtente], (error, results) => {
+    connection.query(query, [idUtente], (error, results) => {
         if (error) {
             risposta.statusCode = 500
             risposta.statusMessage = "Errore di connessione con il db"
@@ -352,6 +443,115 @@ app.post("/prenotazioni", (richiesta, risposta) => {
             risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
         } else {
             risposta.send({result: "success", prenotazioni: results})
+        }
+    })
+})
+
+app.post("/addPrenotazione", (richiesta, risposta) =>{
+    console.log("/addPrenotazione", richiesta.body);
+
+    const idPazienteBody = Number(richiesta.body.idPaziente || 0);
+    const idUtenteBody = getIdUtenteDaRichiesta(richiesta);
+    const idDottore = Number(richiesta.body.idDottore || 0);
+    const dataOra = richiesta.body.dataOra;
+    const tipoVisita = richiesta.body.tipoVisita;
+
+    if (!idDottore || !dataOra || !tipoVisita || (!idPazienteBody && !idUtenteBody)) {
+        risposta.status(400).send({result: "error", message: "Dati prenotazione mancanti o non validi"})
+        return;
+    }
+
+    const inserisciConIdPaziente = (idPaziente) => {
+        const queryInserimento = `INSERT INTO prenotazioni (IDPaziente, IDDottore, DataOra, TipoVisita, Pagata, ValPrenotazione) VALUES (?, ?, ?, ?, 'N', ' ')`;
+
+        connection.query(queryInserimento, [idPaziente, idDottore, dataOra, tipoVisita], (error, results) => {
+            if (error) {
+                risposta.statusCode = 500
+                risposta.statusMessage = "Errore di connessione con il db"
+                risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
+            } else {
+                risposta.send({result: "success", prenotazione: results})
+            }
+        })
+    }
+
+    if (idPazienteBody) {
+        inserisciConIdPaziente(idPazienteBody);
+        return;
+    }
+
+    const queryPaziente = `SELECT ID FROM pazienti WHERE IDUtente = ? AND ValPaziente = ' ' LIMIT 1`;
+    connection.query(queryPaziente, [idUtenteBody], (errorePaziente, risultatiPaziente) => {
+        if (errorePaziente) {
+            risposta.statusCode = 500
+            risposta.statusMessage = "Errore di connessione con il db"
+            risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
+            return;
+        }
+
+        if (!Array.isArray(risultatiPaziente) || risultatiPaziente.length === 0) {
+            risposta.status(404).send({result: "error", message: "Paziente non trovato"})
+            return;
+        }
+
+        inserisciConIdPaziente(risultatiPaziente[0].ID);
+    })
+})
+
+app.get("/prenotazioniPaziente", (richiesta, risposta) => {
+    const idUtente = getIdUtenteDaRichiesta(richiesta);
+    if (!idUtente) {
+        risposta.status(401).send({result: "unauthorized"})
+        return;
+    }
+    
+    const query = `SELECT pr.*, 
+                          u.Nome AS NomeDottore,
+                          u.Cognome AS CognomeDottore,
+                          u.Genere AS GenereDottore,
+                          r.Reparto AS RepartoDottore
+                   FROM Prenotazioni pr
+                   JOIN Pazienti p ON pr.IDPaziente = p.ID
+                   JOIN Dottori d ON pr.IDDottore = d.ID
+                   JOIN Utenti u ON d.IDUtente = u.ID
+                   JOIN Reparti r ON d.IDReparto = r.ID
+                   WHERE p.IDUtente = ?
+                     AND pr.ValPrenotazione = ' '
+                     AND p.ValPaziente = ' '
+                     AND d.ValDottore = ' '
+                     AND u.ValUtente = ' '
+                     AND r.ValReparto = ' '
+                   ORDER BY pr.DataOra ASC`;
+    connection.query(query, [idUtente], (error, results) => {
+        if (error) {
+            risposta.statusCode = 500
+            risposta.statusMessage = "Errore di connessione con il db"
+            risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
+        } else {
+            risposta.send({result: "success", prenotazioni: results})
+        }
+    })
+})
+
+app.post("/pagaPrenotazione", (richiesta, risposta) => {
+    const idUtente = getIdUtenteDaRichiesta(richiesta);
+    if (!idUtente) {
+        risposta.status(401).send({result: "unauthorized"})
+        return;
+    }
+    const query = 'UPDATE Prenotazioni SET Pagata = "S" WHERE ID = ?';
+    const idPrenotazione = richiesta.body.idPrenotazione;
+    if (!idPrenotazione) {
+        risposta.status(400).send({result: "error", message: "ID prenotazione mancante"})
+        return;
+    }
+    connection.query(query, [idPrenotazione], (error, results) => {
+        if (error) {
+            risposta.statusCode = 500
+            risposta.statusMessage = "Errore di connessione con il db"
+            risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
+        } else {
+            risposta.send({result: "success", prenotazione: results})
         }
     })
 })

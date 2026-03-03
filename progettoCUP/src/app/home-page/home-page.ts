@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -13,9 +14,21 @@ export class HomePage {
   appuntamentiProssimi30gg: number = 0;
   prenotazioniDaPagare: number = 0;
   importoInSospeso: number = 0;
-  nomePaziente: string = localStorage.getItem("utenteNome") || '';
-  cognomePaziente: string = localStorage.getItem("utenteCognome") || '';
-  constructor(private cdr: ChangeDetectorRef) {
+  messaggioSuccessoPrenotazione: string = '';
+  nomePaziente: string = '';
+  cognomePaziente: string = '';
+  constructor(private cdr: ChangeDetectorRef, private router: Router) {
+    this.mostraAlertPrenotazioneSePresente();
+    this.caricaDashboard();
+  }
+
+  async caricaDashboard() {
+    const utenteInSessione = await this.getUtenteSessione();
+    if (!utenteInSessione) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.getNextThreeAppointments();
     this.getCountNextMothAppointments();
     this.getCountToPayAppointments();
@@ -23,20 +36,51 @@ export class HomePage {
     this.getRecentToPay();
   }
 
-  async getRecentToPay() {
+  async getUtenteSessione(): Promise<boolean> {
     try {
-      const idUtente = localStorage.getItem('utenteId');
+      const ris = await fetch('http://localhost:8081/utenteSessione', {
+        method: 'GET',
+        credentials: 'include'
+      });
 
-      if (!idUtente) {
-        this.prenotazioniUrgentiDaPagare = [];
-        this.cdr.detectChanges();
-        return;
+      const risJson = await ris.json();
+
+      if (!ris.ok || risJson?.result !== 'success') {
+        return false;
       }
 
+      this.nomePaziente = risJson?.nome || '';
+      this.cognomePaziente = risJson?.cognome || '';
+      this.cdr.detectChanges();
+      return true;
+    } catch (err) {
+      console.error('Impossibile recuperare utente in sessione', err);
+      return false;
+    }
+  }
+
+  mostraAlertPrenotazioneSePresente() {
+    const messaggio = localStorage.getItem('alertPrenotazioneSuccesso') || '';
+    if (!messaggio) {
+      return;
+    }
+
+    this.messaggioSuccessoPrenotazione = messaggio;
+    localStorage.removeItem('alertPrenotazioneSuccesso');
+
+    setTimeout(() => {
+      this.messaggioSuccessoPrenotazione = '';
+      this.cdr.detectChanges();
+    }, 2000);
+  }
+
+  async getRecentToPay() {
+    try {
       const ris = await fetch('http://localhost:8081/recentToPay', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idUtente: Number(idUtente) })
+        body: JSON.stringify({}),
+        credentials: 'include'
       });
 
       const risJson = await ris.json();
@@ -53,18 +97,11 @@ export class HomePage {
 
   async getCountToPayAppointments() {
     try {
-      const idUtente = localStorage.getItem('utenteId');
-
-      if (!idUtente) {
-        this.prenotazioniDaPagare = 0;
-        this.cdr.detectChanges();
-        return;
-      }
-
       const ris = await fetch('http://localhost:8081/countToPayAppointments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idUtente: Number(idUtente) })
+        body: JSON.stringify({}),
+        credentials: 'include'
       });
 
       const risJson = await ris.json();
@@ -79,18 +116,11 @@ export class HomePage {
 
   async getTotalToPay() {
     try {
-      const idUtente = localStorage.getItem('utenteId');
-
-      if (!idUtente) {
-        this.importoInSospeso = 0;
-        this.cdr.detectChanges();
-        return;
-      }
-
       const ris = await fetch('http://localhost:8081/totalToPay', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idUtente: Number(idUtente) })
+        body: JSON.stringify({}),
+        credentials: 'include'
       });
 
       const risJson = await ris.json();
@@ -105,18 +135,11 @@ export class HomePage {
 
   async getCountNextMothAppointments() {
     try {
-      const idUtente = localStorage.getItem('utenteId');
-
-      if (!idUtente) {
-        this.appuntamentiProssimi30gg = 0;
-        this.cdr.detectChanges();
-        return;
-      }
-
       const ris = await fetch('http://localhost:8081/countNextMothAppointments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idUtente: Number(idUtente) })
+        body: JSON.stringify({}),
+        credentials: 'include'
       });
 
       const risJson = await ris.json();
@@ -131,18 +154,11 @@ export class HomePage {
 
   async getNextThreeAppointments() {
     try {
-      const idUtente = localStorage.getItem('utenteId');
-
-      if (!idUtente) {
-        this.prossimiAppuntamenti = [];
-        this.cdr.detectChanges();
-        return;
-      }
-
       const ris = await fetch('http://localhost:8081/nextThreeAppointments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idUtente: Number(idUtente) })
+        body: JSON.stringify({}),
+        credentials: 'include'
       });
 
       const risJson = await ris.json();
@@ -155,6 +171,16 @@ export class HomePage {
       this.prossimiAppuntamenti = [];
       this.cdr.detectChanges();
     }
+  }
+
+  onPagaPrenotazione(idPrenotazione: number) {
+    const id = Number(idPrenotazione || 0);
+    if (!id) {
+      return;
+    }
+
+    localStorage.setItem('idPrenotazionePagamento', String(id));
+    this.router.navigate(['/pagamento']);
   }
 
   getDay(dataOra: string): string {

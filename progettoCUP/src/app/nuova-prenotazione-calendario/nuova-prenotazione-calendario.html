@@ -64,12 +64,17 @@
 								[class.taken]="ottieniClasseSlot(giorno.data, ora) === 'taken'"
 								[class.selected]="ottieniClasseSlot(giorno.data, ora) === 'selected'"
 								[class.past]="ottieniClasseSlot(giorno.data, ora) === 'past'"
+								[attr.id]="ottieniIdSlot(giorno.data, ora)"
+								[attr.data-slot]="ottieniChiaveSlot(giorno.data, ora)"
 								[disabled]="isSlotDisabilitato(giorno.data, ora)" (click)="selezionaSlot(giorno.data, ora)">{{ ora }}</button>
 						</div>
 						}
 					</div>
 					}
 				</div>
+			</div>
+			<div class="d-flex justify-content-end mt-3">
+				<button type="button" class="btn btn-primary btn-sm px-4" [disabled]="!haSlotSelezionato()" (click)="onContinua()">Conferma</button>
 			</div>
 		</section>
 	</div>

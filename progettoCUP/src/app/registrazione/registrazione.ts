@@ -47,7 +47,8 @@ export class Registrazione{
       const risposta = await fetch("http://localhost:8081/registrazione", {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(this.Paziente)
+        body: JSON.stringify(this.Paziente),
+        credentials: 'include'
       });
 
       const rispostaTesto = await risposta.text();
@@ -60,10 +61,6 @@ export class Registrazione{
 
       if(risposta.ok && ris.result === 'success') {
         console.log('Paziente registrato con successo');
-        localStorage.setItem("utenteId", String(ris.idUtente));
-        localStorage.setItem("utenteNome", ris.nome || this.Paziente.nome || '');
-        localStorage.setItem("utenteCognome", ris.cognome || this.Paziente.cognome || '');
-        localStorage.setItem("utenteEmail", ris.email || this.Paziente.email || '');
         f.resetForm();
         this.router.navigate(['/home']);
         return;

@@ -1,0 +1,69 @@
+<div class="visualizza-prenotazioni-page py-3 py-lg-3">
+	<div class="container-fluid">
+		<header class="dashboard-header mb-3">
+			<div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3">
+				<div>
+					<p class="intestazione mb-1">Storico prenotazioni</p>
+					<h1 class="h3 mb-1">Tutte le prenotazioni</h1>
+					<p class="text-muted mb-0">Panoramica completa delle visite prenotate con stato pagamento e dettagli dottore.</p>
+				</div>
+				<div class="d-flex gap-2">
+					<a routerLink="/nuova-prenotazione" class="btn btn-primary btn-sm">Nuova prenotazione</a>
+				</div>
+			</div>
+		</header>
+
+		<section class="panel border-info-subtle">
+			<div class="panel-head d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-2 mb-3">
+				<div>
+					<h2 class="panel-title mb-1 text-info-emphasis">Elenco prenotazioni</h2>
+				</div>
+			</div>
+
+			<div class="table-like-list">
+				@for(prenotazione of prenotazioni; track prenotazione.ID){
+				<div class="prenotazione-row"
+					[class.annullata-row]="isPrenotazioneAnnullata(prenotazione)">
+					<div class="date-square"
+						[class.paid-date-square]="isPrenotazionePagata(prenotazione) && !isPrenotazioneAnnullata(prenotazione)"
+						[class.annullata-date-square]="isPrenotazioneAnnullata(prenotazione)">
+						<p class="date-day mb-0">{{ getDay(prenotazione.DataOra) }}</p>
+						<p class="date-month-year mb-1">{{ getMonthYear(prenotazione.DataOra) }}</p>
+						<p class="date-time mb-0">{{ getTime(prenotazione.DataOra) }}</p>
+					</div>
+					<div class="prenotazione-content">
+						<div class="prenotazione-details">
+							<p class="row-main mb-1">{{ prenotazione.TipoVisita }}</p>
+							<p class="row-sub mb-2">{{ getTitoloDottore(prenotazione) }} {{ prenotazione.CognomeDottore }} {{ prenotazione.NomeDottore }} · Reparto {{ prenotazione.RepartoDottore }}</p>
+							<div class="meta-chip-group">
+								<span class="meta-chip">ID Prenotazione #{{ prenotazione.ID }}</span>
+								<span class="meta-chip"
+									[class.warning-chip]="!isPrenotazionePagata(prenotazione) && !isPrenotazioneAnnullata(prenotazione)"
+									[class.success-chip]="isPrenotazionePagata(prenotazione) && !isPrenotazioneAnnullata(prenotazione)"
+									[class.annullata-chip]="isPrenotazioneAnnullata(prenotazione)">
+									{{ getStatoPrenotazione(prenotazione) }}
+								</span>
+							</div>
+						</div>
+						<div class="prenotazione-actions">
+							<button type="button" class="btn btn-outline-warning btn-sm modifica-btn">Modifica</button>
+							@if(!isPrenotazionePagata(prenotazione) && !isPrenotazioneAnnullata(prenotazione)){
+							<button type="button" class="btn btn-outline-primary btn-sm paga-btn" (click)="onPagaPrenotazione(prenotazione.ID)">Paga</button>
+							}
+						</div>
+					</div>
+				</div>
+				}
+
+				@if(prenotazioni.length === 0){
+				<div class="prenotazione-row">
+					<div>
+						<p class="row-main mb-1">Nessuna prenotazione presente</p>
+						<p class="row-sub mb-0">Al momento non risultano prenotazioni associate al tuo profilo.</p>
+					</div>
+				</div>
+				}
+			</div>
+		</section>
+	</div>
+</div>

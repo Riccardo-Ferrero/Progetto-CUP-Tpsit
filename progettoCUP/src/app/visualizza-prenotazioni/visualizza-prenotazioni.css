@@ -1,0 +1,273 @@
+.visualizza-prenotazioni-page {
+	min-height: 100%;
+}
+
+.dashboard-header {
+	padding: 1.1rem 1.25rem;
+	border: 1px solid #e6edf8;
+	border-radius: 0.9rem;
+	background: #ffffff;
+}
+
+.intestazione {
+	font-size: 0.76rem;
+	font-weight: 700;
+	letter-spacing: 0.45px;
+	color: #607a96;
+	text-transform: uppercase;
+}
+
+.info-card {
+	background: #ffffff;
+	border: 1px solid #e6edf8;
+	border-radius: 0.85rem;
+	padding: 0.9rem 1.05rem;
+	box-shadow: 0 6px 18px rgba(24, 39, 75, 0.05);
+}
+
+.info-label {
+	font-size: 0.82rem;
+	font-weight: 600;
+	color: #617c99;
+}
+
+.info-value {
+	font-size: 1.2rem;
+	font-weight: 700;
+	color: #24364b;
+}
+
+.panel {
+	background: #ffffff;
+	border: 1px solid #e6edf8;
+	border-radius: 0.95rem;
+	padding: 1.05rem 1.1rem;
+	box-shadow: 0 8px 22px rgba(24, 39, 75, 0.06);
+}
+
+.panel-head {
+	padding-bottom: 0.65rem;
+	border-bottom: 1px solid #edf2f8;
+}
+
+.panel-title {
+	font-size: 1rem;
+	font-weight: 700;
+	color: #24364b;
+}
+
+.row-sub {
+	font-size: 0.86rem;
+	color: #6a829a;
+}
+
+.table-like-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.7rem;
+}
+
+.prenotazione-row {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 0.95rem;
+	align-items: center;
+	padding: 0.82rem 0.9rem;
+	border: 1px solid #e8eef8;
+	border-radius: 0.75rem;
+	background: #fbfdff;
+	transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background-color 0.16s ease;
+}
+
+.prenotazione-row:hover {
+	transform: translateY(-2px);
+	border-color: #cfe0f8;
+	background: #ffffff;
+	box-shadow: 0 10px 20px rgba(24, 39, 75, 0.09);
+}
+
+.date-square {
+	min-width: 88px;
+	height: 88px;
+	border-radius: 0.7rem;
+	border: 1px solid #d9e7fb;
+	background: linear-gradient(150deg, #f4f8ff 0%, #eaf3ff 100%);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	transition: border-color 0.16s ease, background 0.16s ease;
+}
+
+.prenotazione-row:hover .date-square {
+	border-color: #bfd6f6;
+	background: linear-gradient(150deg, #eef5ff 0%, #e1edff 100%);
+}
+
+.paid-date-square {
+	border-color: #bfe7cc;
+	background: linear-gradient(140deg, #eefcf3 0%, #e6f8ec 100%);
+}
+
+.prenotazione-row:hover .paid-date-square {
+	border-color: #9ed7b2;
+	background: linear-gradient(140deg, #e7f8ee 0%, #dff3e8 100%);
+}
+
+.date-day {
+	font-size: 1.22rem;
+	line-height: 1;
+	font-weight: 800;
+	color: #2e4f73;
+}
+
+.date-month-year {
+	font-size: 0.68rem;
+	line-height: 1.1;
+	font-weight: 700;
+	letter-spacing: 0.35px;
+	color: #5f7897;
+}
+
+.date-time {
+	font-size: 0.8rem;
+	line-height: 1;
+	font-weight: 700;
+	color: #3e638c;
+}
+
+.row-main {
+	font-weight: 600;
+	color: #2a3e57;
+	transition: color 0.16s ease;
+}
+
+.prenotazione-row:hover .row-main {
+	color: #173b64;
+}
+
+.prenotazione-content {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 0.8rem;
+	align-items: center;
+	width: 100%;
+}
+
+.prenotazione-actions {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.paga-btn {
+	min-width: 76px;
+	border-radius: 0.6rem;
+	font-weight: 600;
+}
+
+.modifica-btn {
+	min-width: 76px;
+	border-radius: 0.6rem;
+	font-weight: 600;
+}
+
+.meta-chip-group {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.45rem;
+}
+
+.meta-chip {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.28rem 0.58rem;
+	border-radius: 999px;
+	border: 1px solid #d7e4f3;
+	background: #f7fbff;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.2px;
+	color: #43617f;
+}
+
+.warning-chip {
+	border-color: #f4d0b8;
+	background: #fff5ee;
+	color: #8a5b3a;
+}
+
+.success-chip {
+	border-color: #bfe7cc;
+	background: #eefcf3;
+	color: #1f6a43;
+}
+
+.annullata-row {
+	border-color: #dfe5ee;
+	background: linear-gradient(130deg, #f7f9fc 0%, #f2f5fa 100%);
+	opacity: 0.78;
+}
+
+.annullata-row:hover {
+	transform: none;
+	box-shadow: none;
+	border-color: #d9e1ec;
+	background: linear-gradient(130deg, #f6f8fb 0%, #f1f4f9 100%);
+}
+
+.annullata-row .row-main {
+	color: #647487;
+}
+
+.annullata-row .row-sub {
+	color: #7e8d9d;
+}
+
+.annullata-date-square {
+	border-color: #dbe2ec;
+	background: linear-gradient(150deg, #f3f6fa 0%, #edf2f8 100%);
+}
+
+.annullata-row:hover .annullata-date-square {
+	border-color: #dbe2ec;
+	background: linear-gradient(150deg, #f3f6fa 0%, #edf2f8 100%);
+}
+
+.annullata-chip {
+	border-color: #d9e1eb;
+	background: #f1f5fa;
+	color: #69798b;
+}
+
+.btn-primary,
+.btn-outline-secondary {
+	border-radius: 0.65rem;
+	font-weight: 600;
+}
+
+@media (max-width: 768px) {
+	.dashboard-header,
+	.panel {
+		padding: 0.95rem;
+	}
+
+	.prenotazione-content {
+		grid-template-columns: 1fr;
+	}
+
+	.prenotazione-actions {
+		justify-content: flex-end;
+	}
+
+	.date-square {
+		min-width: 76px;
+		height: 76px;
+	}
+
+	.date-day {
+		font-size: 1.05rem;
+	}
+}

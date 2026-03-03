@@ -5,6 +5,8 @@ import { HomePage } from './home-page/home-page';
 import { Login } from './login/login';
 import { NuovaPrenotazione } from './nuova-prenotazione/nuova-prenotazione';
 import { NuovaPrenotazioneCalendario } from './nuova-prenotazione-calendario/nuova-prenotazione-calendario';
+import { VisualizzaPrenotazioni } from './visualizza-prenotazioni/visualizza-prenotazioni';
+import { Pagamento } from './pagamento/pagamento';
 
 export const routes: Routes = [
   { path: 'registrazione', component: Registrazione },
@@ -12,5 +14,7 @@ export const routes: Routes = [
   { path: 'home', component: HomePage},
   { path: 'login', component: Login},
   { path: 'nuova-prenotazione', component: NuovaPrenotazione},
-  { path: 'nuova-prenotazione-calendario', component: NuovaPrenotazioneCalendario}
+  { path: 'nuova-prenotazione-calendario', component: NuovaPrenotazioneCalendario},
+  { path: 'visualizza-prenotazioni', component: VisualizzaPrenotazioni},
+  { path: 'pagamento', component: Pagamento}
 ];
