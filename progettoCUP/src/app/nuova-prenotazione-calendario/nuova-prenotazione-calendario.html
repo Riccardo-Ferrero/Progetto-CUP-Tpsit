@@ -12,67 +12,7 @@
 			</div>
 		</header>
 
-		<section class="panel border-primary-subtle h-100 calendar-panel">
-			<div class="panel-head mb-2">
-				<h2 class="panel-title mb-2 text-primary-emphasis">Calendario disponibilità</h2>
-				<p class="small text-muted mb-2">{{ descrizioneSettimana }}</p>
-				<div class="d-flex gap-2 align-items-center flex-nowrap calendario-toolbar">
-					<div class="input-group input-group-sm">
-						<input type="date" class="form-control form-control-sm" aria-label="Vai a data" required [min]="dataMinimaRicerca"
-							[(ngModel)]="dataRicercaCalendario" name="dataRicercaCalendario" #dataRicercaCalendarioInput="ngModel">
-						<button class="btn btn-outline-secondary" type="button" (click)="vaiADataCalendario()"
-							[disabled]="!isDataRicercaValidaPerVaiAData()">Vai a data</button>
-					</div>
-					<div class="btn-group btn-group-sm" role="group">
-						<button class="btn btn-outline-secondary" type="button" (click)="vaiSettimanaPrecedente()" [disabled]="!puoAndareSettimanaPrecedente()">‹</button>
-						<button class="btn btn-outline-secondary" disabled>Cambia Settimana</button>
-						<button class="btn btn-outline-secondary" type="button" (click)="vaiSettimanaSuccessiva()">›</button>
-					</div>
-				</div>
-				@if(isDataRicercaPassata() && (dataRicercaCalendarioInput.dirty || dataRicercaCalendarioInput.touched)){
-				<div style="color:red;font-weight:bold" class="mt-2">
-					<small>Non puoi selezionare una data nel passato</small>
-				</div>
-				}
-			</div>
-			<div class="d-flex gap-3 align-items-center mt-3">
-				<div class="legend d-flex gap-3 align-items-center">
-					<span class="legend-item"><span class="legend-dot free-dot"></span> Libero</span>
-					<span class="legend-item"><span class="legend-dot taken-dot"></span> Occupato</span>
-					<span class="legend-item"><span class="legend-dot selected-dot"></span> Selezionato</span>
-				</div>
-			</div>
-			<div class="calendar-grid mt-3">
-				<div class="calendar-row header align-items-end">
-					<div class="calendar-cell time-col"></div>
-					@for(giorno of giorniSettimana; track $index){
-					<div class="calendar-cell day text-center">
-						<span class="day-name">{{ giorno.nome }}</span>
-						<span class="day-num">{{ giorno.numero }}</span>
-						<small class="text-muted day-month">{{ giorno.mese }}</small>
-					</div>
-					}
-				</div>
-
-				<div class="calendar-hours">
-					@for(ora of orariCalendario; track $index){
-					<div class="calendar-row hour-row">
-						<div class="calendar-cell time-col">{{ ora }}</div>
-						@for(giorno of giorniSettimana; track $index){
-						<div class="calendar-cell">
-							<button class="btn slot" [class.free]="ottieniClasseSlot(giorno.data, ora) === 'free'"
-								[class.taken]="ottieniClasseSlot(giorno.data, ora) === 'taken'"
-								[class.selected]="ottieniClasseSlot(giorno.data, ora) === 'selected'"
-								[class.past]="ottieniClasseSlot(giorno.data, ora) === 'past'"
-								[attr.id]="ottieniIdSlot(giorno.data, ora)"
-								[attr.data-slot]="ottieniChiaveSlot(giorno.data, ora)"
-								[disabled]="isSlotDisabilitato(giorno.data, ora)" (click)="selezionaSlot(giorno.data, ora)">{{ ora }}</button>
-						</div>
-						}
-					</div>
-					}
-				</div>
-			</div>
+			<calendario-prenotazioni></calendario-prenotazioni>
 			<div class="d-flex justify-content-end mt-3">
 				<button type="button" class="btn btn-primary btn-sm px-4" [disabled]="!haSlotSelezionato()" (click)="onContinua()">Conferma</button>
 			</div>
