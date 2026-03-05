@@ -1,12 +1,16 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'calendario-prenotazioni',
   imports: [FormsModule],
   templateUrl: './calendario-prenotazioni.html',
   styleUrl: './calendario-prenotazioni.css',
 })
-export class CalendarioPrenotazioni {
+export class CalendarioPrenotazioni implements OnInit, OnChanges {
+  @Input() idDottore: number = 0;
+  @Output() slotSelezionato = new EventEmitter<string>();
+
   giorniSettimana: { data: Date; nome: string; numero: string; mese: string }[] = [];
   orariCalendario: string[] = [];
   descrizioneSettimana: string = '';
@@ -18,12 +22,38 @@ export class CalendarioPrenotazioni {
   private dataOggi: Date = this.ottieniInizioGiorno(new Date());
   private lunediSettimanaVisualizzata: Date = this.ottieniLunediSettimana(new Date());
 
-  constructor(private cdr: ChangeDetectorRef, private router: Router) {
+  constructor(private cdr: ChangeDetectorRef) {
     this.dataMinimaRicerca = this.formattaDataPerInput(this.dataOggi);
+  }
+
+  ngOnInit() {
     this.inizializzaCalendario();
   }
 
+  async ngOnChanges(changes: SimpleChanges) {
+    if (!changes['idDottore'] || changes['idDottore'].firstChange) {
+      return;
+    }
+
+    this.resetSelezioneSlot();
+    await this.caricaSlotOccupatiDottore();
+    this.cdr.detectChanges();
+  }
+
+  ottieniIdSlot(data: Date, ora: string): string {
+    const chiaveSlot = this.creaChiaveSlot(data, ora)
+      .replace(' ', '-')
+      .replace(':', '-');
+
+    return `slot-${chiaveSlot}`;
+  }
+
+  ottieniChiaveSlot(data: Date, ora: string): string {
+    return this.creaChiaveSlot(data, ora);
+  }
+
   async inizializzaCalendario() {
+    this.dataMinimaRicerca = this.formattaDataPerInput(this.dataOggi);
     this.orariCalendario = this.creaOrariCalendario();
     this.impostaSettimanaCorrente();
     await this.caricaSlotOccupatiDottore();
@@ -52,7 +82,7 @@ export class CalendarioPrenotazioni {
 
     this.lunediSettimanaVisualizzata = nuovoLunedi;
     this.impostaSettimana(this.lunediSettimanaVisualizzata);
-    this.chiaveSlotSelezionato = '';
+    this.resetSelezioneSlot();
   }
 
   vaiSettimanaPrecedente() {
@@ -65,7 +95,7 @@ export class CalendarioPrenotazioni {
 
     this.lunediSettimanaVisualizzata = nuovoLunedi;
     this.impostaSettimana(this.lunediSettimanaVisualizzata);
-    this.chiaveSlotSelezionato = '';
+    this.resetSelezioneSlot();
   }
 
   puoAndareSettimanaPrecedente(): boolean {
@@ -91,7 +121,7 @@ export class CalendarioPrenotazioni {
 
     this.lunediSettimanaVisualizzata = this.ottieniLunediSettimana(dataSelezionata);
     this.impostaSettimana(this.lunediSettimanaVisualizzata);
-    this.chiaveSlotSelezionato = '';
+    this.resetSelezioneSlot();
   }
 
   isDataRicercaPassata(): boolean {
@@ -147,21 +177,7 @@ export class CalendarioPrenotazioni {
   async caricaSlotOccupatiDottore() {
     this.chiaviSlotOccupati.clear();
 
-    const prenotazioneSalvata = localStorage.getItem('prenotazione');
-    if (!prenotazioneSalvata) {
-      return;
-    }
-
-    let idDottore: number = 0;
-
-    try {
-      const prenotazione = JSON.parse(prenotazioneSalvata);
-      idDottore = Number(prenotazione?.dottore ?? 0);
-    } catch {
-      idDottore = 0;
-    }
-
-    if (!idDottore) {
+    if (!this.idDottore) {
       return;
     }
 
@@ -169,7 +185,7 @@ export class CalendarioPrenotazioni {
       const risposta = await fetch('http://localhost:8081/prenotazioni', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idDottore }),
+        body: JSON.stringify({ idDottore: this.idDottore }),
       });
 
       const rispostaJson = await risposta.json();
@@ -229,6 +245,7 @@ export class CalendarioPrenotazioni {
     }
 
     this.chiaveSlotSelezionato = this.creaChiaveSlot(data, ora);
+    this.slotSelezionato.emit(this.chiaveSlotSelezionato);
   }
 
   haSlotSelezionato(): boolean {
@@ -237,6 +254,11 @@ export class CalendarioPrenotazioni {
 
   private isSlotPassato(data: Date): boolean {
     return this.ottieniInizioGiorno(data).getTime() < this.dataOggi.getTime();
+  }
+
+  private resetSelezioneSlot() {
+    this.chiaveSlotSelezionato = '';
+    this.slotSelezionato.emit('');
   }
 
   private creaChiaveSlot(data: Date, ora: string): string {

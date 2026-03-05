@@ -573,4 +573,43 @@ app.post("/logout", (richiesta, risposta) => {
         console.log("/logout");
         risposta.send({ result: "success" });
     });
-});
+})
+
+app.post("/datiPrenotazione" , (richiesta, risposta) => {
+    const idUtente = getIdUtenteDaRichiesta(richiesta);
+    if (!idUtente) {
+        risposta.status(401).send({result: "unauthorized"})
+        return;
+    }
+    const idPrenotazione = richiesta.body.idPrenotazione;
+    if (!idPrenotazione) {
+        risposta.status(400).send({result: "error", message: "ID prenotazione mancante"})
+        return;
+    }
+    console.log("/datiPrenotazione", richiesta.body);
+    const query = `SELECT pr.*,
+                        u.Nome AS NomeDottore,
+                        u.Cognome AS CognomeDottore,
+                        r.Reparto AS RepartoDottore
+                        FROM Prenotazioni pr
+                        JOIN Pazienti p ON pr.IDPaziente = p.ID
+                        JOIN Dottori d ON pr.IDDottore = d.ID
+                        JOIN Utenti u ON d.IDUtente = u.ID
+                        JOIN Reparti r ON d.IDReparto = r.ID
+                        WHERE pr.ID = ?
+                        AND p.IDUtente = ?
+                        AND pr.ValPrenotazione = ' '
+                        AND p.ValPaziente = ' '
+                        AND d.ValDottore = ' '
+                        AND u.ValUtente = ' '
+                        AND r.ValReparto = ' '`;
+        connection.query(query, [idPrenotazione, idUtente], (error, results) => {
+        if (error) {
+            risposta.statusCode = 500
+            risposta.statusMessage = "Errore di connessione con il db"
+            risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
+        } else {
+            risposta.send({result: "success", prenotazione: results[0]})
+        }
+    })
+})

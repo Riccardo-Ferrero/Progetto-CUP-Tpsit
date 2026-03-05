@@ -12,10 +12,9 @@
 			</div>
 		</header>
 
-			<calendario-prenotazioni></calendario-prenotazioni>
-			<div class="d-flex justify-content-end mt-3">
-				<button type="button" class="btn btn-primary btn-sm px-4" [disabled]="!haSlotSelezionato()" (click)="onContinua()">Conferma</button>
-			</div>
-		</section>
+		<calendario-prenotazioni [idDottore]="idDottoreSelezionato" (slotSelezionato)="onSlotSelezionato($event)"></calendario-prenotazioni>
+		<div class="d-flex justify-content-end mt-3">
+			<button type="button" class="btn btn-primary btn-sm px-4" [disabled]="!haSlotSelezionato()" (click)="onContinua()">Conferma</button>
+		</div>
 	</div>
 </div>

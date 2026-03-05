@@ -1,18 +1,39 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CalendarioPrenotazioni } from '../calendario-prenotazioni/calendario-prenotazioni';
 
 @Component({
   selector: 'nuova-prenotazione-calendario',
-  imports: [FormsModule],
+  imports: [CalendarioPrenotazioni],
   templateUrl: './nuova-prenotazione-calendario.html',
   styleUrl: './nuova-prenotazione-calendario.css',
 })
-export class NuovaPrenotazioneCalendario {
+export class NuovaPrenotazioneCalendario implements OnInit {
+  chiaveSlotSelezionato: string = '';
+  idDottoreSelezionato: number = 0;
 
+  constructor(private router: Router) {}
 
-  constructor(private cdr: ChangeDetectorRef, private router: Router) {
-    
+  ngOnInit() {
+    const prenotazioneSalvata = localStorage.getItem('prenotazione');
+    if (!prenotazioneSalvata) {
+      return;
+    }
+
+    try {
+      const prenotazione = JSON.parse(prenotazioneSalvata);
+      this.idDottoreSelezionato = Number(prenotazione?.dottore || 0);
+    } catch {
+      this.idDottoreSelezionato = 0;
+    }
+  }
+
+  onSlotSelezionato(chiaveSlot: string) {
+    this.chiaveSlotSelezionato = chiaveSlot;
+  }
+
+  haSlotSelezionato(): boolean {
+    return this.chiaveSlotSelezionato !== '';
   }
 
   
@@ -73,18 +94,6 @@ export class NuovaPrenotazioneCalendario {
     }
   }
 
-  ottieniIdSlot(data: Date, ora: string): string {
-    const chiaveSlot = this.creaChiaveSlot(data, ora)
-      .replace(' ', '-')
-      .replace(':', '-');
-
-    return `slot-${chiaveSlot}`;
-  }
-
-  ottieniChiaveSlot(data: Date, ora: string): string {
-    return this.creaChiaveSlot(data, ora);
-  }
-
   private async getIdUtenteSessione(): Promise<number> {
     try {
       const ris = await fetch('http://localhost:8081/utenteSessione', {
@@ -102,7 +111,4 @@ export class NuovaPrenotazioneCalendario {
       return 0;
     }
   }
-
- 
-
 }
