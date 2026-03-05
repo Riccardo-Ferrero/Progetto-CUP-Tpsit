@@ -13,6 +13,7 @@ export class ModificaPrenotazione {
   idPrenotazioneModifica: number = 0;
   idDottoreSelezionato: number = 1;
   chiaveSlotSelezionato: string = '';
+  invioModificaInCorso: boolean = false;
 
   nomeDottoreCompleto: string = '-';
   repartoDottore: string = '-';
@@ -89,5 +90,59 @@ export class ModificaPrenotazione {
 
   onSlotSelezionato(slot: string) {
     this.chiaveSlotSelezionato = slot;
+  }
+
+  onAnnullaClick() {
+    localStorage.removeItem('idPrenotazioneModifica');
+    this.router.navigate(['/visualizza-prenotazioni']);
+  }
+
+  async onContinuaModificaClick() {
+    if (this.invioModificaInCorso || !this.chiaveSlotSelezionato || !this.idPrenotazioneModifica || !this.tipoVisitaSelezionato) {
+      return;
+    }
+
+    const dataOraDb = `${this.chiaveSlotSelezionato}:00`;
+    this.invioModificaInCorso = true;
+
+    try {
+      const risposta = await fetch('http://localhost:8081/modificaPrenotazione', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          idPrenotazione: this.idPrenotazioneModifica,
+          dataOra: dataOraDb,
+          tipoVisita: this.tipoVisitaSelezionato
+        }),
+        credentials: 'include'
+      });
+
+      if (risposta.status === 401) {
+        this.router.navigate(['/login']);
+        return;
+      }
+
+      const testoRisposta = await risposta.text();
+      let rispostaJson: any = null;
+
+      try {
+        rispostaJson = testoRisposta ? JSON.parse(testoRisposta) : null;
+      } catch {
+        rispostaJson = null;
+      }
+
+      if (risposta.ok && rispostaJson?.result === 'success') {
+        localStorage.removeItem('idPrenotazioneModifica');
+        localStorage.setItem('alertPrenotazioneSuccesso', 'La prenotazione è stata modificata con successo');
+        this.router.navigate(['/visualizza-prenotazioni']);
+        return;
+      }
+
+      console.error('Risposta non valida da /modificaPrenotazione', risposta.status, testoRisposta);
+    } catch (errore) {
+      console.error('Errore durante modifica prenotazione', errore);
+    } finally {
+      this.invioModificaInCorso = false;
+    }
   }
 }

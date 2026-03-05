@@ -13,6 +13,12 @@
 			</div>
 		</header>
 
+		@if(messaggioSuccesso){
+		<div class="custom-success-alert mb-3" role="status">
+			{{ messaggioSuccesso }}
+		</div>
+		}
+
 		<section class="panel border-info-subtle">
 			<div class="panel-head d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-2 mb-3">
 				<div>
@@ -46,9 +52,12 @@
 							</div>
 						</div>
 						<div class="prenotazione-actions">
+							@if(!isPrenotazioneAnnullata(prenotazione)){
 							<button type="button" class="btn btn-outline-warning btn-sm modifica-btn" (click)="onModificaClick(prenotazione.ID)">Modifica</button>
 							@if(!isPrenotazionePagata(prenotazione) && !isPrenotazioneAnnullata(prenotazione)){
 							<button type="button" class="btn btn-outline-primary btn-sm paga-btn" (click)="onPagaPrenotazione(prenotazione.ID)">Paga</button>
+							}
+							<button type="button" class="btn btn-outline-danger btn-sm" (click)="onAnnullaPrenotazione(prenotazione.ID)">Annulla</button>
 							}
 						</div>
 					</div>

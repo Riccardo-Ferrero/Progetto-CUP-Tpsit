@@ -496,6 +496,13 @@ INSERT INTO Dottori
 VALUES
 (LAST_INSERT_ID(), 2, 'Specialista', 80.00, ' ');
 
+-- ACCOUNT ADMIN 
+
+INSERT INTO Utenti
+(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
+VALUES
+('Admin', 'Admin', '9999-01-01', 'O', '+39 4234567890', 'admin@example.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'ADMNDA99A01H501C', 3, 'Piemonte', '1', 'S', 181, ' ');
+
 
 INSERT INTO Prenotazioni
 (IDPaziente, IDDottore, DataOra, Pagata, TipoVisita, ValPrenotazione)

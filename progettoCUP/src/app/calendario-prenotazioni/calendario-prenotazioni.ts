@@ -192,6 +192,10 @@ export class CalendarioPrenotazioni implements OnInit, OnChanges {
       const prenotazioni = Array.isArray(rispostaJson?.prenotazioni) ? rispostaJson.prenotazioni : [];
 
       for (const prenotazione of prenotazioni) {
+        if (this.isPrenotazioneAnnullata(prenotazione)) {
+          continue;
+        }
+
         const dataOraPrenotazione = this.parseDataOra(prenotazione?.DataOra);
 
         if (!dataOraPrenotazione) {
@@ -259,6 +263,10 @@ export class CalendarioPrenotazioni implements OnInit, OnChanges {
   private resetSelezioneSlot() {
     this.chiaveSlotSelezionato = '';
     this.slotSelezionato.emit('');
+  }
+
+  private isPrenotazioneAnnullata(prenotazione: any): boolean {
+    return String(prenotazione?.ValPrenotazione || '').trim().toUpperCase() === 'A';
   }
 
   private creaChiaveSlot(data: Date, ora: string): string {

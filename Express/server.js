@@ -434,7 +434,7 @@ app.get("/dottoriReparto", (richiesta, risposta)=>{
 })
 
 app.post("/prenotazioni", (richiesta, risposta) => {
-    const query = `SELECT * FROM Prenotazioni WHERE IDDottore= ? AND ValPrenotazione = ' ' ORDER BY DataOra DESC`;
+    const query = `SELECT * FROM Prenotazioni WHERE IDDottore= ? ORDER BY DataOra DESC`;
     console.log("/prenotazioni", richiesta.body);
     connection.query(query, [richiesta.body.idDottore], (error, results) => {
         if (error) {
@@ -516,7 +516,6 @@ app.get("/prenotazioniPaziente", (richiesta, risposta) => {
                    JOIN Utenti u ON d.IDUtente = u.ID
                    JOIN Reparti r ON d.IDReparto = r.ID
                    WHERE p.IDUtente = ?
-                     AND pr.ValPrenotazione = ' '
                      AND p.ValPaziente = ' '
                      AND d.ValDottore = ' '
                      AND u.ValUtente = ' '
@@ -556,6 +555,33 @@ app.post("/pagaPrenotazione", (richiesta, risposta) => {
     })
 })
 
+app.post("/annullaPrenotazione", (richiesta, risposta) => {
+    const idUtente = getIdUtenteDaRichiesta(richiesta);
+    if (!idUtente) {
+        risposta.status(401).send({result: "unauthorized"})
+        return;
+    }
+
+    const idPrenotazione = richiesta.body.idPrenotazione;
+    if (!idPrenotazione) {
+        risposta.status(400).send({result: "error", message: "ID prenotazione mancante"})
+        return;
+    }
+
+    const query = "UPDATE Prenotazioni SET ValPrenotazione = 'A' WHERE ID = ?";
+    console.log("/annullaPrenotazione", richiesta.body);
+
+    connection.query(query, [idPrenotazione], (error, results) => {
+        if (error) {
+            risposta.statusCode = 500
+            risposta.statusMessage = "Errore di connessione con il db"
+            risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
+        } else {
+            risposta.send({result: "success", prenotazione: results})
+        }
+    })
+})
+
 app.post("/logout", (richiesta, risposta) => {
     if (!richiesta.session) {
         risposta.status(200).send({ result: "success" });
@@ -581,7 +607,8 @@ app.post("/datiPrenotazione" , (richiesta, risposta) => {
         risposta.status(401).send({result: "unauthorized"})
         return;
     }
-    const idPrenotazione = richiesta.body.idPrenotazione;
+    const body = richiesta.body || {};
+    const idPrenotazione = body.idPrenotazione;
     if (!idPrenotazione) {
         risposta.status(400).send({result: "error", message: "ID prenotazione mancante"})
         return;
@@ -610,6 +637,35 @@ app.post("/datiPrenotazione" , (richiesta, risposta) => {
             risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
         } else {
             risposta.send({result: "success", prenotazione: results[0]})
+        }
+    })
+})
+
+app.post("/modificaPrenotazione", (richiesta, risposta) => {
+    const idUtente = getIdUtenteDaRichiesta(richiesta);
+    if (!idUtente) {
+        risposta.status(401).send({result: "unauthorized"})
+        return;
+    }
+    const body = richiesta.body || {};
+    const idPrenotazione = body.idPrenotazione;
+    const dataOra = body.dataOra;
+    const tipoVisita = body.tipoVisita;
+    if (!idPrenotazione || !dataOra || !tipoVisita) {
+        risposta.status(400).send({result: "error", message: "Dati prenotazione mancanti o non validi"})
+        return;
+    }
+    console.log("/modificaPrenotazione", richiesta.body);
+    const query = `UPDATE Prenotazioni
+                   SET DataOra = ?, TipoVisita = ?
+                   WHERE ID = ?`;
+    connection.query(query, [dataOra, tipoVisita, idPrenotazione], (error, results) => {
+        if (error) {
+            risposta.statusCode = 500
+            risposta.statusMessage = "Errore di connessione con il db"
+            risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
+        } else {
+            risposta.send({result: "success", prenotazione: results})
         }
     })
 })

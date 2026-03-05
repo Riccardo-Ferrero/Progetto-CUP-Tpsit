@@ -9,6 +9,7 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class VisualizzaPrenotazioni {
   prenotazioni: any[] = [];
+  messaggioSuccesso: string = '';
 
   constructor(private cdr: ChangeDetectorRef, private router: Router) {
     this.getPrenotazioniPaziente();
@@ -101,5 +102,43 @@ export class VisualizzaPrenotazioni {
 
     localStorage.setItem('idPrenotazioneModifica', String(id));
     this.router.navigate(['/modifica-prenotazione']);
+  }
+
+  async onAnnullaPrenotazione(idPrenotazione: number) {
+    const id = Number(idPrenotazione || 0);
+    if (!id) {
+      return;
+    }
+
+    try {
+      const risposta = await fetch('http://localhost:8081/annullaPrenotazione', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idPrenotazione: id }),
+        credentials: 'include'
+      });
+
+      if (risposta.status === 401) {
+        this.router.navigate(['/login']);
+        return;
+      }
+
+      const rispostaJson = await risposta.json();
+      if (risposta.ok && rispostaJson?.result === 'success') {
+        localStorage.removeItem('idPrenotazioneModifica');
+        localStorage.removeItem('idPrenotazionePagamento');
+        this.messaggioSuccesso = 'Prenotazione annullata con successo';
+        this.getPrenotazioniPaziente();
+        setTimeout(() => {
+          this.messaggioSuccesso = '';
+          this.cdr.detectChanges();
+        }, 2000);
+        return;
+      }
+
+      console.error('Errore risposta /annullaPrenotazione', rispostaJson);
+    } catch (err) {
+      console.error('Impossibile annullare la prenotazione', err);
+    }
   }
 }

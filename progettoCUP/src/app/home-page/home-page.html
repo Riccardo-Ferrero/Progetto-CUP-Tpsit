@@ -62,7 +62,8 @@
 							<div>
 								<p class="row-main mb-1">{{ appuntamento.TipoVisita }}</p>
 								<p class="row-sub mb-0">Dott. {{ appuntamento.CognomeDottore }} {{ appuntamento.NomeDottore }}</p>
-								<div class="d-flex justify-content-end mt-2">
+								<div class="d-flex justify-content-end mt-2 gap-2">
+									<button class="btn btn-outline-danger btn-sm" type="button" (click)="onAnnullaPrenotazione(appuntamento.ID)">Annulla</button>
 									<button class="btn btn-outline-warning btn-sm modifica-btn" type="button" (click)="onModificaClick(appuntamento.ID)">Modifica</button>
 								</div>
 							</div>
@@ -99,6 +100,7 @@
 							<strong>{{ formatEuro(prenotazione.PrezzoVisita) }}</strong>
 						</div>
 						<div class="d-flex justify-content-end mt-2 gap-2">
+							<button class="btn btn-outline-danger btn-sm" type="button" (click)="onAnnullaPrenotazione(prenotazione.ID)">Annulla</button>
 							<button class="btn btn-outline-warning btn-sm modifica-btn" type="button" (click)="onModificaClick(prenotazione.ID)">Modifica</button>
 							<button class="btn btn-outline-primary btn-sm" type="button" (click)="onPagaPrenotazione(prenotazione.ID)">Paga ora</button>
 						</div>

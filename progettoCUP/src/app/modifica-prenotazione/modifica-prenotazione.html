@@ -51,6 +51,15 @@
 					<div class="helper-note">
 						Seleziona un nuovo slot nel calendario e aggiorna il tipo visita, poi conferma la modifica.
 					</div>
+
+					<div class="mt-3 d-flex gap-2">
+						<button type="button" class="btn btn-outline-secondary btn-sm px-4 flex-fill" (click)="onAnnullaClick()">
+							Annulla
+						</button>
+						<button type="button" class="btn btn-primary btn-sm px-4 flex-fill" [disabled]="chiaveSlotSelezionato === ''" (click)="onContinuaModificaClick()">
+							Continua
+						</button>
+					</div>
 				</section>
 			</div>
 

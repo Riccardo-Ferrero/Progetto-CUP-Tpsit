@@ -85,7 +85,7 @@ export class HomePage {
 
       const risJson = await ris.json();
       this.prenotazioniUrgentiDaPagare = risJson?.result === 'success' && Array.isArray(risJson?.prenotazioni)
-        ? risJson.prenotazioni
+        ? risJson.prenotazioni.filter((prenotazione: any) => !this.isPrenotazioneAnnullata(prenotazione))
         : [];
       this.cdr.detectChanges();
     } catch (err) {
@@ -163,7 +163,7 @@ export class HomePage {
 
       const risJson = await ris.json();
       this.prossimiAppuntamenti = risJson?.result === 'success' && Array.isArray(risJson?.prenotazioni)
-        ? risJson.prenotazioni
+        ? risJson.prenotazioni.filter((prenotazione: any) => !this.isPrenotazioneAnnullata(prenotazione))
         : [];
       this.cdr.detectChanges();
     } catch (err) {
@@ -210,6 +210,10 @@ export class HomePage {
     return `${giorno}/${mese}/${anno}`;
   }
 
+  isPrenotazioneAnnullata(prenotazione: any): boolean {
+    return String(prenotazione?.ValPrenotazione || '').trim().toUpperCase() === 'A';
+  }
+
   formatEuro(importo: number): string {
     return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(importo || 0);
   }
@@ -242,5 +246,43 @@ export class HomePage {
 
     localStorage.setItem('idPrenotazioneModifica', String(id));
     this.router.navigate(['/modifica-prenotazione']);
+  }
+
+  async onAnnullaPrenotazione(idPrenotazione: number) {
+    const id = Number(idPrenotazione || 0);
+    if (!id) {
+      return;
+    }
+
+    try {
+      const risposta = await fetch('http://localhost:8081/annullaPrenotazione', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idPrenotazione: id }),
+        credentials: 'include'
+      });
+
+      if (risposta.status === 401) {
+        this.router.navigate(['/login']);
+        return;
+      }
+
+      const rispostaJson = await risposta.json();
+      if (risposta.ok && rispostaJson?.result === 'success') {
+        localStorage.removeItem('idPrenotazioneModifica');
+        localStorage.removeItem('idPrenotazionePagamento');
+        this.messaggioSuccessoPrenotazione = 'Prenotazione annullata con successo';
+        this.caricaDashboard();
+        setTimeout(() => {
+          this.messaggioSuccessoPrenotazione = '';
+          this.cdr.detectChanges();
+        }, 2000);
+        return;
+      }
+
+      console.error('Errore risposta /annullaPrenotazione', rispostaJson);
+    } catch (err) {
+      console.error('Impossibile annullare la prenotazione', err);
+    }
   }
 }
