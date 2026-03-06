@@ -20,25 +20,34 @@
 				<div>
 					<h2 class="panel-title mb-1 text-info-emphasis">Elenco prenotazioni</h2>
 				</div>
-				<div class="btn-group btn-group-sm" role="group" aria-label="Filtro prenotazioni">
-					<button type="button" class="btn"
-						[class.btn-primary]="filtroStato === 'tutte'"
-						[class.btn-outline-primary]="filtroStato !== 'tutte'"
-						(click)="impostaFiltroStato('tutte')">Tutte</button>
-					<button type="button" class="btn"
-						[class.btn-primary]="filtroStato === 'attive'"
-						[class.btn-outline-primary]="filtroStato !== 'attive'"
-						(click)="impostaFiltroStato('attive')">Solo attive</button>
-					<button type="button" class="btn"
-						[class.btn-primary]="filtroStato === 'annullate'"
-						[class.btn-outline-primary]="filtroStato !== 'annullate'"
-						(click)="impostaFiltroStato('annullate')">Solo annullate</button>
+				<div class="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
+					@if(isAdmin){
+					<select class="form-select form-select-sm" (change)="impostaFiltroPaziente($any($event.target).value)">
+						<option value="">Tutti i pazienti</option>
+						@for(paziente of pazientiPrenotati; track paziente.IDPaziente){
+						<option [value]="paziente.IDPaziente">{{ paziente.CognomePaziente }} {{ paziente.NomePaziente }}</option>
+						}
+					</select>
+					}
+					<div class="btn-group btn-group-sm" role="group" aria-label="Filtro prenotazioni">
+						<button type="button" class="btn"
+							[class.btn-primary]="filtroStato === 'tutte'"
+							[class.btn-outline-primary]="filtroStato !== 'tutte'"
+							(click)="impostaFiltroStato('tutte')">Tutte</button>
+						<button type="button" class="btn"
+							[class.btn-primary]="filtroStato === 'attive'"
+							[class.btn-outline-primary]="filtroStato !== 'attive'"
+							(click)="impostaFiltroStato('attive')">Solo attive</button>
+						<button type="button" class="btn"
+							[class.btn-primary]="filtroStato === 'annullate'"
+							[class.btn-outline-primary]="filtroStato !== 'annullate'"
+							(click)="impostaFiltroStato('annullate')">Solo annullate</button>
+					</div>
 				</div>
 			</div>
 
 			<div class="table-like-list">
-				@for(prenotazione of prenotazioni; track prenotazione.ID){
-				@if(isPrenotazioneVisibileConFiltro(prenotazione)){
+				@for(prenotazione of getPrenotazioniFiltrate(); track prenotazione.ID){
 				<div class="prenotazione-row"
 					[class.annullata-row]="isPrenotazioneAnnullata(prenotazione)">
 					<div class="date-square"
@@ -85,7 +94,6 @@
 						</div>
 					</div>
 				</div>
-				}
 				}
 
 				@if(getPrenotazioniFiltrate().length === 0){

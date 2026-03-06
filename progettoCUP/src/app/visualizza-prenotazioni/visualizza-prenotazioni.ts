@@ -16,6 +16,8 @@ export class VisualizzaPrenotazioni {
   idPrenotazioneDaPagare: number = 0;
   isAdmin: boolean = false;
   filtroStato: 'tutte' | 'attive' | 'annullate' = 'tutte';
+  filtroPaziente: string = '';
+  pazientiPrenotati: any[] = [];
 
   constructor(private cdr: ChangeDetectorRef, private router: Router) {
     this.getPrenotazioniPaziente();
@@ -36,6 +38,13 @@ export class VisualizzaPrenotazioni {
       const utenteSessioneJson = await utenteSessioneRis.json();
       this.isAdmin = String(utenteSessioneJson?.amministratore || '').trim().toUpperCase() === 'S';
 
+      if (this.isAdmin) {
+        await this.caricaPazientiPrenotati();
+      } else {
+        this.pazientiPrenotati = [];
+        this.filtroPaziente = '';
+      }
+
       const ris = await fetch('http://localhost:8081/prenotazioni', {
         method: 'GET',
         credentials: 'include'
@@ -51,6 +60,10 @@ export class VisualizzaPrenotazioni {
       this.prenotazioni = risJson?.result === 'success' && Array.isArray(risJson?.prenotazioni)
         ? risJson.prenotazioni
         : [];
+
+      if (this.isAdmin && this.pazientiPrenotati.length === 0) {
+        this.aggiornaPazientiDaPrenotazioni();
+      }
 
       this.cdr.detectChanges();
     } catch (err) {
@@ -68,8 +81,68 @@ export class VisualizzaPrenotazioni {
     return String(prenotazione?.Pagata || '').toUpperCase() === 'S';
   }
 
+  async caricaPazientiPrenotati() {
+    try {
+      const ris = await fetch('http://localhost:8081/pazientiPrenotati', {
+        method: 'GET',
+        credentials: 'include'
+      });
+
+      if (ris.status === 401) {
+        this.router.navigate(['/login']);
+        return;
+      }
+
+      if (ris.status === 403) {
+        this.pazientiPrenotati = [];
+        this.filtroPaziente = '';
+        return;
+      }
+
+      const risJson = await ris.json();
+      this.pazientiPrenotati = risJson?.result === 'success' && Array.isArray(risJson?.pazienti)
+        ? risJson.pazienti
+        : [];
+    } catch (err) {
+      console.error('Impossibile recuperare la lista pazienti', err);
+      this.pazientiPrenotati = [];
+    }
+  }
+
+  aggiornaPazientiDaPrenotazioni() {
+    const mappa = new Map<string, any>();
+    this.prenotazioni.forEach((prenotazione) => {
+      const id = String(prenotazione?.IDPaziente || '').trim();
+      if (!id) {
+        return;
+      }
+
+      if (!mappa.has(id)) {
+        mappa.set(id, {
+          IDPaziente: prenotazione.IDPaziente,
+          NomePaziente: prenotazione.NomePaziente,
+          CognomePaziente: prenotazione.CognomePaziente
+        });
+      }
+    });
+
+    this.pazientiPrenotati = Array.from(mappa.values()).sort((a, b) => {
+      const cognomeA = String(a?.CognomePaziente || '').toLowerCase();
+      const cognomeB = String(b?.CognomePaziente || '').toLowerCase();
+      if (cognomeA === cognomeB) {
+        return String(a?.NomePaziente || '').toLowerCase()
+          .localeCompare(String(b?.NomePaziente || '').toLowerCase());
+      }
+      return cognomeA.localeCompare(cognomeB);
+    });
+  }
+
   impostaFiltroStato(filtro: 'tutte' | 'attive' | 'annullate') {
     this.filtroStato = filtro;
+  }
+
+  impostaFiltroPaziente(valore: string) {
+    this.filtroPaziente = String(valore || '').trim();
   }
 
   isPrenotazioneVisibileConFiltro(prenotazione: any): boolean {
@@ -84,8 +157,18 @@ export class VisualizzaPrenotazioni {
     return true;
   }
 
+  isPrenotazioneVisibilePerPaziente(prenotazione: any): boolean {
+    if (!this.isAdmin || !this.filtroPaziente) {
+      return true;
+    }
+
+    return String(prenotazione?.IDPaziente || '') === this.filtroPaziente;
+  }
+
   getPrenotazioniFiltrate(): any[] {
-    return this.prenotazioni.filter((prenotazione) => this.isPrenotazioneVisibileConFiltro(prenotazione));
+    return this.prenotazioni.filter((prenotazione) =>
+      this.isPrenotazioneVisibileConFiltro(prenotazione) && this.isPrenotazioneVisibilePerPaziente(prenotazione)
+    );
   }
 
   getStatoPrenotazione(prenotazione: any): string {

@@ -549,6 +549,42 @@ app.get("/prenotazioni", (richiesta, risposta) => {
     })
 })
 
+app.get("/pazientiPrenotati", (richiesta, risposta) => {
+    const utenteSessione = richiesta.session?.utente;
+    const idUtente = Number(utenteSessione?.idUtente || 0);
+
+    if (!idUtente) {
+        risposta.status(401).send({result: "unauthorized"})
+        return;
+    }
+
+    const isAdmin = String(utenteSessione?.amministratore || '').trim().toUpperCase() === 'S';
+    if (!isAdmin) {
+        risposta.status(403).send({result: "forbidden"})
+        return;
+    }
+
+    const query = `SELECT DISTINCT p.ID AS IDPaziente,
+                          up.Nome AS NomePaziente,
+                          up.Cognome AS CognomePaziente
+                   FROM Prenotazioni pr
+                   JOIN Pazienti p ON pr.IDPaziente = p.ID
+                   JOIN Utenti up ON p.IDUtente = up.ID
+                   WHERE p.ValPaziente = ' '
+                     AND up.ValUtente = ' '
+                   ORDER BY up.Cognome, up.Nome`;
+
+    connection.query(query, (error, results) => {
+        if (error) {
+            risposta.statusCode = 500
+            risposta.statusMessage = "Errore di connessione con il db"
+            risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
+        } else {
+            risposta.send({result: "success", pazienti: results})
+        }
+    })
+})
+
 app.post("/pagaPrenotazione", (richiesta, risposta) => {
     const idUtente = getIdUtenteDaRichiesta(richiesta);
     if (!idUtente) {
