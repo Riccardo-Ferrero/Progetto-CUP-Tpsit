@@ -196,7 +196,7 @@ app.post("/registrazione", (richiesta, risposta)=>{
 })
 
 app.post("/login", (richiesta, risposta)=>{
-    const query = "SELECT ID, Nome, Cognome, Email, Password FROM utenti WHERE Email = ? AND ValUtente = ' ' LIMIT 1";
+    const query = "SELECT ID, Nome, Cognome, Email, Password, Amministratore FROM utenti WHERE Email = ? AND ValUtente = ' ' LIMIT 1";
     console.log("/login", richiesta.body);
 
     connection.query(query, [richiesta.body.email], (error, results) => {
@@ -230,7 +230,8 @@ app.post("/login", (richiesta, risposta)=>{
                 idUtente: utente.ID,
                 nome: utente.Nome,
                 cognome: utente.Cognome,
-                email: utente.Email
+                email: utente.Email,
+                amministratore: utente.Amministratore
             }
 
             risposta.send({
@@ -238,7 +239,8 @@ app.post("/login", (richiesta, risposta)=>{
                 idUtente: utente.ID,
                 nome: utente.Nome,
                 cognome: utente.Cognome,
-                email: utente.Email
+                email: utente.Email,
+                amministratore: utente.Amministratore
             })
         })
     })
@@ -257,7 +259,8 @@ app.get("/utenteSessione", (richiesta, risposta) => {
         idUtente: utenteSessione.idUtente,
         nome: utenteSessione.nome,
         cognome: utenteSessione.cognome,
-        email: utenteSessione.email
+        email: utenteSessione.email,
+        amministratore: utenteSessione.amministratore
     })
 })
 
@@ -433,7 +436,7 @@ app.get("/dottoriReparto", (richiesta, risposta)=>{
     })
 })
 
-app.post("/prenotazioni", (richiesta, risposta) => {
+app.post("/prenotazioniDottore", (richiesta, risposta) => {
     const query = `SELECT * FROM Prenotazioni WHERE IDDottore= ? ORDER BY DataOra DESC`;
     console.log("/prenotazioni", richiesta.body);
     connection.query(query, [richiesta.body.idDottore], (error, results) => {
@@ -498,30 +501,44 @@ app.post("/addPrenotazione", (richiesta, risposta) =>{
     })
 })
 
-app.get("/prenotazioniPaziente", (richiesta, risposta) => {
-    const idUtente = getIdUtenteDaRichiesta(richiesta);
+app.get("/prenotazioni", (richiesta, risposta) => {
+    const utenteSessione = richiesta.session?.utente;
+    const idUtente = Number(utenteSessione?.idUtente || 0);
+
     if (!idUtente) {
         risposta.status(401).send({result: "unauthorized"})
         return;
     }
-    
-    const query = `SELECT pr.*, 
-                          u.Nome AS NomeDottore,
-                          u.Cognome AS CognomeDottore,
-                          u.Genere AS GenereDottore,
-                          r.Reparto AS RepartoDottore
+
+    const isAdmin = String(utenteSessione?.amministratore || '').trim().toUpperCase() === 'S';
+
+        const selectBase = `SELECT pr.*, 
+                       u.Nome AS NomeDottore,
+                       u.Cognome AS CognomeDottore,
+                       u.Genere AS GenereDottore,
+                       up.Nome AS NomePaziente,
+                       up.Cognome AS CognomePaziente,
+                       r.Reparto AS RepartoDottore
                    FROM Prenotazioni pr
                    JOIN Pazienti p ON pr.IDPaziente = p.ID
+                   JOIN Utenti up ON p.IDUtente = up.ID
                    JOIN Dottori d ON pr.IDDottore = d.ID
                    JOIN Utenti u ON d.IDUtente = u.ID
                    JOIN Reparti r ON d.IDReparto = r.ID
-                   WHERE p.IDUtente = ?
-                     AND p.ValPaziente = ' '
+                   WHERE p.ValPaziente = ' '
+                     AND up.ValUtente = ' '
                      AND d.ValDottore = ' '
                      AND u.ValUtente = ' '
                      AND r.ValReparto = ' '
-                   ORDER BY pr.DataOra ASC`;
-    connection.query(query, [idUtente], (error, results) => {
+                     `;
+
+    const query = isAdmin
+        ? `${selectBase} ORDER BY pr.DataOra ASC`
+        : `${selectBase} AND p.IDUtente = ? ORDER BY pr.DataOra ASC`;
+
+    const queryParams = isAdmin ? [] : [idUtente];
+
+    connection.query(query, queryParams, (error, results) => {
         if (error) {
             risposta.statusCode = 500
             risposta.statusMessage = "Errore di connessione con il db"
@@ -570,6 +587,40 @@ app.post("/annullaPrenotazione", (richiesta, risposta) => {
 
     const query = "UPDATE Prenotazioni SET ValPrenotazione = 'A' WHERE ID = ?";
     console.log("/annullaPrenotazione", richiesta.body);
+
+    connection.query(query, [idPrenotazione], (error, results) => {
+        if (error) {
+            risposta.statusCode = 500
+            risposta.statusMessage = "Errore di connessione con il db"
+            risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
+        } else {
+            risposta.send({result: "success", prenotazione: results})
+        }
+    })
+})
+
+app.post("/ripristinaPrenotazione", (richiesta, risposta) => {
+    const utenteSessione = richiesta.session?.utente;
+    const idUtente = Number(utenteSessione?.idUtente || 0);
+    if (!idUtente) {
+        risposta.status(401).send({result: "unauthorized"})
+        return;
+    }
+
+    const isAdmin = String(utenteSessione?.amministratore || '').trim().toUpperCase() === 'S';
+    if (!isAdmin) {
+        risposta.status(403).send({result: "forbidden"})
+        return;
+    }
+
+    const idPrenotazione = richiesta.body.idPrenotazione;
+    if (!idPrenotazione) {
+        risposta.status(400).send({result: "error", message: "ID prenotazione mancante"})
+        return;
+    }
+
+    const query = "UPDATE Prenotazioni SET ValPrenotazione = ' ' WHERE ID = ?";
+    console.log("/ripristinaPrenotazione", richiesta.body);
 
     connection.query(query, [idPrenotazione], (error, results) => {
         if (error) {

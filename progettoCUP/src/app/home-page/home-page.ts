@@ -1,10 +1,11 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { ModalConferma } from '../modal-conferma/modal-conferma';
 
 @Component({
   selector: 'home-page',
-  imports: [RouterModule],
+  imports: [RouterModule, ModalConferma],
   templateUrl: './home-page.html',
   styleUrl: './home-page.css',
 })
@@ -17,6 +18,8 @@ export class HomePage {
   messaggioSuccessoPrenotazione: string = '';
   nomePaziente: string = '';
   cognomePaziente: string = '';
+  mostraModalConferma: boolean = false;
+  idPrenotazioneDaAnnullare: number = 0;
   constructor(private cdr: ChangeDetectorRef, private router: Router) {
     this.mostraAlertPrenotazioneSePresente();
     this.caricaDashboard();
@@ -248,11 +251,26 @@ export class HomePage {
     this.router.navigate(['/modifica-prenotazione']);
   }
 
-  async onAnnullaPrenotazione(idPrenotazione: number) {
+  onAnnullaPrenotazione(idPrenotazione: number) {
     const id = Number(idPrenotazione || 0);
     if (!id) {
       return;
     }
+
+    this.idPrenotazioneDaAnnullare = id;
+    this.mostraModalConferma = true;
+  }
+
+  async onRispostaModalConferma(haConfermato: boolean) {
+    this.mostraModalConferma = false;
+
+    if (!haConfermato || !this.idPrenotazioneDaAnnullare) {
+      this.idPrenotazioneDaAnnullare = 0;
+      return;
+    }
+
+    const id = this.idPrenotazioneDaAnnullare;
+    this.idPrenotazioneDaAnnullare = 0;
 
     try {
       const risposta = await fetch('http://localhost:8081/annullaPrenotazione', {

@@ -182,7 +182,7 @@ export class CalendarioPrenotazioni implements OnInit, OnChanges {
     }
 
     try {
-      const risposta = await fetch('http://localhost:8081/prenotazioni', {
+      const risposta = await fetch('http://localhost:8081/prenotazioniDottore', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ idDottore: this.idDottore }),

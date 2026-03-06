@@ -1,4 +1,6 @@
 <div class="visualizza-prenotazioni-page py-3 py-lg-3">
+	<modal-conferma [visibile]="mostraModalConferma" [messaggio]="'Sei sicuro?'" (risposta)="onRispostaModalConferma($event)"></modal-conferma>
+	<modal-conferma [visibile]="mostraModalConfermaPagamento" [messaggio]="'Contrassegnare la prenotazione come pagata?'" (risposta)="onRispostaModalConfermaPagamento($event)"></modal-conferma>
 	<div class="container-fluid">
 		<header class="dashboard-header mb-3">
 			<div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3">
@@ -13,21 +15,30 @@
 			</div>
 		</header>
 
-		@if(messaggioSuccesso){
-		<div class="custom-success-alert mb-3" role="status">
-			{{ messaggioSuccesso }}
-		</div>
-		}
-
 		<section class="panel border-info-subtle">
 			<div class="panel-head d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-2 mb-3">
 				<div>
 					<h2 class="panel-title mb-1 text-info-emphasis">Elenco prenotazioni</h2>
 				</div>
+				<div class="btn-group btn-group-sm" role="group" aria-label="Filtro prenotazioni">
+					<button type="button" class="btn"
+						[class.btn-primary]="filtroStato === 'tutte'"
+						[class.btn-outline-primary]="filtroStato !== 'tutte'"
+						(click)="impostaFiltroStato('tutte')">Tutte</button>
+					<button type="button" class="btn"
+						[class.btn-primary]="filtroStato === 'attive'"
+						[class.btn-outline-primary]="filtroStato !== 'attive'"
+						(click)="impostaFiltroStato('attive')">Solo attive</button>
+					<button type="button" class="btn"
+						[class.btn-primary]="filtroStato === 'annullate'"
+						[class.btn-outline-primary]="filtroStato !== 'annullate'"
+						(click)="impostaFiltroStato('annullate')">Solo annullate</button>
+				</div>
 			</div>
 
 			<div class="table-like-list">
 				@for(prenotazione of prenotazioni; track prenotazione.ID){
+				@if(isPrenotazioneVisibileConFiltro(prenotazione)){
 				<div class="prenotazione-row"
 					[class.annullata-row]="isPrenotazioneAnnullata(prenotazione)">
 					<div class="date-square"
@@ -40,7 +51,10 @@
 					<div class="prenotazione-content">
 						<div class="prenotazione-details">
 							<p class="row-main mb-1">{{ prenotazione.TipoVisita }}</p>
-							<p class="row-sub mb-2">{{ getTitoloDottore(prenotazione) }} {{ prenotazione.CognomeDottore }} {{ prenotazione.NomeDottore }} · Reparto {{ prenotazione.RepartoDottore }}</p>
+							<p class="row-sub mb-1">{{ getTitoloDottore(prenotazione) }} {{ prenotazione.CognomeDottore }} {{ prenotazione.NomeDottore }} · Reparto {{ prenotazione.RepartoDottore }}</p>
+							@if(isAdmin){
+							<p class="row-sub mb-2">Paziente: {{ prenotazione.CognomePaziente }} {{ prenotazione.NomePaziente }}</p>
+							}
 							<div class="meta-chip-group">
 								<span class="meta-chip">ID Prenotazione #{{ prenotazione.ID }}</span>
 								<span class="meta-chip"
@@ -53,22 +67,40 @@
 						</div>
 						<div class="prenotazione-actions">
 							@if(!isPrenotazioneAnnullata(prenotazione)){
-							<button type="button" class="btn btn-outline-warning btn-sm modifica-btn" (click)="onModificaClick(prenotazione.ID)">Modifica</button>
-							@if(!isPrenotazionePagata(prenotazione) && !isPrenotazioneAnnullata(prenotazione)){
+								@if(!isPrenotazionePagata(prenotazione) && !isPrenotazioneAnnullata(prenotazione)){
+							@if(isAdmin){
+							<button type="button" class="btn btn-outline-primary btn-sm paga-btn" (click)="onPagaPrenotazione(prenotazione.ID)">Contrassegna come pagato</button>
+							}
+							@if(!isAdmin){
 							<button type="button" class="btn btn-outline-primary btn-sm paga-btn" (click)="onPagaPrenotazione(prenotazione.ID)">Paga</button>
 							}
+							}
+							<button type="button" class="btn btn-outline-warning btn-sm modifica-btn" (click)="onModificaClick(prenotazione.ID)">Modifica</button>
+							
 							<button type="button" class="btn btn-outline-danger btn-sm" (click)="onAnnullaPrenotazione(prenotazione.ID)">Annulla</button>
+							}
+							@if(isAdmin && isPrenotazioneAnnullata(prenotazione)){
+							<button type="button" class="btn btn-outline-success btn-sm" (click)="onRipristinaPrenotazione(prenotazione.ID)">Ripristina</button>
 							}
 						</div>
 					</div>
 				</div>
 				}
+				}
 
-				@if(prenotazioni.length === 0){
+				@if(getPrenotazioniFiltrate().length === 0){
 				<div class="prenotazione-row">
 					<div>
 						<p class="row-main mb-1">Nessuna prenotazione presente</p>
+						@if(filtroStato === 'tutte'){
 						<p class="row-sub mb-0">Al momento non risultano prenotazioni associate al tuo profilo.</p>
+						}
+						@if(filtroStato === 'attive'){
+						<p class="row-sub mb-0">Non ci sono prenotazioni attive con il filtro selezionato.</p>
+						}
+						@if(filtroStato === 'annullate'){
+						<p class="row-sub mb-0">Non ci sono prenotazioni annullate con il filtro selezionato.</p>
+						}
 					</div>
 				</div>
 				}

@@ -1,0 +1,50 @@
+<div class="home-admin-page py-3 py-lg-3">
+	<div class="container-fluid">
+		<header class="dashboard-header mb-3">
+			<div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3">
+				<div>
+					<p class="intestazione mb-1">Dashboard Admin</p>
+					<h1 class="h3 mb-1">Pannello di controllo Admin</h1>
+					<p class="text-muted mb-0">Seleziona una delle azioni rapide disponibili.</p>
+				</div>
+				<div class="d-flex gap-2">
+					<button type="button" class="btn btn-outline-danger btn-sm" (click)="onLogoutClick()">Logout</button>
+				</div>
+			</div>
+		</header>
+
+		<section class="panel border-info-subtle">
+			<div class="panel-head mb-3">
+				<h2 class="panel-title mb-1 text-info-emphasis">Azioni amministratore</h2>
+				<p class="text-muted mb-0 small">Accesso rapido alle funzioni principali.</p>
+			</div>
+
+			<div class="row g-3 d-flex flex-wrap align-items-stretch justify-content-center">
+				<div class="col-12 col-md-6 col-xl-4">
+					<div class="action-card h-100 border-start border-3 border-primary-subtle">
+						<p class="action-label mb-2 text-primary-emphasis">Prenotazioni</p>
+						<p class="action-text mb-3">Consulta l'elenco completo e lo stato delle visite.</p>
+						<a href="/visualizza-prenotazioni" class="btn btn-outline-primary btn-sm w-100">Visualizza prenotazioni</a>
+					</div>
+				</div>
+
+				<div class="col-12 col-md-6 col-xl-4">
+					<div class="action-card h-100 border-start border-3 border-success-subtle">
+						<p class="action-label mb-2 text-success-emphasis">Nuova visita</p>
+						<p class="action-text mb-3">Avvia una nuova prenotazione per un paziente.</p>
+						<a href="/nuova-prenotazione" class="btn btn-primary btn-sm w-100">Nuova prenotazione</a>
+					</div>
+				</div>
+
+				<div class="col-12 col-md-6 col-xl-4">
+					<div class="action-card h-100 border-start border-3 border-warning-subtle">
+						<p class="action-label mb-2 text-warning-emphasis">Gestione profili</p>
+						<p class="action-text mb-3">Registra un nuovo medico o admin nel sistema.</p>
+						<a href="/registrazione" class="btn btn-warning btn-sm mb-2 w-100">Nuovo medico</a>
+                        <a href="/registrazione" class="btn btn-outline-warning btn-sm w-100">Nuovo admin</a>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+</div>

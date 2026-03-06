@@ -2,10 +2,11 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CalendarioPrenotazioni } from '../calendario-prenotazioni/calendario-prenotazioni';
+import { ModalConferma } from '../modal-conferma/modal-conferma';
 
 @Component({
   selector: 'modifica-prenotazione',
-  imports: [CalendarioPrenotazioni, FormsModule],
+  imports: [CalendarioPrenotazioni, FormsModule, ModalConferma],
   templateUrl: './modifica-prenotazione.html',
   styleUrl: './modifica-prenotazione.css',
 })
@@ -20,6 +21,7 @@ export class ModificaPrenotazione {
   pagataLabel: string = 'No';
   validitaLabel: string = 'Valida';
   tipoVisitaSelezionato: string = '';
+  mostraModalConfermaAnnulla: boolean = false;
   tipiVisita: string[] = [
     'Visita specialistica',
     'Prima visita',
@@ -93,6 +95,16 @@ export class ModificaPrenotazione {
   }
 
   onAnnullaClick() {
+    this.mostraModalConfermaAnnulla = true;
+  }
+
+  onRispostaModalConferma(haConfermato: boolean) {
+    this.mostraModalConfermaAnnulla = false;
+
+    if (!haConfermato) {
+      return;
+    }
+
     localStorage.removeItem('idPrenotazioneModifica');
     this.router.navigate(['/visualizza-prenotazioni']);
   }
@@ -134,7 +146,7 @@ export class ModificaPrenotazione {
       if (risposta.ok && rispostaJson?.result === 'success') {
         localStorage.removeItem('idPrenotazioneModifica');
         localStorage.setItem('alertPrenotazioneSuccesso', 'La prenotazione è stata modificata con successo');
-        this.router.navigate(['/visualizza-prenotazioni']);
+        this.router.navigate(['/home']);
         return;
       }
 

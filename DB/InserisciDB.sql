@@ -508,9 +508,9 @@ INSERT INTO Prenotazioni
 (IDPaziente, IDDottore, DataOra, Pagata, TipoVisita, ValPrenotazione)
 VALUES
 (1, 1, '2026-03-10 09:00:00', 'N', 'Consulenza', ' '),
-(1, 2, '2026-03-12 10:00:00', 'N', 'Visita di controllo', ' '),
+(1, 2, '2026-03-12 10:00:00', 'S', 'Visita di controllo', ' '),
 (1, 1, '2026-03-18 11:00:00', 'S', 'Follow-up', ' '),
-(1, 2, '2026-03-25 16:00:00', 'N', 'Esame diagnostico', ' '),
+(1, 2, '2026-03-25 16:00:00', 'S', 'Esame diagnostico', ' '),
 (1, 2, '2026-03-16 16:00:00', 'N', 'Consulenza', ' '),
 (2, 1, '2026-03-16 14:00:00', 'S', 'Esame diagnostico', ' '),
 (2, 1, '2026-03-18 13:00:00', 'S', 'Visita di controllo', ' '),
@@ -522,7 +522,33 @@ VALUES
 (3, 2, '2026-03-18 19:00:00', 'S', 'Consulenza', ' '),
 (3, 1, '2026-03-19 10:00:00', 'S', 'Esame diagnostico', ' '),
 (3, 1, '2026-03-19 17:00:00', 'N', 'Visita di controllo', ' '),
-(3, 2, '2026-03-19 12:00:00', 'S', 'Esame diagnostico', ' ');
+(3, 2, '2026-03-19 12:00:00', 'S', 'Esame diagnostico', ' '),
+(1, 1, '2026-03-11 09:00:00', 'S', 'Prima visita', ' '),
+(2, 1, '2026-03-11 11:00:00', 'S', 'Visita specialistica', ' '),
+(3, 1, '2026-03-12 15:00:00', 'N', 'Teleconsulto', ' '),
+(1, 1, '2026-03-13 10:00:00', 'S', 'Follow-up', ' '),
+(2, 1, '2026-03-14 09:00:00', 'N', 'Esame diagnostico', ' '),
+(3, 1, '2026-03-20 11:00:00', 'S', 'Consulenza', ' '),
+(1, 1, '2026-03-21 16:00:00', 'N', 'Visita di controllo', ' '),
+(1, 2, '2026-03-10 09:00:00', 'S', 'Visita specialistica', ' '),
+(2, 2, '2026-03-11 10:00:00', 'N', 'Consulenza', ' '),
+(3, 2, '2026-03-12 11:00:00', 'S', 'Esame diagnostico', ' '),
+(1, 2, '2026-03-13 15:00:00', 'S', 'Teleconsulto', ' '),
+(2, 2, '2026-03-14 12:00:00', 'S', 'Prima visita', ' '),
+(3, 2, '2026-03-20 10:00:00', 'N', 'Visita di controllo', ' '),
+(1, 2, '2026-03-21 09:00:00', 'S', 'Follow-up', ' '),
+(2, 1, '2026-03-10 10:00:00', 'S', 'Prima visita', ' '),
+(3, 1, '2026-03-12 09:00:00', 'S', 'Visita specialistica', ' '),
+(1, 1, '2026-03-16 10:00:00', 'N', 'Consulenza', ' '),
+(2, 1, '2026-03-17 11:00:00', 'S', 'Follow-up', ' '),
+(3, 1, '2026-03-20 14:00:00', 'S', 'Esame diagnostico', ' '),
+(1, 1, '2026-03-21 17:00:00', 'N', 'Teleconsulto', ' '),
+(2, 2, '2026-03-10 10:00:00', 'S', 'Consulenza', ' '),
+(3, 2, '2026-03-11 11:00:00', 'S', 'Prima visita', ' '),
+(1, 2, '2026-03-12 14:00:00', 'S', 'Visita specialistica', ' '),
+(2, 2, '2026-03-16 10:00:00', 'N', 'Follow-up', ' '),
+(3, 2, '2026-03-18 15:00:00', 'S', 'Esame diagnostico', ' '),
+(1, 2, '2026-03-21 17:00:00', 'N', 'Teleconsulto', ' ');
 
 
 

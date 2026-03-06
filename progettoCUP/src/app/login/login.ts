@@ -26,7 +26,8 @@ export class Login {
     const ris = await risposta.json();
 
     if(ris.result == "success"){
-      this.router.navigate(['/home']);
+      const isAdmin = String(ris?.amministratore || '').trim().toUpperCase() === 'S';
+      this.router.navigate([isAdmin ? '/home-admin' : '/home']);
     }
 
   }

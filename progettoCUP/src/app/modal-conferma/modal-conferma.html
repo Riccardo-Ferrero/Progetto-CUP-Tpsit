@@ -1,0 +1,12 @@
+@if(visibile){
+<div class="modal-conferma-backdrop" (click)="onNoClick()"></div>
+<div class="modal-conferma-wrapper" role="dialog" aria-modal="true" aria-label="Conferma annullamento">
+	<div class="modal-conferma-card">
+		<p class="modal-conferma-title mb-2">{{ messaggio }}</p>
+		<div class="d-flex justify-content-end gap-2">
+			<button type="button" class="btn btn-sm btn-outline-secondary" (click)="onNoClick()">No</button>
+			<button type="button" class="btn btn-sm btn-danger" (click)="onSiClick()">Si</button>
+		</div>
+	</div>
+</div>
+}
