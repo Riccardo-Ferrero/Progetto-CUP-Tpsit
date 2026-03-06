@@ -1,7 +1,8 @@
 <div class="nuova-prenotazione-page py-3 py-lg-4">
 	<div class="container-fluid">
 		<header class="dashboard-header mb-3">
-			<div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3">
+			<div
+				class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3">
 				<div>
 					<p class="intestazione mb-1">Nuova prenotazione</p>
 					<h1 class="h3 mb-1">Prenota una nuova visita</h1>
@@ -16,48 +17,74 @@
 				<section class="panel border-primary-subtle h-100">
 					<div class="panel-head mb-3">
 						<h2 class="panel-title mb-1 text-primary-emphasis">Dati della prenotazione</h2>
-						<p class="text-muted mb-0 small">Seleziona prima il reparto, poi il dottore e il tipo di visita.</p>
+						<p class="text-muted mb-0 small">Seleziona prima il reparto, poi il dottore e il tipo di visita.
+						</p>
 					</div>
 
 					<form class="prenotazione-form" (ngSubmit)="onSubmit(f)" #f="ngForm">
+						@if(isAdmin){
+							<div class="mb-3">
+								<label class="form-label small">Paziente</label>
+								<select id="pazienteSelect" class="form-select form-select-sm" required
+									[(ngModel)]="Prenotazione.paziente" name="paziente"
+									#paziente="ngModel">
+									<option value="">-- Seleziona paziente --</option>
+									@for(paziente of pazienti; track $index){
+									<option [value]="paziente.IDPaziente">{{paziente.Nome}} {{paziente.Cognome}}</option>
+									}
+								</select>
+								@if(paziente.invalid && paziente.dirty){
+								<div style="color:red;font-weight:bold">
+									@if(paziente.errors?.["required"]){
+									<small>Il campo paziente è obbligatorio</small>
+									}
+								</div>
+								}
+							</div>
+						}
+						
 						<div class="mb-3">
 							<label class="form-label small">Reparto</label>
-							<select id="repartiSelect" class="form-select form-select-sm" required (change)="onRepartoChange($event)"
-                [(ngModel)]="Prenotazione.reparto" name="reparto" #reparto="ngModel">
+							<select id="repartiSelect" class="form-select form-select-sm" required
+								(change)="onRepartoChange($event)" [(ngModel)]="Prenotazione.reparto" name="reparto"
+								#reparto="ngModel">
 								<option value="">-- Seleziona reparto --</option>
-                @for(reparto of reparti; track $index){
-                  <option [value]="reparto.ID">{{reparto.Reparto}}</option>
-                }
+								@for(reparto of reparti; track $index){
+								<option [value]="reparto.ID">{{reparto.Reparto}}</option>
+								}
 							</select>
-              @if(reparto.invalid && reparto.dirty){
-              <div style="color:red;font-weight:bold">
-                @if(reparto.errors?.["required"]){
-                <small>Il campo reparto è obbligatorio</small>
-                }
-              </div>
-              }
+							@if(reparto.invalid && reparto.dirty){
+							<div style="color:red;font-weight:bold">
+								@if(reparto.errors?.["required"]){
+								<small>Il campo reparto è obbligatorio</small>
+								}
+							</div>
+							}
 						</div>
 
 						<div class="mb-3">
 							<label class="form-label small">Dottore</label>
-							<select id="dottoriSelect" class="form-select form-select-sm" required [disabled]="!Prenotazione.reparto" [(ngModel)]="Prenotazione.dottore" name="dottore" #dottore="ngModel">
+							<select id="dottoriSelect" class="form-select form-select-sm" required
+								[disabled]="!Prenotazione.reparto" [(ngModel)]="Prenotazione.dottore" name="dottore"
+								#dottore="ngModel">
 								<option value="">-- Seleziona dottore --</option>
-                @for(dottore of dottoriReparto; track $index){
-                  <option [value]="dottore.ID">{{dottore.Nome}} {{dottore.Cognome}}</option>
-                }
+								@for(dottore of dottoriReparto; track $index){
+								<option [value]="dottore.ID">{{dottore.Nome}} {{dottore.Cognome}}</option>
+								}
 							</select>
-              @if(dottore.invalid && dottore.dirty){
-              <div style="color:red;font-weight:bold">
-                @if(dottore.errors?.["required"]){
-                <small>Il campo dottore è obbligatorio</small>
-                }
-              </div>
-              }
+							@if(dottore.invalid && dottore.dirty){
+							<div style="color:red;font-weight:bold">
+								@if(dottore.errors?.["required"]){
+								<small>Il campo dottore è obbligatorio</small>
+								}
+							</div>
+							}
 						</div>
 
 						<div class="mb-3">
 							<label class="form-label small">Tipo visita</label>
-							<select class="form-select form-select-sm" required [(ngModel)]="Prenotazione.tipoVisita" name="tipoVisita" #tipoVisita="ngModel">
+							<select class="form-select form-select-sm" required [(ngModel)]="Prenotazione.tipoVisita"
+								name="tipoVisita" #tipoVisita="ngModel">
 								<option value="">-- Seleziona tipo visita --</option>
 								<option>Visita specialistica</option>
 								<option>Prima visita</option>
@@ -67,18 +94,19 @@
 								<option>Consulenza</option>
 								<option>Teleconsulto</option>
 							</select>
-              @if(tipoVisita.invalid && tipoVisita.dirty){
-              <div style="color:red;font-weight:bold">
-                @if(tipoVisita.errors?.["required"]){
-                <small>Il campo tipo visita è obbligatorio</small>
-                }
-              </div>
-              }
+							@if(tipoVisita.invalid && tipoVisita.dirty){
+							<div style="color:red;font-weight:bold">
+								@if(tipoVisita.errors?.["required"]){
+								<small>Il campo tipo visita è obbligatorio</small>
+								}
+							</div>
+							}
 						</div>
 
 						<div class="d-flex justify-content-end gap-2 mt-4">
 							<a routerLink="/home" class="btn btn-outline-secondary btn-sm px-4">Annulla</a>
-							<button type="submit" class="btn btn-primary btn-sm px-4" [disabled]="f.invalid">Continua</button>
+							<button type="submit" class="btn btn-primary btn-sm px-4"
+								[disabled]="f.invalid">Continua</button>
 						</div>
 					</form>
 				</section>

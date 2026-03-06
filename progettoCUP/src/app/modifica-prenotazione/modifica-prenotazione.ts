@@ -15,6 +15,7 @@ export class ModificaPrenotazione {
   idDottoreSelezionato: number = 1;
   chiaveSlotSelezionato: string = '';
   invioModificaInCorso: boolean = false;
+  isAdmin: boolean = false;
 
   nomeDottoreCompleto: string = '-';
   repartoDottore: string = '-';
@@ -34,11 +35,13 @@ export class ModificaPrenotazione {
 
   constructor(private cdr: ChangeDetectorRef, private router: Router) {
     this.caricaPrenotazioneDaModificare();
+    this.getAmministratore();
   }
 
   async caricaPrenotazioneDaModificare() {
     const idSalvato = Number(localStorage.getItem('idPrenotazioneModifica') || 0);
     if (!idSalvato) {
+      console.error("No ID prenotazione in local storage");
       this.router.navigate(['/visualizza-prenotazioni']);
       return;
     }
@@ -64,6 +67,7 @@ export class ModificaPrenotazione {
         prenotazione = risJson?.prenotazione || null;
       }
       if (!prenotazione) {
+        console.error("Prenotazione non trovata")
         this.router.navigate(['/visualizza-prenotazioni']);
         return;
       }
@@ -146,7 +150,13 @@ export class ModificaPrenotazione {
       if (risposta.ok && rispostaJson?.result === 'success') {
         localStorage.removeItem('idPrenotazioneModifica');
         localStorage.setItem('alertPrenotazioneSuccesso', 'La prenotazione è stata modificata con successo');
-        this.router.navigate(['/home']);
+        if(this.isAdmin){
+          this.router.navigate(['/home-admin']);
+        }
+        else{
+          this.router.navigate(['/home']);
+        }
+        
         return;
       }
 
@@ -155,6 +165,25 @@ export class ModificaPrenotazione {
       console.error('Errore durante modifica prenotazione', errore);
     } finally {
       this.invioModificaInCorso = false;
+    }
+  }
+  async getAmministratore(){
+    try{
+      const utenteSessioneRis = await fetch('http://localhost:8081/utenteSessione', {
+        method: 'GET',
+        credentials: 'include'
+      });
+
+      if (utenteSessioneRis.status === 401) {
+        this.router.navigate(['/login']);
+        return;
+      }
+
+      const utenteSessioneJson = await utenteSessioneRis.json();
+      this.isAdmin = String(utenteSessioneJson?.amministratore || '').trim().toUpperCase() === 'S';
+    }
+    catch (err) {
+      console.error('Impossibile recuperare il paziente', err);
     }
   }
 }

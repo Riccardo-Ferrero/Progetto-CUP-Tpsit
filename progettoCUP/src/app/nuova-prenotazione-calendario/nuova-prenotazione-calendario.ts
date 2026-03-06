@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { numberAttribute } from '../../../node_modules/@angular/core/types/core';
 import { CalendarioPrenotazioni } from '../calendario-prenotazioni/calendario-prenotazioni';
 
 @Component({
@@ -11,7 +12,8 @@ import { CalendarioPrenotazioni } from '../calendario-prenotazioni/calendario-pr
 export class NuovaPrenotazioneCalendario implements OnInit {
   chiaveSlotSelezionato: string = '';
   idDottoreSelezionato: number = 0;
-
+  idPaziente: number = 0;
+  isAdmin: boolean = false;
   constructor(private router: Router) {}
 
   ngOnInit() {
@@ -23,9 +25,11 @@ export class NuovaPrenotazioneCalendario implements OnInit {
     try {
       const prenotazione = JSON.parse(prenotazioneSalvata);
       this.idDottoreSelezionato = Number(prenotazione?.dottore || 0);
+      this.idPaziente = Number(prenotazione?.paziente || 0);
     } catch {
       this.idDottoreSelezionato = 0;
     }
+    this.getAmministratore();
   }
 
   onSlotSelezionato(chiaveSlot: string) {
@@ -75,7 +79,7 @@ export class NuovaPrenotazioneCalendario implements OnInit {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          idUtente: idUtenteSessione,
+          idPaziente: this.idPaziente,
           idDottore,
           dataOra: dataOraDb,
           tipoVisita,
@@ -87,7 +91,13 @@ export class NuovaPrenotazioneCalendario implements OnInit {
       if (risposta.ok && rispostaJson?.result === 'success') {
         localStorage.setItem('alertPrenotazioneSuccesso', 'La prenotazione è stata aggiunta con successo');
         localStorage.removeItem('prenotazione');
-        this.router.navigate(['/home']);
+        if(this.isAdmin){
+          this.router.navigate(['/home-admin']);
+        }
+        else{
+          this.router.navigate(['/home']);
+        }
+        
       }
     } catch (errore) {
       console.error('Errore durante inserimento prenotazione', errore);
@@ -109,6 +119,25 @@ export class NuovaPrenotazioneCalendario implements OnInit {
       return Number(risJson?.idUtente || 0);
     } catch {
       return 0;
+    }
+  }
+  async getAmministratore(){
+    try{
+      const utenteSessioneRis = await fetch('http://localhost:8081/utenteSessione', {
+        method: 'GET',
+        credentials: 'include'
+      });
+
+      if (utenteSessioneRis.status === 401) {
+        this.router.navigate(['/login']);
+        return;
+      }
+
+      const utenteSessioneJson = await utenteSessioneRis.json();
+      this.isAdmin = String(utenteSessioneJson?.amministratore || '').trim().toUpperCase() === 'S';
+    }
+    catch (err) {
+      console.error('Impossibile recuperare il paziente', err);
     }
   }
 }

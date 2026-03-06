@@ -690,7 +690,7 @@ app.post("/logout", (richiesta, risposta) => {
 
 app.post("/datiPrenotazione" , (richiesta, risposta) => {
     const idUtente = getIdUtenteDaRichiesta(richiesta);
-    if (!idUtente) {
+    if (!idUtente  && !(richiesta.session?.amministratore === 'S')) {
         risposta.status(401).send({result: "unauthorized"})
         return;
     }
@@ -711,7 +711,6 @@ app.post("/datiPrenotazione" , (richiesta, risposta) => {
                         JOIN Utenti u ON d.IDUtente = u.ID
                         JOIN Reparti r ON d.IDReparto = r.ID
                         WHERE pr.ID = ?
-                        AND p.IDUtente = ?
                         AND pr.ValPrenotazione = ' '
                         AND p.ValPaziente = ' '
                         AND d.ValDottore = ' '
@@ -729,8 +728,8 @@ app.post("/datiPrenotazione" , (richiesta, risposta) => {
 })
 
 app.post("/modificaPrenotazione", (richiesta, risposta) => {
-    const idUtente = getIdUtenteDaRichiesta(richiesta);
-    if (!idUtente) {
+    let idUtente = getIdUtenteDaRichiesta(richiesta);
+    if (!idUtente && !(richiesta.session?.amministratore === 'S')) {
         risposta.status(401).send({result: "unauthorized"})
         return;
     }
@@ -753,6 +752,40 @@ app.post("/modificaPrenotazione", (richiesta, risposta) => {
             risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
         } else {
             risposta.send({result: "success", prenotazione: results})
+        }
+    })
+})
+
+app.get("/pazienti", (richiesta, risposta) => {
+    const utenteSessione = richiesta.session?.utente;
+    const idUtente = Number(getIdUtenteDaRichiesta(richiesta) || 0);
+    console.log("Tentativo /pazienti");
+    if (!idUtente) {
+        risposta.status(401).send({result: "unauthorized"})
+        console.log("non autorizzato")
+        return;
+    }
+
+    const isAdmin = String(utenteSessione?.amministratore || '').trim().toUpperCase() === 'S';
+    if (!isAdmin) {
+        risposta.status(403).send({result: "forbidden"})
+        return;
+    }
+    console.log("Esecuzione /pazienti", richiesta)
+    const query = `SELECT 
+                        p.ID AS IDPaziente,
+                        u.Nome,
+                        u.Cognome
+                    FROM Pazienti p
+                    INNER JOIN Utenti u ON p.IDUtente = u.ID;`;
+
+    connection.query(query, (error, results) => {
+        if (error) {
+            risposta.statusCode = 500
+            risposta.statusMessage = "Errore di connessione con il db"
+            risposta.send({result: "error", message: "Errore nell'esecuzione della query"})
+        } else {
+            risposta.send({result: "success", pazienti: results})
         }
     })
 })

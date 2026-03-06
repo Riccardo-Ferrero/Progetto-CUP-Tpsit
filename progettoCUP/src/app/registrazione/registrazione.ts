@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
   templateUrl: './registrazione.html',
   styleUrl: './registrazione.css',
 })
+
 export class Registrazione{
   Paziente = {
     nome: '',
@@ -38,6 +39,7 @@ export class Registrazione{
   comuni: any[] = [];
   maxDate: string = '';
   erroreRegistrazione: string = '';
+  isAdmin: boolean = false;
 
   async onSubmit(f: NgForm) {
     this.erroreRegistrazione = '';
@@ -99,6 +101,7 @@ export class Registrazione{
   constructor(private cdr: ChangeDetectorRef, private router: Router) {
     this.getToponimi();
     this.getProvince();
+    this.getAmministratore();
     const today = new Date();
     this.maxDate = today.toISOString().split('T')[0];
   }
@@ -168,5 +171,19 @@ export class Registrazione{
     }
   }
 
+  async getAmministratore(){
+    try{
+      const utenteSessioneRis = await fetch('http://localhost:8081/utenteSessione', {
+        method: 'GET',
+        credentials: 'include'
+      });
+
+      const utenteSessioneJson = await utenteSessioneRis.json();
+      this.isAdmin = String(utenteSessioneJson?.amministratore || '').trim().toUpperCase() === 'S';
+    }
+    catch (err) {
+      console.error('Impossibile recuperare il paziente', err);
+    }
+  }
 
 }

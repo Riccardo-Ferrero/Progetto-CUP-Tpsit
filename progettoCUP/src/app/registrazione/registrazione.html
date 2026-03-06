@@ -17,8 +17,8 @@
 									<div class="col-md-6">
 										<label class="form-label" for="nome">Nome</label>
 										<input class="form-control" id="nome" name="nome" type="text"
-											[(ngModel)]="Paziente.nome" placeholder="Es. Mario" required
-											#nome="ngModel" minlength="2">
+											[(ngModel)]="Paziente.nome" placeholder="Es. Mario" required #nome="ngModel"
+											minlength="2">
 										@if(nome.invalid && nome.dirty){
 										<div style="color:red;font-weight:bold">
 											@if(nome.errors?.["required"]){
@@ -49,7 +49,8 @@
 									<div class="col-md-4">
 										<label class="form-label" for="dataNascita">Data di nascita</label>
 										<input class="form-control" id="dataNascita" name="dataNascita" type="date"
-											[(ngModel)]="Paziente.dataNascita" required #dataNascita="ngModel" [max]="maxDate">
+											[(ngModel)]="Paziente.dataNascita" required #dataNascita="ngModel"
+											[max]="maxDate">
 										@if(dataNascita.invalid && dataNascita.dirty){
 										<div style="color:red;font-weight:bold">
 											@if(dataNascita.errors?.["required"]){
@@ -83,8 +84,9 @@
 										<input class="form-control text-uppercase" id="codiceFiscale"
 											name="codiceFiscale" type="text" maxlength="16"
 											[(ngModel)]="Paziente.codiceFiscale" placeholder="Es. RSSMRA80A01H501U"
-											(ngModelChange)="onCodiceFiscaleChange($event)"
-											required #codiceFiscale="ngModel" pattern="^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$">
+											(ngModelChange)="onCodiceFiscaleChange($event)" required
+											#codiceFiscale="ngModel"
+											pattern="^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$">
 										@if(codiceFiscale.invalid && codiceFiscale.dirty){
 										<div style="color:red;font-weight:bold">
 											@if(codiceFiscale.errors?.["required"]){
@@ -118,10 +120,11 @@
 											}
 										</div>
 										}
-										
+
 									</div>
 									<div class="col-md-6">
-										<label class="form-label" for="telefono">Telefono <span class="fw-light fst-italic">con prefisso</span></label>
+										<label class="form-label" for="telefono">Telefono <span
+												class="fw-light fst-italic">con prefisso</span></label>
 										<input class="form-control" id="telefono" name="telefono" type="tel"
 											[(ngModel)]="Paziente.telefono" placeholder="Es. 3331234567" required
 											#telefono="ngModel" pattern="^\+[1-9]\d{0,3}\s\d{4,14}$">
@@ -131,7 +134,8 @@
 											<small>Il campo telefono è obbligatorio</small>
 											}
 											@if(telefono.errors?.["pattern"]){
-											<small>Il campo telefono inserito non è valido. Deve includere il prefisso internazionale (es. +39)</small>
+											<small>Il campo telefono inserito non è valido. Deve includere il prefisso
+												internazionale (es. +39)</small>
 											}
 										</div>
 										}
@@ -157,12 +161,15 @@
 										<input class="form-control" id="confermaPassword" name="confermaPassword"
 											type="password" [(ngModel)]="Paziente.confermaPassword"
 											placeholder="Ripeti la password" required #confermaPassword="ngModel">
-										@if(confermaPassword.dirty && (confermaPassword.errors?.["required"] || (Paziente.password !== Paziente.confermaPassword && Paziente.confermaPassword))){
+										@if(confermaPassword.dirty && (confermaPassword.errors?.["required"] ||
+										(Paziente.password !== Paziente.confermaPassword &&
+										Paziente.confermaPassword))){
 										<div style="color:red;font-weight:bold">
 											@if(confermaPassword.errors?.["required"]){
 											<small>Il campo conferma password è obbligatorio</small>
 											}
-											@else if(Paziente.password !== Paziente.confermaPassword && Paziente.confermaPassword){
+											@else if(Paziente.password !== Paziente.confermaPassword &&
+											Paziente.confermaPassword){
 											<small>Le password non coincidono</small>
 											}
 										</div>
@@ -193,10 +200,12 @@
 										}
 									</div>
 									<div class="col-12 col-md-7">
-										<label class="form-label" for="indirizzo">Indirizzo <span class="fw-light fst-italic" style="font-size: 0.75rem;">toponimo richiesto solo con ‘Altro...’</span></label>
-											<input class="form-control" id="indirizzo" name="indirizzo" type="text"
-												[(ngModel)]="Paziente.indirizzo" placeholder="Es. Roma" required
-												#indirizzo="ngModel">
+										<label class="form-label" for="indirizzo">Indirizzo <span
+												class="fw-light fst-italic" style="font-size: 0.75rem;">toponimo
+												richiesto solo con ‘Altro...’</span></label>
+										<input class="form-control" id="indirizzo" name="indirizzo" type="text"
+											[(ngModel)]="Paziente.indirizzo" placeholder="Es. Roma" required
+											#indirizzo="ngModel">
 										@if(indirizzo.invalid && indirizzo.dirty){
 										<div style="color:red;font-weight:bold">
 											@if(indirizzo.errors?.["required"]){
@@ -255,14 +264,15 @@
 									</div>
 								</div>
 							</section>
-
+							@if(!isAdmin){
 							<section class="mb-4">
 								<h2 class="section-title">Informazioni paziente</h2>
 								<div class="row g-3">
 									<div class="col-md-4">
 										<label class="form-label" for="gruppo">Gruppo sanguigno</label>
 										<select class="form-select" id="gruppo" name="gruppoSanguigno"
-											[(ngModel)]="Paziente.gruppoSanguigno" required #gruppoSanguigno="ngModel" required>
+											[(ngModel)]="Paziente.gruppoSanguigno" required #gruppoSanguigno="ngModel"
+											required>
 											<option [ngValue]="''">Seleziona</option>
 											<option value="0+">0+</option>
 											<option value="0-">0-</option>
@@ -309,6 +319,30 @@
 									</div>
 								</div>
 							</section>
+							}
+							@else{
+								<section class="mb-4">
+									<h2 class="section-title">Informazioni dottore</h2>
+									<div class="row g-3">
+										<div class="col-md-4">
+											<label class="form-label" for="reparto">Reparto</label>
+											<select class="form-select" id="reparto" name="reparto"
+												 required
+												required>
+												<option value="">Seleziona</option>
+											</select>
+											<!--@if(gruppoSanguigno.invalid && gruppoSanguigno.dirty){
+											<div style="color:red;font-weight:bold">
+												@if(gruppoSanguigno.errors?.["required"]){
+												<small>Il campo gruppo sanguigno è obbligatorio</small>
+												}
+											</div>
+											}-->
+										</div>
+										
+									</div>
+								</section>
+							}
 
 							@if(erroreRegistrazione){
 							<div class="alert alert-danger py-2" role="alert">
@@ -317,7 +351,8 @@
 							}
 
 							<div class="d-flex justify-content-end pt-2">
-								<button type="submit" class="btn btn-primary px-4 py-2" [disabled]="f.invalid">Crea account paziente</button>
+								<button type="submit" class="btn btn-primary px-4 py-2" [disabled]="f.invalid">Crea
+									account paziente</button>
 							</div>
 						</form>
 					</div>
