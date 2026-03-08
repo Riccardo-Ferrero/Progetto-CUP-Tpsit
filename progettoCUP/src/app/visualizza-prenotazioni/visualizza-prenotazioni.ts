@@ -15,6 +15,7 @@ export class VisualizzaPrenotazioni {
   idPrenotazioneDaAnnullare: number = 0;
   idPrenotazioneDaPagare: number = 0;
   isAdmin: boolean = false;
+  isDottore: boolean = false;
   filtroStato: 'tutte' | 'attive' | 'annullate' = 'tutte';
   filtroPaziente: string = '';
   pazientiPrenotati: any[] = [];
@@ -36,7 +37,10 @@ export class VisualizzaPrenotazioni {
       }
 
       const utenteSessioneJson = await utenteSessioneRis.json();
-      this.isAdmin = String(utenteSessioneJson?.amministratore || '').trim().toUpperCase() === 'S';
+      const isAdmin = String(utenteSessioneJson?.amministratore || '').trim().toUpperCase() === 'S';
+      const isDottore = String(utenteSessioneJson?.dottore || '').trim().toUpperCase() === 'S';
+      this.isDottore = isDottore;
+      this.isAdmin = isAdmin || isDottore;
 
       if (this.isAdmin) {
         await this.caricaPazientiPrenotati();
@@ -371,6 +375,28 @@ export class VisualizzaPrenotazioni {
       console.error('Errore risposta /pagaPrenotazione', rispostaJson);
     } catch (err) {
       console.error('Impossibile contrassegnare come pagata la prenotazione', err);
+    }
+  }
+
+  async onLogoutClick() {
+    try {
+      const risposta = await fetch('http://localhost:8081/logout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+      });
+
+      const risJson = await risposta.json();
+      if (risJson.result === 'success') {
+        localStorage.removeItem('idPrenotazioneModifica');
+        localStorage.removeItem('idPrenotazionePagamento');
+        localStorage.removeItem('prezzoPrenotazionePagamento');
+        this.router.navigate(['/']);
+      } else {
+        console.error('Errore durante il logout:', risJson?.message);
+      }
+    } catch (err) {
+      console.error('Impossibile effettuare il logout', err);
     }
   }
 }

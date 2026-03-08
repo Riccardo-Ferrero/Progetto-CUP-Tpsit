@@ -27,7 +27,8 @@ export class Login {
 
     if(ris.result == "success"){
       const isAdmin = String(ris?.amministratore || '').trim().toUpperCase() === 'S';
-      this.router.navigate([isAdmin ? '/home-admin' : '/home']);
+      const isDottore = String(ris?.dottore || '').trim().toUpperCase() === 'S';
+      this.router.navigate([isAdmin ? '/home-admin' : isDottore ? '/visualizza-prenotazioni' : '/home']);
     }
 
   }

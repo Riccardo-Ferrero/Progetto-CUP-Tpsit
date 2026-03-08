@@ -10,7 +10,12 @@
 					<p class="text-muted mb-0">Panoramica completa delle visite prenotate con stato pagamento e dettagli dottore.</p>
 				</div>
 				<div class="d-flex gap-2">
+					@if(isDottore){
+					<button type="button" class="btn btn-outline-danger btn-sm" (click)="onLogoutClick()">Logout</button>
+					}
+					@if(!isDottore){
 					<a routerLink="/nuova-prenotazione" class="btn btn-primary btn-sm">Nuova prenotazione</a>
+					}
 				</div>
 			</div>
 		</header>
@@ -60,7 +65,21 @@
 					<div class="prenotazione-content">
 						<div class="prenotazione-details">
 							<p class="row-main mb-1">{{ prenotazione.TipoVisita }}</p>
+							@if(!isDottore){
 							<p class="row-sub mb-1">{{ getTitoloDottore(prenotazione) }} {{ prenotazione.CognomeDottore }} {{ prenotazione.NomeDottore }} · Reparto {{ prenotazione.RepartoDottore }}</p>
+							}
+							@if(!isAdmin){
+							<div class="doctor-contacts mb-1">
+								<p class="row-sub doctor-contact-line mb-0">
+									<i class="bi bi-envelope-fill contact-icon" aria-label="Email dottore" title="Email dottore"></i>
+									<span>{{ prenotazione.EmailDottore || '-' }}</span>
+								</p>
+								<p class="row-sub doctor-contact-line mb-0">
+									<i class="bi bi-telephone-fill contact-icon" aria-label="Telefono dottore" title="Telefono dottore"></i>
+									<span>{{ prenotazione.TelefonoDottore || '-' }}</span>
+								</p>
+							</div>
+							}
 							@if(isAdmin){
 							<p class="row-sub mb-2">Paziente: {{ prenotazione.CognomePaziente }} {{ prenotazione.NomePaziente }}</p>
 							}

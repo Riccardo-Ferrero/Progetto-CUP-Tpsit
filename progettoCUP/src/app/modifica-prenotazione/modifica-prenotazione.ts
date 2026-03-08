@@ -16,6 +16,7 @@ export class ModificaPrenotazione {
   chiaveSlotSelezionato: string = '';
   invioModificaInCorso: boolean = false;
   isAdmin: boolean = false;
+  isDottore: boolean = false;
 
   nomeDottoreCompleto: string = '-';
   repartoDottore: string = '-';
@@ -153,6 +154,9 @@ export class ModificaPrenotazione {
         if(this.isAdmin){
           this.router.navigate(['/home-admin']);
         }
+        else if(this.isDottore){
+          this.router.navigate(['/visualizza-prenotazioni']);
+        }
         else{
           this.router.navigate(['/home']);
         }
@@ -181,6 +185,7 @@ export class ModificaPrenotazione {
 
       const utenteSessioneJson = await utenteSessioneRis.json();
       this.isAdmin = String(utenteSessioneJson?.amministratore || '').trim().toUpperCase() === 'S';
+      this.isDottore = String(utenteSessioneJson?.dottore || '').trim().toUpperCase() === 'S';
     }
     catch (err) {
       console.error('Impossibile recuperare il paziente', err);

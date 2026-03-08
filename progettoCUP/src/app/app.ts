@@ -25,7 +25,8 @@ export class App {
 
       const utente = await risposta.json();
       const isAdmin = String(utente?.amministratore || '').trim().toUpperCase() === 'S';
-      this.router.navigate([isAdmin ? '/home-admin' : '/home']);
+      const isDottore = String(utente?.dottore || '').trim().toUpperCase() === 'S';
+      this.router.navigate([isAdmin ? '/home-admin' : isDottore ? '/visualizza-prenotazioni' : '/home']);
     } catch {
       this.router.navigate(['/home']);
     }

@@ -1,4 +1,4 @@
-DELETE FROM Prenotazioni;
+﻿DELETE FROM Prenotazioni;
 DELETE FROM Dottori;
 DELETE FROM Pazienti;
 DELETE FROM Utenti;
@@ -30,7 +30,7 @@ INSERT INTO Toponimi (ID, Toponimo, ValToponimo) VALUES
 (11,'Galleria',' '),
 (12,'Passaggio',' '),
 (13,'Lungomare',' '),
-(14,'Località',' '),
+(14,'LocalitÃ ',' '),
 (15,'Frazione',' '),
 (16,'Contrada',' '),
 (17,'Traversa',' '),
@@ -187,7 +187,7 @@ INSERT INTO Comuni (ID, Comune, IDProvincia, CAP, ValComune) VALUES
 (112,'Alba',4,'12051',' '),
 (113,'Bra',4,'12042',' '),
 (114,'Fossano',4,'12045',' '),
-(115,'Mondovì',4,'12084',' '),
+(115,'MondovÃ¬',4,'12084',' '),
 (116,'Saluzzo',4,'12037',' '),
 (117,'Savigliano',4,'12038',' '),
 (118,'Borgo San Dalmazzo',4,'12011',' '),
@@ -203,7 +203,7 @@ INSERT INTO Comuni (ID, Comune, IDProvincia, CAP, ValComune) VALUES
 (128,'Barolo',4,'12051',' '),
 (129,'Barbaresco',4,'12051',' '),
 (130,'Caraglio',4,'12032',' '),
-(131,'Carrù',4,'12061',' '),
+(131,'CarrÃ¹',4,'12061',' '),
 (132,'Cavallermaggiore',4,'12030',' '),
 (133,'Canale',4,'12046',' '),
 (134,'Castagnito',4,'12050',' '),
@@ -213,14 +213,14 @@ INSERT INTO Comuni (ID, Comune, IDProvincia, CAP, ValComune) VALUES
 (138,'Costigliole Saluzzo',4,'12026',' '),
 (139,'Farigliano',4,'12060',' '),
 (140,'Garessio',4,'12078',' '),
-(141,'Montà',4,'12066',' '),
+(141,'MontÃ ',4,'12066',' '),
 (142,'Murazzano',4,'12060',' '),
 (143,'Neive',4,'12060',' '),
 (144,'Novello',4,'12050',' '),
 (145,'Roddi',4,'12040',' '),
-(146,'Serra Riccò',4,'12060',' '),
-(147,'Torre Mondovì',4,'12070',' '),
-(148,'Trinità',4,'12040',' '),
+(146,'Serra RiccÃ²',4,'12060',' '),
+(147,'Torre MondovÃ¬',4,'12070',' '),
+(148,'TrinitÃ ',4,'12040',' '),
 (149,'Vezza d''Alba',4,'12050',' '),
 (150,'Verduno',4,'12050',' '),
 
@@ -278,7 +278,7 @@ INSERT INTO Comuni (ID, Comune, IDProvincia, CAP, ValComune) VALUES
 (194,'Orbassano',6,'10043',' '),
 (195,'Caselle Torinese',6,'10072',' '),
 (196,'San Mauro Torinese',6,'10099',' '),
-(197,'Ciriè',6,'10073',' '),
+(197,'CiriÃ¨',6,'10073',' '),
 (198,'Piossasco',6,'10045',' '),
 (199,'Beinasco',6,'10092',' '),
 (200,'Alpignano',6,'10091',' '),
@@ -293,7 +293,7 @@ INSERT INTO Comuni (ID, Comune, IDProvincia, CAP, ValComune) VALUES
 (209,'Santena',6,'10026',' '),
 (210,'Poirino',6,'10046',' '),
 (211,'San Maurizio Canavese',6,'10077',' '),
-(212,'Cuorgnè',6,'10082',' '),
+(212,'CuorgnÃ¨',6,'10082',' '),
 (213,'Castellamonte',6,'10081',' '),
 (214,'Gassino Torinese',6,'10090',' '),
 (215,'Carignano',6,'10041',' '),
@@ -394,10 +394,10 @@ INSERT INTO Comuni (ID, Comune, IDProvincia, CAP, ValComune) VALUES
 (301,'Vercelli',8,'13100',' '),
 (302,'Borgosesia',8,'13011',' '),
 (303,'Alice Castello',8,'13041',' '),
-(304,'Bianzè',8,'13040',' '),
+(304,'BianzÃ¨',8,'13040',' '),
 (305,'Borgo Vercelli',8,'13037',' '),
 (306,'Crescentino',8,'13044',' '),
-(307,'Santhià',8,'13048',' '),
+(307,'SanthiÃ ',8,'13048',' '),
 (308,'Trino',8,'13039',' '),
 (309,'Romagnano Sesia',8,'28078',' '),
 (310,'Ghemme',8,'28074',' '),
@@ -437,13 +437,17 @@ INSERT INTO Comuni (ID, Comune, IDProvincia, CAP, ValComune) VALUES
 (344,'San Pietro Mosezzo',8,'28060',' '),
 (345,'Tricerro',8,'13030',' '),
 (346,'Villanova Monferrato',8,'15039',' '),
-(347,'Zerbolò',8,'27020',' '),
+(347,'ZerbolÃ²',8,'27020',' '),
 (348,'Gattinara',8,'13045',' '),
 (349,'Civiasco',8,'13010',' '),
 (350,'Balmuccia',8,'13010',' ');
 
 
--- LA PASSWORD dei profili qua di seguito è SEMPRE 12345678
+-- LA PASSWORD dei profili qua di seguito Ã¨ SEMPRE 12345678
+
+-- ========================
+-- ACCOUNT DOTTORI 
+-- ========================
 INSERT INTO Utenti
 (Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
 VALUES
@@ -452,39 +456,7 @@ VALUES
 INSERT INTO Dottori
 (IDUtente, IDReparto, Ruolo, PrezzoVisita, ValDottore)
 VALUES
-(LAST_INSERT_ID(), 1, 'Specialista', 95.00, ' ');
-
-
-INSERT INTO Utenti
-(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
-VALUES
-('Mario', 'Rossi', '1992-04-18', 'M', '+39 3331234503', 'mario.rossi.paziente@example.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'RSSMRA92D18H501C', 1, 'Garibaldi', '21', ' ', 301, ' ');
-
-INSERT INTO Pazienti
-(IDUtente, GruppoSanguigno, Peso, Altezza, ValPaziente)
-VALUES
-(LAST_INSERT_ID(), 'A+', 72.50, 178.00, ' ');
-
-INSERT INTO Utenti
-(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
-VALUES
-('Marco', 'Colorato', '1984-07-20', 'M', '+39 2323543243', 'marco.colorato@mail.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'MMCCM84G18H507V', 1, 'Lago', '31A', ' ', 253, ' ');
-
-INSERT INTO Pazienti
-(IDUtente, GruppoSanguigno, Peso, Altezza, ValPaziente)
-VALUES
-(LAST_INSERT_ID(), 'B+', 83.00, 180.00, ' ');
-
-INSERT INTO Utenti
-(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
-VALUES
-('Lucia', 'Viola', '2001-11-02', 'F', '+39 5422346888', 'lucia.viola@mail.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'LLLVA01F02H543O', 2, 'Unità', '24B', ' ', 181, ' ');
-
-INSERT INTO Pazienti
-(IDUtente, GruppoSanguigno, Peso, Altezza, ValPaziente)
-VALUES
-(LAST_INSERT_ID(), '0-', 70.50, 160.00, ' ');
-
+(LAST_INSERT_ID(), 1, 'Cardiologo', 95.00, ' ');
 
 INSERT INTO Utenti
 (Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
@@ -494,61 +466,286 @@ VALUES
 INSERT INTO Dottori
 (IDUtente, IDReparto, Ruolo, PrezzoVisita, ValDottore)
 VALUES
-(LAST_INSERT_ID(), 2, 'Specialista', 80.00, ' ');
+(LAST_INSERT_ID(), 2, 'Oculista', 80.00, ' ');
 
--- ACCOUNT ADMIN 
+INSERT INTO Utenti
+(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
+VALUES
+('Paolo', 'Neri', '1979-03-11', 'M', '+39 3331234504', 'paolo.neri.dottore@example.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'NREPLA79C11H501C', 5, 'Torino', '45', ' ', 181, ' ');
 
+INSERT INTO Dottori
+(IDUtente, IDReparto, Ruolo, PrezzoVisita, ValDottore)
+VALUES
+(LAST_INSERT_ID(), 3, 'Ortopedico', 90.00, ' ');
+
+INSERT INTO Utenti
+(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
+VALUES
+('Giulia', 'Ferri', '1988-12-04', 'F', '+39 3331234505', 'giulia.ferri.dottore@example.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'FRRGLI88T44H501D', 3, 'Manzoni', '7', ' ', 301, ' ');
+
+INSERT INTO Dottori
+(IDUtente, IDReparto, Ruolo, PrezzoVisita, ValDottore)
+VALUES
+(LAST_INSERT_ID(), 4, 'Pediatra', 85.00, ' ');
+
+INSERT INTO Utenti
+(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
+VALUES
+('Andrea', 'Gallo', '1976-08-22', 'M', '+39 3331234506', 'andrea.gallo.dottore@example.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'GLLNDR76M22H501E', 1, 'Po', '19', ' ', 151, ' ');
+
+INSERT INTO Dottori
+(IDUtente, IDReparto, Ruolo, PrezzoVisita, ValDottore)
+VALUES
+(LAST_INSERT_ID(), 5, 'Chirurgo', 120.00, ' ');
+
+
+-- ========================
+-- ACCOUNT PAZIENTI (10)
+-- ========================
+INSERT INTO Utenti
+(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
+VALUES
+('Mario', 'Rossi', '1992-04-18', 'M', '+39 3331234601', 'mario.rossi.paziente@example.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'RSSMRA92D18H501C', 1, 'Garibaldi', '21', ' ', 301, ' ');
+INSERT INTO Pazienti (IDUtente, GruppoSanguigno, Peso, Altezza, ValPaziente) VALUES (LAST_INSERT_ID(), 'A+', 72.50, 178.00, ' ');
+
+INSERT INTO Utenti
+(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
+VALUES
+('Marco', 'Colorato', '1984-07-20', 'M', '+39 3331234602', 'marco.colorato@mail.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'CLRMRC84L20H507V', 1, 'Lago', '31A', ' ', 253, ' ');
+INSERT INTO Pazienti (IDUtente, GruppoSanguigno, Peso, Altezza, ValPaziente) VALUES (LAST_INSERT_ID(), 'B+', 83.00, 180.00, ' ');
+
+INSERT INTO Utenti
+(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
+VALUES
+('Lucia', 'Viola', '2001-11-02', 'F', '+39 3331234603', 'lucia.viola@mail.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'VIOLCU01S42H543O', 2, 'UnitÃ ', '24B', ' ', 181, ' ');
+INSERT INTO Pazienti (IDUtente, GruppoSanguigno, Peso, Altezza, ValPaziente) VALUES (LAST_INSERT_ID(), '0-', 70.50, 160.00, ' ');
+
+INSERT INTO Utenti
+(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
+VALUES
+('Sara', 'Nava', '1995-02-14', 'F', '+39 3331234604', 'sara.nava@mail.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'NVASRA95B54H501F', 5, 'Po', '9', ' ', 193, ' ');
+INSERT INTO Pazienti (IDUtente, GruppoSanguigno, Peso, Altezza, ValPaziente) VALUES (LAST_INSERT_ID(), 'AB+', 62.00, 168.00, ' ');
+
+INSERT INTO Utenti
+(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
+VALUES
+('Davide', 'Costa', '1990-10-09', 'M', '+39 3331234605', 'davide.costa@mail.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'CSTDVD90R09H501G', 1, 'Marconi', '33', ' ', 151, ' ');
+INSERT INTO Pazienti (IDUtente, GruppoSanguigno, Peso, Altezza, ValPaziente) VALUES (LAST_INSERT_ID(), 'A-', 79.00, 182.00, ' ');
+
+INSERT INTO Utenti
+(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
+VALUES
+('Chiara', 'Moro', '1998-06-22', 'F', '+39 3331234606', 'chiara.moro@mail.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'MROCHR98H62H501H', 2, 'Matteotti', '5', ' ', 201, ' ');
+INSERT INTO Pazienti (IDUtente, GruppoSanguigno, Peso, Altezza, ValPaziente) VALUES (LAST_INSERT_ID(), 'B-', 58.00, 165.00, ' ');
+
+INSERT INTO Utenti
+(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
+VALUES
+('Simone', 'Greco', '1987-01-30', 'M', '+39 3331234607', 'simone.greco@mail.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'GRCSMN87A30H501I', 3, 'Roma', '48', ' ', 241, ' ');
+INSERT INTO Pazienti (IDUtente, GruppoSanguigno, Peso, Altezza, ValPaziente) VALUES (LAST_INSERT_ID(), '0+', 86.00, 184.00, ' ');
+
+INSERT INTO Utenti
+(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
+VALUES
+('Elena', 'Riva', '1993-09-17', 'F', '+39 3331234608', 'elena.riva@mail.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'RVILNE93P57H501L', 1, 'Mazzini', '16', ' ', 111, ' ');
+INSERT INTO Pazienti (IDUtente, GruppoSanguigno, Peso, Altezza, ValPaziente) VALUES (LAST_INSERT_ID(), 'A+', 64.00, 170.00, ' ');
+
+INSERT INTO Utenti
+(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
+VALUES
+('Alberto', 'Fazio', '1982-12-03', 'M', '+39 3331234609', 'alberto.fazio@mail.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'FZALRT82T03H501M', 5, 'Dante', '77', ' ', 183, ' ');
+INSERT INTO Pazienti (IDUtente, GruppoSanguigno, Peso, Altezza, ValPaziente) VALUES (LAST_INSERT_ID(), 'AB-', 91.00, 186.00, ' ');
+
+INSERT INTO Utenti
+(Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
+VALUES
+('Francesca', 'Longo', '1999-05-28', 'F', '+39 3331234610', 'francesca.longo@mail.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'LNGFNC99E68H501N', 2, 'Garibaldi', '10', ' ', 302, ' ');
+INSERT INTO Pazienti (IDUtente, GruppoSanguigno, Peso, Altezza, ValPaziente) VALUES (LAST_INSERT_ID(), '0-', 55.00, 162.00, ' ');
+
+
+-- ACCOUNT ADMIN
 INSERT INTO Utenti
 (Nome, Cognome, DataNascita, Genere, Telefono, Email, Password, CodiceFiscale, IdToponimo, Indirizzo, NCivico, Amministratore, IdComune, ValUtente)
 VALUES
 ('Admin', 'Admin', '9999-01-01', 'O', '+39 4234567890', 'admin@example.com', '$2b$10$PkVVHAd5bPfZME4161iULO3.yo0vB5UrbnXEVU2RJH1pvtVqdUTqy', 'ADMNDA99A01H501C', 3, 'Piemonte', '1', 'S', 181, ' ');
 
 
+-- ========================
+-- PRENOTAZIONI
+-- ========================
 INSERT INTO Prenotazioni
 (IDPaziente, IDDottore, DataOra, Pagata, TipoVisita, ValPrenotazione)
 VALUES
-(1, 1, '2026-03-10 09:00:00', 'N', 'Consulenza', ' '),
-(1, 2, '2026-03-12 10:00:00', 'S', 'Visita di controllo', ' '),
-(1, 1, '2026-03-18 11:00:00', 'S', 'Follow-up', ' '),
-(1, 2, '2026-03-25 16:00:00', 'S', 'Esame diagnostico', ' '),
-(1, 2, '2026-03-16 16:00:00', 'N', 'Consulenza', ' '),
-(2, 1, '2026-03-16 14:00:00', 'S', 'Esame diagnostico', ' '),
-(2, 1, '2026-03-18 13:00:00', 'S', 'Visita di controllo', ' '),
-(2, 2, '2026-03-19 16:00:00', 'N', 'Follow-up', ' '),
-(2, 1, '2026-03-18 14:00:00', 'S', 'Consulenza', ' '),
-(2, 2, '2026-03-16 09:00:00', 'N', 'Esame diagnostico', ' '),
-(3, 1, '2026-03-17 16:00:00', 'N', 'Consulenza', ' '),
-(3, 2, '2026-03-17 17:00:00', 'N', 'Follow-up', ' '),
-(3, 2, '2026-03-18 19:00:00', 'S', 'Consulenza', ' '),
-(3, 1, '2026-03-19 10:00:00', 'S', 'Esame diagnostico', ' '),
-(3, 1, '2026-03-19 17:00:00', 'N', 'Visita di controllo', ' '),
-(3, 2, '2026-03-19 12:00:00', 'S', 'Esame diagnostico', ' '),
-(1, 1, '2026-03-11 09:00:00', 'S', 'Prima visita', ' '),
-(2, 1, '2026-03-11 11:00:00', 'S', 'Visita specialistica', ' '),
-(3, 1, '2026-03-12 15:00:00', 'N', 'Teleconsulto', ' '),
-(1, 1, '2026-03-13 10:00:00', 'S', 'Follow-up', ' '),
-(2, 1, '2026-03-14 09:00:00', 'N', 'Esame diagnostico', ' '),
-(3, 1, '2026-03-20 11:00:00', 'S', 'Consulenza', ' '),
-(1, 1, '2026-03-21 16:00:00', 'N', 'Visita di controllo', ' '),
-(1, 2, '2026-03-10 09:00:00', 'S', 'Visita specialistica', ' '),
-(2, 2, '2026-03-11 10:00:00', 'N', 'Consulenza', ' '),
-(3, 2, '2026-03-12 11:00:00', 'S', 'Esame diagnostico', ' '),
-(1, 2, '2026-03-13 15:00:00', 'S', 'Teleconsulto', ' '),
-(2, 2, '2026-03-14 12:00:00', 'S', 'Prima visita', ' '),
-(3, 2, '2026-03-20 10:00:00', 'N', 'Visita di controllo', ' '),
-(1, 2, '2026-03-21 09:00:00', 'S', 'Follow-up', ' '),
-(2, 1, '2026-03-10 10:00:00', 'S', 'Prima visita', ' '),
-(3, 1, '2026-03-12 09:00:00', 'S', 'Visita specialistica', ' '),
-(1, 1, '2026-03-16 10:00:00', 'N', 'Consulenza', ' '),
-(2, 1, '2026-03-17 11:00:00', 'S', 'Follow-up', ' '),
-(3, 1, '2026-03-20 14:00:00', 'S', 'Esame diagnostico', ' '),
-(1, 1, '2026-03-21 17:00:00', 'N', 'Teleconsulto', ' '),
-(2, 2, '2026-03-10 10:00:00', 'S', 'Consulenza', ' '),
-(3, 2, '2026-03-11 11:00:00', 'S', 'Prima visita', ' '),
-(1, 2, '2026-03-12 14:00:00', 'S', 'Visita specialistica', ' '),
-(2, 2, '2026-03-16 10:00:00', 'N', 'Follow-up', ' '),
-(3, 2, '2026-03-18 15:00:00', 'S', 'Esame diagnostico', ' '),
-(1, 2, '2026-03-21 17:00:00', 'N', 'Teleconsulto', ' ');
+(1, 1, '2026-03-26 13:00:00', 'N', 'Visita specialistica', ' '),
+(1, 2, '2026-03-16 15:00:00', 'S', 'Consulenza', ' '),
+(1, 3, '2026-03-20 09:00:00', 'N', 'Visita di controllo', ' '),
+(1, 4, '2026-04-01 14:00:00', 'S', 'Prima visita', ' '),
+(1, 5, '2026-03-24 17:00:00', 'N', 'Esame diagnostico', ' '),
+(1, 1, '2026-04-01 17:00:00', 'S', 'Follow-up', ' '),
+
+(2, 2, '2026-04-03 16:00:00', 'N', 'Consulenza', ' '),
+(2, 3, '2026-04-02 17:00:00', 'S', 'Teleconsulto', ' '),
+(2, 4, '2026-03-26 11:00:00', 'N', 'Visita specialistica', ' '),
+(2, 5, '2026-04-02 10:00:00', 'S', 'Esame diagnostico', ' '),
+(2, 1, '2026-04-02 09:00:00', 'N', 'Prima visita', ' '),
+(2, 2, '2026-03-26 17:00:00', 'S', 'Follow-up', ' '),
+
+(3, 3, '2026-03-18 16:00:00', 'N', 'Visita di controllo', ' '),
+(3, 4, '2026-03-27 09:00:00', 'S', 'Consulenza', ' '),
+(3, 5, '2026-04-03 14:00:00', 'N', 'Esame diagnostico', ' '),
+(3, 1, '2026-03-16 16:00:00', 'S', 'Teleconsulto', ' '),
+(3, 2, '2026-04-02 16:00:00', 'N', 'Visita specialistica', ' '),
+(3, 3, '2026-03-27 08:00:00', 'S', 'Follow-up', ' '),
+
+(4, 4, '2026-04-03 12:00:00', 'N', 'Prima visita', ' '),
+(4, 5, '2026-03-30 09:00:00', 'S', 'Visita di controllo', ' '),
+(4, 1, '2026-03-23 14:00:00', 'N', 'Consulenza', ' '),
+(4, 2, '2026-03-30 17:00:00', 'S', 'Esame diagnostico', ' '),
+(4, 3, '2026-03-18 17:00:00', 'N', 'Teleconsulto', ' '),
+(4, 4, '2026-04-03 15:00:00', 'S', 'Follow-up', ' '),
+
+(5, 5, '2026-03-20 08:00:00', 'N', 'Visita specialistica', ' '),
+(5, 1, '2026-03-17 15:00:00', 'S', 'Consulenza', ' '),
+(5, 2, '2026-03-24 16:00:00', 'N', 'Prima visita', ' '),
+(5, 3, '2026-04-01 16:00:00', 'S', 'Teleconsulto', ' '),
+(5, 4, '2026-03-30 08:00:00', 'N', 'Esame diagnostico', ' '),
+(5, 5, '2026-04-03 17:00:00', 'S', 'Follow-up', ' '),
+
+(6, 1, '2026-03-24 13:00:00', 'N', 'Prima visita', ' '),
+(6, 2, '2026-03-23 12:00:00', 'S', 'Consulenza', ' '),
+(6, 3, '2026-03-30 12:00:00', 'N', 'Visita specialistica', ' '),
+(6, 4, '2026-04-03 08:00:00', 'S', 'Teleconsulto', ' '),
+(6, 5, '2026-03-17 14:00:00', 'N', 'Esame diagnostico', ' '),
+(6, 1, '2026-04-01 15:00:00', 'S', 'Follow-up', ' '),
+
+(7, 2, '2026-03-30 11:00:00', 'N', 'Consulenza', ' '),
+(7, 3, '2026-03-23 13:00:00', 'S', 'Prima visita', ' '),
+(7, 4, '2026-03-16 14:00:00', 'N', 'Visita di controllo', ' '),
+(7, 5, '2026-03-17 13:00:00', 'S', 'Esame diagnostico', ' '),
+(7, 1, '2026-04-01 13:00:00', 'N', 'Teleconsulto', ' '),
+(7, 2, '2026-04-03 09:00:00', 'S', 'Follow-up', ' '),
+
+(8, 3, '2026-03-16 08:00:00', 'N', 'Visita specialistica', ' '),
+(8, 4, '2026-03-18 08:00:00', 'S', 'Consulenza', ' '),
+(8, 5, '2026-03-31 09:00:00', 'N', 'Prima visita', ' '),
+(8, 1, '2026-03-24 10:00:00', 'S', 'Visita di controllo', ' '),
+(8, 2, '2026-03-19 14:00:00', 'N', 'Teleconsulto', ' '),
+(8, 3, '2026-03-19 17:00:00', 'S', 'Follow-up', ' '),
+
+(9, 4, '2026-03-19 16:00:00', 'N', 'Consulenza', ' '),
+(9, 5, '2026-03-24 11:00:00', 'S', 'Esame diagnostico', ' '),
+(9, 1, '2026-03-25 10:00:00', 'N', 'Visita specialistica', ' '),
+(9, 2, '2026-03-30 10:00:00', 'S', 'Prima visita', ' '),
+(9, 3, '2026-03-20 17:00:00', 'N', 'Visita di controllo', ' '),
+(9, 4, '2026-03-26 08:00:00', 'S', 'Follow-up', ' '),
+
+(10, 5, '2026-03-20 11:00:00', 'N', 'Esame diagnostico', ' '),
+(10, 1, '2026-03-19 15:00:00', 'S', 'Consulenza', ' '),
+(10, 2, '2026-03-19 12:00:00', 'N', 'Prima visita', ' '),
+(10, 3, '2026-03-24 08:00:00', 'S', 'Teleconsulto', ' '),
+(10, 4, '2026-03-30 15:00:00', 'N', 'Visita specialistica', ' '),
+(10, 5, '2026-04-03 11:00:00', 'S', 'Follow-up', ' '),
+
+(1, 2, '2026-04-01 10:00:00', 'N', 'Teleconsulto', ' '),
+(1, 3, '2026-03-30 16:00:00', 'S', 'Consulenza', ' '),
+(1, 4, '2026-03-18 09:00:00', 'N', 'Visita di controllo', ' '),
+(1, 5, '2026-04-02 13:00:00', 'S', 'Follow-up', ' '),
+
+(2, 3, '2026-03-18 12:00:00', 'N', 'Visita specialistica', ' '),
+(2, 4, '2026-03-19 10:00:00', 'S', 'Teleconsulto', ' '),
+(2, 5, '2026-03-26 15:00:00', 'N', 'Consulenza', ' '),
+(2, 1, '2026-03-26 16:00:00', 'S', 'Visita di controllo', ' '),
+
+(3, 4, '2026-03-31 12:00:00', 'N', 'Prima visita', ' '),
+(3, 5, '2026-04-03 10:00:00', 'S', 'Esame diagnostico', ' '),
+(3, 1, '2026-03-17 10:00:00', 'N', 'Consulenza', ' '),
+(3, 2, '2026-04-01 08:00:00', 'S', 'Follow-up', ' '),
+
+(4, 5, '2026-03-20 14:00:00', 'N', 'Visita specialistica', ' '),
+(4, 1, '2026-03-25 14:00:00', 'S', 'Teleconsulto', ' '),
+(4, 2, '2026-04-01 09:00:00', 'N', 'Prima visita', ' '),
+(4, 3, '2026-03-27 14:00:00', 'S', 'Visita di controllo', ' '),
+
+(5, 1, '2026-03-26 14:00:00', 'N', 'Esame diagnostico', ' '),
+(5, 2, '2026-03-25 17:00:00', 'S', 'Consulenza', ' '),
+(5, 3, '2026-03-19 13:00:00', 'N', 'Follow-up', ' '),
+(5, 4, '2026-04-02 14:00:00', 'S', 'Teleconsulto', ' '),
+
+(6, 2, '2026-03-27 13:00:00', 'N', 'Visita specialistica', ' '),
+(6, 3, '2026-03-23 08:00:00', 'S', 'Prima visita', ' '),
+(6, 4, '2026-03-17 17:00:00', 'N', 'Consulenza', ' '),
+(6, 5, '2026-03-31 17:00:00', 'S', 'Esame diagnostico', ' '),
+
+(7, 3, '2026-03-18 10:00:00', 'N', 'Teleconsulto', ' '),
+(7, 4, '2026-03-16 10:00:00', 'S', 'Visita di controllo', ' '),
+(7, 5, '2026-03-27 16:00:00', 'N', 'Prima visita', ' '),
+(7, 1, '2026-03-31 14:00:00', 'S', 'Consulenza', ' '),
+
+(8, 4, '2026-03-25 16:00:00', 'N', 'Visita specialistica', ' '),
+(8, 5, '2026-03-20 15:00:00', 'S', 'Esame diagnostico', ' '),
+(8, 1, '2026-03-27 15:00:00', 'N', 'Follow-up', ' '),
+(8, 2, '2026-03-30 13:00:00', 'S', 'Teleconsulto', ' '),
+
+(9, 5, '2026-03-24 15:00:00', 'N', 'Prima visita', ' '),
+(9, 1, '2026-03-25 13:00:00', 'S', 'Consulenza', ' '),
+(9, 2, '2026-03-23 09:00:00', 'N', 'Visita di controllo', ' '),
+(9, 3, '2026-03-31 10:00:00', 'S', 'Visita specialistica', ' '),
+
+(10, 1, '2026-03-20 10:00:00', 'N', 'Teleconsulto', ' '),
+(10, 2, '2026-04-02 11:00:00', 'S', 'Esame diagnostico', ' '),
+(10, 3, '2026-03-17 08:00:00', 'N', 'Consulenza', ' '),
+(10, 4, '2026-04-01 12:00:00', 'S', 'Prima visita', ' '),
+(3, 4, '2026-03-20 17:00:00', 'S', 'Prima visita', ' '),
+(9, 3, '2026-04-02 14:00:00', 'S', 'Follow-up', ' '),
+(2, 4, '2026-03-16 17:00:00', 'S', 'Visita specialistica', ' '),
+(4, 4, '2026-03-23 10:00:00', 'N', 'Esame diagnostico', ' '),
+(3, 3, '2026-03-25 12:00:00', 'N', 'Teleconsulto', ' '),
+(6, 2, '2026-04-01 14:00:00', 'S', 'Consulenza', ' '),
+(2, 2, '2026-03-17 10:00:00', 'S', 'Visita di controllo', ' '),
+(10, 4, '2026-03-24 13:00:00', 'N', 'Esame diagnostico', ' '),
+(10, 4, '2026-03-18 14:00:00', 'N', 'Prima visita', ' '),
+(8, 2, '2026-03-16 17:00:00', 'S', 'Follow-up', ' '),
+(7, 5, '2026-04-01 10:00:00', 'S', 'Visita specialistica', ' '),
+(4, 5, '2026-03-26 09:00:00', 'S', 'Visita di controllo', ' '),
+(5, 1, '2026-03-30 17:00:00', 'N', 'Follow-up', ' '),
+(8, 3, '2026-03-24 11:00:00', 'N', 'Visita specialistica', ' '),
+(6, 1, '2026-03-20 14:00:00', 'S', 'Esame diagnostico', ' '),
+(6, 2, '2026-03-18 09:00:00', 'S', 'Visita specialistica', ' '),
+(4, 1, '2026-03-20 11:00:00', 'N', 'Prima visita', ' '),
+(6, 1, '2026-04-03 12:00:00', 'N', 'Teleconsulto', ' '),
+(7, 1, '2026-04-03 13:00:00', 'S', 'Visita specialistica', ' '),
+(3, 3, '2026-03-30 08:00:00', 'S', 'Consulenza', ' '),
+(6, 5, '2026-04-01 11:00:00', 'S', 'Esame diagnostico', ' '),
+(1, 2, '2026-03-31 08:00:00', 'S', 'Prima visita', ' '),
+(9, 1, '2026-03-17 17:00:00', 'N', 'Prima visita', ' '),
+(7, 4, '2026-03-30 16:00:00', 'S', 'Consulenza', ' '),
+(6, 2, '2026-04-01 12:00:00', 'S', 'Visita specialistica', ' '),
+(6, 1, '2026-03-27 14:00:00', 'S', 'Consulenza', ' '),
+(3, 4, '2026-03-30 13:00:00', 'N', 'Teleconsulto', ' '),
+(10, 1, '2026-03-16 14:00:00', 'N', 'Prima visita', ' '),
+(4, 5, '2026-03-25 15:00:00', 'S', 'Follow-up', ' '),
+(8, 3, '2026-04-01 10:00:00', 'N', 'Follow-up', ' '),
+(8, 2, '2026-04-03 14:00:00', 'S', 'Prima visita', ' '),
+(4, 4, '2026-04-03 14:00:00', 'S', 'Visita specialistica', ' '),
+(6, 4, '2026-03-25 12:00:00', 'S', 'Visita specialistica', ' '),
+(5, 1, '2026-03-23 17:00:00', 'N', 'Prima visita', ' '),
+(1, 1, '2026-03-19 09:00:00', 'N', 'Follow-up', ' '),
+(4, 2, '2026-03-18 15:00:00', 'N', 'Esame diagnostico', ' '),
+(4, 1, '2026-03-27 09:00:00', 'N', 'Esame diagnostico', ' '),
+(1, 4, '2026-04-03 17:00:00', 'N', 'Prima visita', ' '),
+(9, 5, '2026-03-23 08:00:00', 'N', 'Consulenza', ' '),
+(4, 5, '2026-03-27 10:00:00', 'N', 'Esame diagnostico', ' '),
+(7, 5, '2026-03-26 13:00:00', 'N', 'Teleconsulto', ' '),
+(8, 1, '2026-03-17 08:00:00', 'N', 'Prima visita', ' '),
+(3, 4, '2026-03-24 15:00:00', 'N', 'Consulenza', ' '),
+(7, 3, '2026-03-23 12:00:00', 'N', 'Visita di controllo', ' '),
+(7, 5, '2026-03-17 10:00:00', 'S', 'Esame diagnostico', ' '),
+(10, 2, '2026-03-26 15:00:00', 'N', 'Consulenza', ' '),
+(10, 5, '2026-03-26 08:00:00', 'S', 'Esame diagnostico', ' '),
+(3, 1, '2026-03-25 11:00:00', 'N', 'Consulenza', ' '),
+(6, 5, '2026-03-25 11:00:00', 'N', 'Teleconsulto', ' '),
+(3, 2, '2026-03-17 16:00:00', 'S', 'Teleconsulto', ' ');
+
 
 
 
