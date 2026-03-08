@@ -206,8 +206,8 @@ export class VisualizzaPrenotazioni {
     return String(prenotazione?.GenereDottore || '').toUpperCase() === 'F' ? 'Dott.ssa' : 'Dott.';
   }
 
-  onPagaPrenotazione(idPrenotazione: number) {
-    const id = Number(idPrenotazione || 0);
+  onPagaPrenotazione(prenotazione: any) {
+    const id = Number(prenotazione?.ID || 0);
     if (!id) {
       return;
     }
@@ -218,8 +218,32 @@ export class VisualizzaPrenotazioni {
       return;
     }
 
+    const prezzo = this.estraiPrezzoVisita(prenotazione);
     localStorage.setItem('idPrenotazionePagamento', String(id));
+    localStorage.setItem('prezzoPrenotazionePagamento', String(prezzo));
     this.router.navigate(['/pagamento']);
+  }
+
+  private estraiPrezzoVisita(prenotazione: any): number {
+    const possibiliValori = [
+      prenotazione?.PrezzoVisita,
+      prenotazione?.prezzoVisita,
+      prenotazione?.Prezzo,
+      prenotazione?.prezzo
+    ];
+
+    for (const valore of possibiliValori) {
+      if (valore === null || valore === undefined || valore === '') {
+        continue;
+      }
+
+      const numero = Number(String(valore).replace(',', '.'));
+      if (Number.isFinite(numero)) {
+        return numero;
+      }
+    }
+
+    return 0;
   }
   
   async onModificaClick(idPrenotazione: number) {
@@ -302,6 +326,7 @@ export class VisualizzaPrenotazioni {
       if (risposta.ok && rispostaJson?.result === 'success') {
         localStorage.removeItem('idPrenotazioneModifica');
         localStorage.removeItem('idPrenotazionePagamento');
+        localStorage.removeItem('prezzoPrenotazionePagamento');
         this.getPrenotazioniPaziente();
         return;
       }

@@ -1,0 +1,168 @@
+<div class="admin-page py-5">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-12 col-lg-8 col-xl-7">
+				<div class="admin-card shadow-sm">
+					<div class="admin-header">
+						<h1 class="h3 mb-2">Creazione Nuovo Admin</h1>
+						<p class="text-muted mb-0">Inserisci i dati richiesti per creare un nuovo account amministratore.</p>
+					</div>
+
+					<div class="admin-body p-4 p-md-5">
+						<form (ngSubmit)="onSubmit(f)" #f="ngForm">
+							<section class="mb-4">
+								<h2 class="section-title">Dati admin</h2>
+								<div class="row g-3">
+									<div class="col-12">
+										<label class="form-label" for="nomeAdmin">Nome admin</label>
+										<input
+											class="form-control"
+											id="nomeAdmin"
+											name="nomeAdmin"
+											type="text"
+											[(ngModel)]="Admin.nomeAdmin"
+											placeholder="Es. adminCuneo"
+											required
+											#nomeAdmin="ngModel"
+											minlength="2"
+										/>
+										@if (nomeAdmin.invalid && nomeAdmin.dirty) {
+											<div style="color: red; font-weight: bold">
+												@if (nomeAdmin.errors?.['required']) {
+													<small>Il campo nome admin e obbligatorio</small>
+												}
+												@if (nomeAdmin.errors?.['minlength']) {
+													<small>Il campo nome admin deve avere almeno 2 caratteri</small>
+												}
+											</div>
+										}
+									</div>
+
+									<div class="col-md-6">
+										<label class="form-label" for="email">Email</label>
+										<input
+											class="form-control"
+											id="email"
+											name="email"
+											type="email"
+											[(ngModel)]="Admin.email"
+											placeholder="Es. admin@email.it"
+											required
+											#email="ngModel"
+											pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+										/>
+										@if (email.invalid && email.dirty) {
+											<div style="color: red; font-weight: bold">
+												@if (email.errors?.['required']) {
+													<small>Il campo email e obbligatorio</small>
+												}
+												@if (email.errors?.['pattern']) {
+													<small>Il campo email inserito non e valido</small>
+												}
+											</div>
+										}
+									</div>
+
+									<div class="col-md-6">
+										<label class="form-label" for="telefono">Telefono <span class="fw-light fst-italic">con prefisso</span></label>
+										<input
+											class="form-control"
+											id="telefono"
+											name="telefono"
+											type="tel"
+											maxlength="15"
+											[(ngModel)]="Admin.telefono"
+											placeholder="Es. +39 3331234567"
+											required
+											#telefono="ngModel"
+											pattern="^\+[1-9]\d{0,3}\s\d{4,14}$"
+										/>
+										@if (telefono.invalid && telefono.dirty) {
+											<div style="color: red; font-weight: bold">
+												@if (telefono.errors?.['required']) {
+													<small>Il campo telefono e obbligatorio</small>
+												}
+												@if (telefono.errors?.['pattern']) {
+													<small>Il campo telefono inserito non e valido. Deve includere il prefisso internazionale (es. +39)</small>
+												}
+											</div>
+										}
+									</div>
+
+									<div class="col-md-6">
+										<label class="form-label" for="password">Password</label>
+										<input
+											class="form-control"
+											id="password"
+											name="password"
+											type="password"
+											[(ngModel)]="Admin.password"
+											placeholder="Almeno 8 caratteri"
+											required
+											#password="ngModel"
+											minlength="8"
+										/>
+										@if (password.invalid && password.dirty) {
+											<div style="color: red; font-weight: bold">
+												@if (password.errors?.['required']) {
+													<small>Il campo password e obbligatorio</small>
+												}
+												@if (password.errors?.['minlength']) {
+													<small>La password deve essere lunga almeno 8 caratteri</small>
+												}
+											</div>
+										}
+									</div>
+
+									<div class="col-md-6">
+										<label class="form-label" for="confermaPassword">Conferma Password</label>
+										<input
+											class="form-control"
+											id="confermaPassword"
+											name="confermaPassword"
+											type="password"
+											[(ngModel)]="Admin.confermaPassword"
+											placeholder="Ripeti la password"
+											required
+											#confermaPassword="ngModel"
+										/>
+										@if (
+											confermaPassword.dirty &&
+											(confermaPassword.errors?.['required'] ||
+												(Admin.password !== Admin.confermaPassword && Admin.confermaPassword))
+										) {
+											<div style="color: red; font-weight: bold">
+												@if (confermaPassword.errors?.['required']) {
+													<small>Il campo conferma password e obbligatorio</small>
+												} @else if (Admin.password !== Admin.confermaPassword && Admin.confermaPassword) {
+													<small>Le password non coincidono</small>
+												}
+											</div>
+										}
+									</div>
+								</div>
+							</section>
+
+							@if (erroreCreazioneAdmin) {
+								<div class="alert alert-danger py-2" role="alert">
+									{{ erroreCreazioneAdmin }}
+								</div>
+							}
+
+							<div class="d-flex justify-content-end gap-2 pt-2">
+								<a class="btn btn-outline-secondary px-4 py-2" href="/home-admin">Annulla</a>
+								<button
+									type="submit"
+									class="btn btn-primary px-4 py-2"
+									[disabled]="f.invalid || (Admin.password !== Admin.confermaPassword)"
+								>
+									Crea account admin
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

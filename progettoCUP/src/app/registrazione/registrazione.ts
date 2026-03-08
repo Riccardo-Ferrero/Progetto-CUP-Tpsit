@@ -1,16 +1,15 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { FormsModule,NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormsModule, NgForm } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'registrazione',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './registrazione.html',
   styleUrl: './registrazione.css',
 })
-
-export class Registrazione{
-  Paziente = {
+export class Registrazione {
+  Registrazione = {
     nome: '',
     cognome: '',
     dataNascita: null,
@@ -30,13 +29,17 @@ export class Registrazione{
 
     gruppoSanguigno: '',
     peso: null,
-    altezza: null
+    altezza: null,
+
+    reparto: '',
+    ruolo: '',
+    prezzoVisita: null,
   };
 
- 
   toponimi: any[] = [];
   province: any[] = [];
   comuni: any[] = [];
+  reparti: any[] = [];
   maxDate: string = '';
   erroreRegistrazione: string = '';
   isAdmin: boolean = false;
@@ -46,11 +49,11 @@ export class Registrazione{
     this.cdr.detectChanges();
 
     try {
-      const risposta = await fetch("http://localhost:8081/registrazione", {
+      const risposta = await fetch('http://localhost:8081/registrazione', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(this.Paziente),
-        credentials: 'include'
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.Registrazione),
+        credentials: 'include',
       });
 
       const rispostaTesto = await risposta.text();
@@ -61,10 +64,10 @@ export class Registrazione{
         ris = { result: 'error', message: rispostaTesto || 'Errore durante la registrazione' };
       }
 
-      if(risposta.ok && ris.result === 'success') {
-        console.log('Paziente registrato con successo');
+      if (risposta.ok && ris.result === 'success') {
+        console.log('Registrazione completata con successo');
         f.resetForm();
-        this.router.navigate(['/home']);
+        this.router.navigate([this.isAdmin ? '/home-admin' : '/home']);
         return;
       }
 
@@ -95,20 +98,24 @@ export class Registrazione{
   }
 
   onCodiceFiscaleChange(value: string) {
-    this.Paziente.codiceFiscale = (value ?? '').toUpperCase().replace(/\s+/g, '');
+    this.Registrazione.codiceFiscale = (value ?? '').toUpperCase().replace(/\s+/g, '');
   }
-  
-  constructor(private cdr: ChangeDetectorRef, private router: Router) {
+
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+  ) {
     this.getToponimi();
     this.getProvince();
+    this.getReparti();
     this.getAmministratore();
     const today = new Date();
     this.maxDate = today.toISOString().split('T')[0];
   }
 
-  async getToponimi(){
+  async getToponimi() {
     try {
-      let ris = await fetch("http://localhost:8081/toponimi");
+      let ris = await fetch('http://localhost:8081/toponimi');
       ris = await ris.json();
       this.toponimi = Array.isArray(ris) ? ris : [];
       this.cdr.detectChanges();
@@ -118,37 +125,51 @@ export class Registrazione{
       this.toponimi = [];
       this.cdr.detectChanges();
     }
-    
   }
 
   async getProvince() {
-      try {
-        let ris = await fetch("http://localhost:8081/province");
-        ris = await ris.json();
-        this.province = Array.isArray(ris) ? ris : [];
-        this.cdr.detectChanges();
-        console.log('Province caricate:', this.province);
-      }
-      catch (err) {
-        console.error('Impossibile recuperare province', err);
-        this.province = [];
-        this.cdr.detectChanges();
-      }
+    try {
+      let ris = await fetch('http://localhost:8081/province');
+      ris = await ris.json();
+      this.province = Array.isArray(ris) ? ris : [];
+      this.cdr.detectChanges();
+      console.log('Province caricate:', this.province);
+    } catch (err) {
+      console.error('Impossibile recuperare province', err);
+      this.province = [];
+      this.cdr.detectChanges();
+    }
+  }
+
+  async getReparti() {
+    try {
+      let ris = await fetch('http://localhost:8081/reparti', {
+        method: 'GET',
+        credentials: 'include',
+      });
+      ris = await ris.json();
+      this.reparti = Array.isArray(ris) ? ris : [];
+      this.cdr.detectChanges();
+      console.log('Reparti caricati:', this.reparti);
+    } catch (err) {
+      console.error('Impossibile recuperare reparti', err);
+      this.reparti = [];
+      this.cdr.detectChanges();
+    }
   }
 
   onProvinciaChange(event: any) {
     const provinciaId = event.target.value;
     const cmbComune = document.getElementById('comune') as HTMLSelectElement;
 
-    this.Paziente.idComune = '';
+    this.Registrazione.idComune = '';
     this.comuni = [];
 
-    if(provinciaId === '') {
+    if (provinciaId === '') {
       cmbComune.disabled = true;
     } else {
       cmbComune.disabled = false;
       this.getComuni(provinciaId);
-      
     }
   }
 
@@ -156,14 +177,13 @@ export class Registrazione{
     try {
       let ris = await fetch(`http://localhost:8081/comuni`, {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ idProvincia: provinciaId })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idProvincia: provinciaId }),
       });
       ris = await ris.json();
       this.comuni = Array.isArray(ris) ? ris : [];
       this.cdr.detectChanges();
       console.log('Comuni caricati:', this.comuni);
-      
     } catch (err) {
       console.error('Impossibile recuperare comuni', err);
       this.comuni = [];
@@ -171,19 +191,20 @@ export class Registrazione{
     }
   }
 
-  async getAmministratore(){
-    try{
+  async getAmministratore() {
+    try {
       const utenteSessioneRis = await fetch('http://localhost:8081/utenteSessione', {
         method: 'GET',
-        credentials: 'include'
+        credentials: 'include',
       });
 
       const utenteSessioneJson = await utenteSessioneRis.json();
-      this.isAdmin = String(utenteSessioneJson?.amministratore || '').trim().toUpperCase() === 'S';
-    }
-    catch (err) {
+      this.isAdmin =
+        String(utenteSessioneJson?.amministratore || '')
+          .trim()
+          .toUpperCase() === 'S';
+    } catch (err) {
       console.error('Impossibile recuperare il paziente', err);
     }
   }
-
 }

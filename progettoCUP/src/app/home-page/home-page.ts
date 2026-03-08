@@ -176,14 +176,38 @@ export class HomePage {
     }
   }
 
-  onPagaPrenotazione(idPrenotazione: number) {
-    const id = Number(idPrenotazione || 0);
+  onPagaPrenotazione(prenotazione: any) {
+    const id = Number(prenotazione?.ID || 0);
     if (!id) {
       return;
     }
 
+    const prezzo = this.estraiPrezzoVisita(prenotazione);
     localStorage.setItem('idPrenotazionePagamento', String(id));
+    localStorage.setItem('prezzoPrenotazionePagamento', String(prezzo));
     this.router.navigate(['/pagamento']);
+  }
+
+  private estraiPrezzoVisita(prenotazione: any): number {
+    const possibiliValori = [
+      prenotazione?.PrezzoVisita,
+      prenotazione?.prezzoVisita,
+      prenotazione?.Prezzo,
+      prenotazione?.prezzo
+    ];
+
+    for (const valore of possibiliValori) {
+      if (valore === null || valore === undefined || valore === '') {
+        continue;
+      }
+
+      const numero = Number(String(valore).replace(',', '.'));
+      if (Number.isFinite(numero)) {
+        return numero;
+      }
+    }
+
+    return 0;
   }
 
   getDay(dataOra: string): string {
@@ -232,6 +256,7 @@ export class HomePage {
       const risJson = await risposta.json();
       if (risJson.result === 'success') {
         localStorage.removeItem('idPrenotazionePagamento');
+        localStorage.removeItem('prezzoPrenotazionePagamento');
         this.router.navigate(['/']);
       } else {
         console.error('Errore durante il logout:', risJson?.message);
@@ -289,6 +314,7 @@ export class HomePage {
       if (risposta.ok && rispostaJson?.result === 'success') {
         localStorage.removeItem('idPrenotazioneModifica');
         localStorage.removeItem('idPrenotazionePagamento');
+        localStorage.removeItem('prezzoPrenotazionePagamento');
         this.messaggioSuccessoPrenotazione = 'Prenotazione annullata con successo';
         this.caricaDashboard();
         setTimeout(() => {

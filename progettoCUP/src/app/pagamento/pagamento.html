@@ -20,7 +20,7 @@
 
 					<div class="totale-inline mb-3">
 						<span class="totale-inline-label">Totale da pagare</span>
-						<span class="totale-inline-value">€ 80,00</span>
+						<span class="totale-inline-value">{{ getTotaleFormattato() }}</span>
 					</div>
 
 					<form class="pagamento-form" #f="ngForm" (ngSubmit)="onSubmit(f)">

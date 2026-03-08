@@ -9,6 +9,7 @@ import { VisualizzaPrenotazioni } from './visualizza-prenotazioni/visualizza-pre
 import { Pagamento } from './pagamento/pagamento';
 import { ModificaPrenotazione } from './modifica-prenotazione/modifica-prenotazione';
 import { HomeAdmin } from './home-admin/home-admin';
+import { NuovoAdmin } from './nuovo-admin/nuovo-admin';
 
 export const routes: Routes = [
   { path: 'registrazione', component: Registrazione },
@@ -20,5 +21,6 @@ export const routes: Routes = [
   { path: 'visualizza-prenotazioni', component: VisualizzaPrenotazioni},
   { path: 'pagamento', component: Pagamento},
   { path: 'modifica-prenotazione', component: ModificaPrenotazione},
-  { path: 'home-admin', component: HomeAdmin}
+  { path: 'home-admin', component: HomeAdmin},
+  { path: 'nuovo-admin', component: NuovoAdmin}
 ];

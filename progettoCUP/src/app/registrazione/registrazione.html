@@ -1,363 +1,561 @@
 <div class="registration-page py-5">
-	<div class="container">
-		<div class="row justify-content-center">
-			<div class="col-12 col-lg-10 col-xl-9">
-				<div class="registration-card shadow-sm">
-					<div class="registration-header">
-						<h1 class="h3 mb-2">Registrazione Paziente</h1>
-						<p class="text-muted mb-0">Compila i dati richiesti per creare il tuo account in modo semplice e
-							veloce.</p>
-					</div>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-10 col-xl-9">
+        <div class="registration-card shadow-sm">
+          <div class="registration-header">
+            @if (!isAdmin) {
+              <h1 class="h3 mb-2">Registrazione Paziente</h1>
+              <p class="text-muted mb-0">
+                Compila i dati richiesti per creare il tuo account in modo semplice e veloce.
+              </p>
+            } @else {
+              <h1 class="h3 mb-2">Creazione Account Dottore</h1>
+              <p class="text-muted mb-0">
+                Compila i dati richiesti per creare il nuovo account dottore in modo semplice e
+                veloce.
+              </p>
+            }
+          </div>
 
-					<div class="registration-body p-4 p-md-5">
-						<form (ngSubmit)="onSubmit(f)" #f="ngForm">
-							<section class="mb-4">
-								<h2 class="section-title">Dati anagrafici</h2>
-								<div class="row g-3">
-									<div class="col-md-6">
-										<label class="form-label" for="nome">Nome</label>
-										<input class="form-control" id="nome" name="nome" type="text"
-											[(ngModel)]="Paziente.nome" placeholder="Es. Mario" required #nome="ngModel"
-											minlength="2">
-										@if(nome.invalid && nome.dirty){
-										<div style="color:red;font-weight:bold">
-											@if(nome.errors?.["required"]){
-											<small>Il campo nome è obbligatorio</small>
-											}
-											@if(nome.errors?.["minlength"]){
-											<small>Il campo nome deve avere almeno 2 caratteri</small>
-											}
-										</div>
-										}
-									</div>
-									<div class="col-md-6">
-										<label class="form-label" for="cognome">Cognome</label>
-										<input class="form-control" id="cognome" name="cognome" type="text"
-											[(ngModel)]="Paziente.cognome" placeholder="Es. Rossi" required
-											#cognome="ngModel" minlength="2">
-										@if(cognome.invalid && cognome.dirty){
-										<div style="color:red;font-weight:bold">
-											@if(cognome.errors?.["required"]){
-											<small>Il campo cognome è obbligatorio</small>
-											}
-											@if(cognome.errors?.["minlength"]){
-											<small>Il campo cognome deve avere almeno 2 caratteri</small>
-											}
-										</div>
-										}
-									</div>
-									<div class="col-md-4">
-										<label class="form-label" for="dataNascita">Data di nascita</label>
-										<input class="form-control" id="dataNascita" name="dataNascita" type="date"
-											[(ngModel)]="Paziente.dataNascita" required #dataNascita="ngModel"
-											[max]="maxDate">
-										@if(dataNascita.invalid && dataNascita.dirty){
-										<div style="color:red;font-weight:bold">
-											@if(dataNascita.errors?.["required"]){
-											<small>Il campo data di nascita è obbligatorio</small>
-											}
-											@if(dataNascita.errors?.["max"]){
-											<small>La data di nascita non può essere futura</small>
-											}
-										</div>
-										}
-									</div>
-									<div class="col-md-4">
-										<label class="form-label" for="genere">Genere</label>
-										<select class="form-select" id="genere" name="genere"
-											[(ngModel)]="Paziente.genere" required #genere="ngModel">
-											<option value="">Seleziona</option>
-											<option value="M">Maschio</option>
-											<option value="F">Femmina</option>
-											<option value="O">Altro</option>
-										</select>
-										@if(genere.invalid && genere.dirty){
-										<div style="color:red;font-weight:bold">
-											@if(genere.errors?.["required"]){
-											<small>Il campo genere è obbligatorio</small>
-											}
-										</div>
-										}
-									</div>
-									<div class="col-md-4">
-										<label class="form-label" for="codiceFiscale">Codice Fiscale</label>
-										<input class="form-control text-uppercase" id="codiceFiscale"
-											name="codiceFiscale" type="text" maxlength="16"
-											[(ngModel)]="Paziente.codiceFiscale" placeholder="Es. RSSMRA80A01H501U"
-											(ngModelChange)="onCodiceFiscaleChange($event)" required
-											#codiceFiscale="ngModel"
-											pattern="^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$">
-										@if(codiceFiscale.invalid && codiceFiscale.dirty){
-										<div style="color:red;font-weight:bold">
-											@if(codiceFiscale.errors?.["required"]){
-											<small>Il campo codice fiscale è obbligatorio</small>
-											}
-											@if(codiceFiscale.errors?.["pattern"]){
-											<small>Il campo codice fiscale inserito non è valido</small>
-											}
-										</div>
-										}
-									</div>
+          <div class="registration-body p-4 p-md-5">
+            <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+              <section class="mb-4">
+                <h2 class="section-title">Dati anagrafici</h2>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label" for="nome">Nome</label>
+                    <input
+                      class="form-control"
+                      id="nome"
+                      name="nome"
+                      type="text"
+                      [(ngModel)]="Registrazione.nome"
+                      placeholder="Es. Mario"
+                      required
+                      #nome="ngModel"
+                      minlength="2"
+                    />
+                    @if (nome.invalid && nome.dirty) {
+                      <div style="color: red; font-weight: bold">
+                        @if (nome.errors?.['required']) {
+                          <small>Il campo nome è obbligatorio</small>
+                        }
+                        @if (nome.errors?.['minlength']) {
+                          <small>Il campo nome deve avere almeno 2 caratteri</small>
+                        }
+                      </div>
+                    }
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label" for="cognome">Cognome</label>
+                    <input
+                      class="form-control"
+                      id="cognome"
+                      name="cognome"
+                      type="text"
+                      [(ngModel)]="Registrazione.cognome"
+                      placeholder="Es. Rossi"
+                      required
+                      #cognome="ngModel"
+                      minlength="2"
+                    />
+                    @if (cognome.invalid && cognome.dirty) {
+                      <div style="color: red; font-weight: bold">
+                        @if (cognome.errors?.['required']) {
+                          <small>Il campo cognome è obbligatorio</small>
+                        }
+                        @if (cognome.errors?.['minlength']) {
+                          <small>Il campo cognome deve avere almeno 2 caratteri</small>
+                        }
+                      </div>
+                    }
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label" for="dataNascita">Data di nascita</label>
+                    <input
+                      class="form-control"
+                      id="dataNascita"
+                      name="dataNascita"
+                      type="date"
+                      [(ngModel)]="Registrazione.dataNascita"
+                      required
+                      #dataNascita="ngModel"
+                      [max]="maxDate"
+                    />
+                    @if (dataNascita.invalid && dataNascita.dirty) {
+                      <div style="color: red; font-weight: bold">
+                        @if (dataNascita.errors?.['required']) {
+                          <small>Il campo data di nascita è obbligatorio</small>
+                        }
+                        @if (dataNascita.errors?.['max']) {
+                          <small>La data di nascita non può essere futura</small>
+                        }
+                      </div>
+                    }
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label" for="genere">Genere</label>
+                    <select
+                      class="form-select"
+                      id="genere"
+                      name="genere"
+                      [(ngModel)]="Registrazione.genere"
+                      required
+                      #genere="ngModel"
+                    >
+                      <option value="">Seleziona</option>
+                      <option value="M">Maschio</option>
+                      <option value="F">Femmina</option>
+                      <option value="O">Altro</option>
+                    </select>
+                    @if (genere.invalid && genere.dirty) {
+                      <div style="color: red; font-weight: bold">
+                        @if (genere.errors?.['required']) {
+                          <small>Il campo genere è obbligatorio</small>
+                        }
+                      </div>
+                    }
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label" for="codiceFiscale">Codice Fiscale</label>
+                    <input
+                      class="form-control text-uppercase"
+                      id="codiceFiscale"
+                      name="codiceFiscale"
+                      type="text"
+                      maxlength="16"
+                      [(ngModel)]="Registrazione.codiceFiscale"
+                      placeholder="Es. RSSMRA80A01H501U"
+                      (ngModelChange)="onCodiceFiscaleChange($event)"
+                      required
+                      #codiceFiscale="ngModel"
+                      pattern="^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$"
+                    />
+                    @if (codiceFiscale.invalid && codiceFiscale.dirty) {
+                      <div style="color: red; font-weight: bold">
+                        @if (codiceFiscale.errors?.['required']) {
+                          <small>Il campo codice fiscale è obbligatorio</small>
+                        }
+                        @if (codiceFiscale.errors?.['pattern']) {
+                          <small>Il campo codice fiscale inserito non è valido</small>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+              </section>
 
-								</div>
-							</section>
+              <section class="mb-4">
+                <h2 class="section-title">Contatti e accesso</h2>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label" for="email">Email</label>
+                    <input
+                      class="form-control"
+                      id="email"
+                      name="email"
+                      type="email"
+                      [(ngModel)]="Registrazione.email"
+                      placeholder="Es. mario.rossi@email.it"
+                      required
+                      #email="ngModel"
+                      pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                    />
+                    @if (email.invalid && email.dirty) {
+                      <div style="color: red; font-weight: bold">
+                        @if (email.errors?.['required']) {
+                          <small>Il campo email è obbligatorio</small>
+                        }
+                        @if (email.errors?.['pattern']) {
+                          <small>Il campo email inserito non è valido</small>
+                        }
+                      </div>
+                    }
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label" for="telefono"
+                      >Telefono <span class="fw-light fst-italic">con prefisso</span></label
+                    >
+                    <input
+                      class="form-control"
+                      id="telefono"
+                      name="telefono"
+                      type="tel"
+                      [(ngModel)]="Registrazione.telefono"
+                      placeholder="Es. +39 3331234567"
+                      required
+                      #telefono="ngModel"
+                      pattern="^\+[1-9]\d{0,3}\s\d{4,14}$"
+                    />
+                    @if (telefono.invalid && telefono.dirty) {
+                      <div style="color: red; font-weight: bold">
+                        @if (telefono.errors?.['required']) {
+                          <small>Il campo telefono è obbligatorio</small>
+                        }
+                        @if (telefono.errors?.['pattern']) {
+                          <small
+                            >Il campo telefono inserito non è valido. Deve includere il prefisso
+                            internazionale (es. +39)</small
+                          >
+                        }
+                      </div>
+                    }
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label" for="password">Password</label>
+                    <input
+                      class="form-control"
+                      id="password"
+                      name="password"
+                      type="password"
+                      [(ngModel)]="Registrazione.password"
+                      placeholder="Almeno 8 caratteri"
+                      required
+                      #password="ngModel"
+                      minlength="8"
+                    />
+                    @if (password.invalid && password.dirty) {
+                      <div style="color: red; font-weight: bold">
+                        @if (password.errors?.['required']) {
+                          <small>Il campo password è obbligatorio</small>
+                        }
+                        @if (password.errors?.['minlength']) {
+                          <small>La password deve essere lunga almeno 8 caratteri</small>
+                        }
+                      </div>
+                    }
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label" for="confermaPassword">Conferma Password</label>
+                    <input
+                      class="form-control"
+                      id="confermaPassword"
+                      name="confermaPassword"
+                      type="password"
+                      [(ngModel)]="Registrazione.confermaPassword"
+                      placeholder="Ripeti la password"
+                      required
+                      #confermaPassword="ngModel"
+                    />
+                    @if (
+                      confermaPassword.dirty &&
+                      (confermaPassword.errors?.['required'] ||
+                        (Registrazione.password !== Registrazione.confermaPassword &&
+                          Registrazione.confermaPassword))
+                    ) {
+                      <div style="color: red; font-weight: bold">
+                        @if (confermaPassword.errors?.['required']) {
+                          <small>Il campo conferma password è obbligatorio</small>
+                        } @else if (
+                          Registrazione.password !== Registrazione.confermaPassword &&
+                          Registrazione.confermaPassword
+                        ) {
+                          <small>Le password non coincidono</small>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+              </section>
 
-							<section class="mb-4">
-								<h2 class="section-title">Contatti e accesso</h2>
-								<div class="row g-3">
-									<div class="col-md-6">
-										<label class="form-label" for="email">Email</label>
-										<input class="form-control" id="email" name="email" type="email"
-											[(ngModel)]="Paziente.email" placeholder="Es. mario.rossi@email.it" required
-											#email="ngModel" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$">
-										@if(email.invalid && email.dirty){
-										<div style="color:red;font-weight:bold">
-											@if(email.errors?.["required"]){
-											<small>Il campo email è obbligatorio</small>
-											}
-											@if(email.errors?.["pattern"]){
-											<small>Il campo email inserito non è valido</small>
-											}
-										</div>
-										}
+              <section class="mb-4">
+                <h2 class="section-title">Residenza</h2>
+                <div class="row g-3">
+                  <div class="col-12 col-md-3">
+                    <label class="form-label" for="toponimo">Toponimo</label>
+                    <select
+                      class="form-select"
+                      id="toponimo"
+                      name="toponimo"
+                      [(ngModel)]="Registrazione.idToponimo"
+                      required
+                      #idToponimo="ngModel"
+                      required
+                    >
+                      <option value="">Seleziona...</option>
+                      @for (t of toponimi; track $index) {
+                        <option [value]="t.ID">{{ t.Toponimo }}</option>
+                      }
+                    </select>
+                    @if (idToponimo.invalid && idToponimo.dirty) {
+                      <div style="color: red; font-weight: bold">
+                        @if (idToponimo.errors?.['required']) {
+                          <small>Il campo toponimo è obbligatorio</small>
+                        }
+                      </div>
+                    }
+                  </div>
+                  <div class="col-12 col-md-7">
+                    <label class="form-label" for="indirizzo"
+                      >Indirizzo
+                      <span class="fw-light fst-italic" style="font-size: 0.75rem"
+                        >toponimo richiesto solo con ‘Altro...’</span
+                      ></label
+                    >
+                    <input
+                      class="form-control"
+                      id="indirizzo"
+                      name="indirizzo"
+                      type="text"
+                      [(ngModel)]="Registrazione.indirizzo"
+                      placeholder="Es. Roma"
+                      required
+                      #indirizzo="ngModel"
+                    />
+                    @if (indirizzo.invalid && indirizzo.dirty) {
+                      <div style="color: red; font-weight: bold">
+                        @if (indirizzo.errors?.['required']) {
+                          <small>Il campo indirizzo è obbligatorio</small>
+                        }
+                      </div>
+                    }
+                  </div>
+                  <div class="col-12 col-md-2">
+                    <label class="form-label" for="ncivico">N. Civico</label>
+                    <input
+                      class="form-control"
+                      id="ncivico"
+                      name="ncivico"
+                      type="text"
+                      [(ngModel)]="Registrazione.ncivico"
+                      placeholder="Es. 12A"
+                      required
+                      #ncivico="ngModel"
+                    />
+                    @if (ncivico.invalid && ncivico.dirty) {
+                      <div style="color: red; font-weight: bold">
+                        @if (ncivico.errors?.['required']) {
+                          <small>Il campo n. civico è obbligatorio</small>
+                        }
+                      </div>
+                    }
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label class="form-label" for="provincia">Provincia</label>
+                    <select
+                      class="form-select"
+                      id="provincia"
+                      name="provincia"
+                      [(ngModel)]="Registrazione.idProvincia"
+                      required
+                      (change)="onProvinciaChange($event)"
+                      #idProvincia="ngModel"
+                    >
+                      <option value="">Seleziona...</option>
+                      @for (pr of province; track $index) {
+                        <option [value]="pr.ID">{{ pr.Provincia }}</option>
+                      }
+                    </select>
+                    @if (idProvincia.invalid && idProvincia.dirty) {
+                      <div style="color: red; font-weight: bold">
+                        @if (idProvincia.errors?.['required']) {
+                          <small>Il campo provincia è obbligatorio</small>
+                        }
+                      </div>
+                    }
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label class="form-label" for="comune">Comune</label>
+                    <select
+                      class="form-select"
+                      id="comune"
+                      name="comune"
+                      [(ngModel)]="Registrazione.idComune"
+                      disabled
+                      #idComune="ngModel"
+                    >
+                      <option value="">Seleziona...</option>
+                      @for (comune of comuni; track $index) {
+                        <option [value]="comune.ID">{{ comune.Comune }}</option>
+                      }
+                    </select>
+                    @if (idComune.invalid && idComune.dirty) {
+                      <div style="color: red; font-weight: bold">
+                        @if (idComune.errors?.['required']) {
+                          <small>Il campo comune è obbligatorio</small>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+              </section>
+              @if (!isAdmin) {
+                <section class="mb-4">
+                  <h2 class="section-title">Informazioni paziente</h2>
+                  <div class="row g-3">
+                    <div class="col-md-4">
+                      <label class="form-label" for="gruppo">Gruppo sanguigno</label>
+                      <select
+                        class="form-select"
+                        id="gruppo"
+                        name="gruppoSanguigno"
+                        [(ngModel)]="Registrazione.gruppoSanguigno"
+                        required
+                        #gruppoSanguigno="ngModel"
+                        required
+                      >
+                        <option [ngValue]="''">Seleziona</option>
+                        <option value="0+">0+</option>
+                        <option value="0-">0-</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                      </select>
+                      @if (gruppoSanguigno.invalid && gruppoSanguigno.dirty) {
+                        <div style="color: red; font-weight: bold">
+                          @if (gruppoSanguigno.errors?.['required']) {
+                            <small>Il campo gruppo sanguigno è obbligatorio</small>
+                          }
+                        </div>
+                      }
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label" for="peso">Peso (kg)</label>
+                      <input
+                        class="form-control"
+                        id="peso"
+                        name="peso"
+                        type="number"
+                        step="0.1"
+                        [(ngModel)]="Registrazione.peso"
+                        placeholder="Es. 72.5"
+                        required
+                        #peso="ngModel"
+                      />
 
-									</div>
-									<div class="col-md-6">
-										<label class="form-label" for="telefono">Telefono <span
-												class="fw-light fst-italic">con prefisso</span></label>
-										<input class="form-control" id="telefono" name="telefono" type="tel"
-											[(ngModel)]="Paziente.telefono" placeholder="Es. 3331234567" required
-											#telefono="ngModel" pattern="^\+[1-9]\d{0,3}\s\d{4,14}$">
-										@if(telefono.invalid && telefono.dirty){
-										<div style="color:red;font-weight:bold">
-											@if(telefono.errors?.["required"]){
-											<small>Il campo telefono è obbligatorio</small>
-											}
-											@if(telefono.errors?.["pattern"]){
-											<small>Il campo telefono inserito non è valido. Deve includere il prefisso
-												internazionale (es. +39)</small>
-											}
-										</div>
-										}
-									</div>
-									<div class="col-md-6">
-										<label class="form-label" for="password">Password</label>
-										<input class="form-control" id="password" name="password" type="password"
-											[(ngModel)]="Paziente.password" placeholder="Almeno 8 caratteri" required
-											#password="ngModel" minlength="8">
-										@if(password.invalid && password.dirty){
-										<div style="color:red;font-weight:bold">
-											@if(password.errors?.["required"]){
-											<small>Il campo password è obbligatorio</small>
-											}
-											@if(password.errors?.["minlength"]){
-											<small>La password deve essere lunga almeno 8 caratteri</small>
-											}
-										</div>
-										}
-									</div>
-									<div class="col-md-6">
-										<label class="form-label" for="confermaPassword">Conferma Password</label>
-										<input class="form-control" id="confermaPassword" name="confermaPassword"
-											type="password" [(ngModel)]="Paziente.confermaPassword"
-											placeholder="Ripeti la password" required #confermaPassword="ngModel">
-										@if(confermaPassword.dirty && (confermaPassword.errors?.["required"] ||
-										(Paziente.password !== Paziente.confermaPassword &&
-										Paziente.confermaPassword))){
-										<div style="color:red;font-weight:bold">
-											@if(confermaPassword.errors?.["required"]){
-											<small>Il campo conferma password è obbligatorio</small>
-											}
-											@else if(Paziente.password !== Paziente.confermaPassword &&
-											Paziente.confermaPassword){
-											<small>Le password non coincidono</small>
-											}
-										</div>
-										}
-									</div>
-								</div>
-							</section>
-
-							<section class="mb-4">
-								<h2 class="section-title">Residenza</h2>
-								<div class="row g-3">
-									<div class="col-12 col-md-3">
-										<label class="form-label" for="toponimo">Toponimo</label>
-										<select class="form-select" id="toponimo" name="toponimo"
-											[(ngModel)]="Paziente.idToponimo" required #idToponimo="ngModel" required>
-											<option value="">Seleziona...</option>
-											@for(t of toponimi; track $index){
-											<option [value]="t.ID">{{ t.Toponimo }}</option>
-											}
-
-										</select>
-										@if(idToponimo.invalid && idToponimo.dirty){
-										<div style="color:red;font-weight:bold">
-											@if(idToponimo.errors?.["required"]){
-											<small>Il campo toponimo è obbligatorio</small>
-											}
-										</div>
-										}
-									</div>
-									<div class="col-12 col-md-7">
-										<label class="form-label" for="indirizzo">Indirizzo <span
-												class="fw-light fst-italic" style="font-size: 0.75rem;">toponimo
-												richiesto solo con ‘Altro...’</span></label>
-										<input class="form-control" id="indirizzo" name="indirizzo" type="text"
-											[(ngModel)]="Paziente.indirizzo" placeholder="Es. Roma" required
-											#indirizzo="ngModel">
-										@if(indirizzo.invalid && indirizzo.dirty){
-										<div style="color:red;font-weight:bold">
-											@if(indirizzo.errors?.["required"]){
-											<small>Il campo indirizzo è obbligatorio</small>
-											}
-										</div>
-										}
-									</div>
-									<div class="col-12 col-md-2">
-										<label class="form-label" for="ncivico">N. Civico</label>
-										<input class="form-control" id="ncivico" name="ncivico" type="text"
-											[(ngModel)]="Paziente.ncivico" placeholder="Es. 12A" required
-											#ncivico="ngModel">
-										@if(ncivico.invalid && ncivico.dirty){
-										<div style="color:red;font-weight:bold">
-											@if(ncivico.errors?.["required"]){
-											<small>Il campo n. civico è obbligatorio</small>
-											}
-										</div>
-										}
-									</div>
-									<div class="col-12 col-md-6">
-										<label class="form-label" for="provincia">Provincia</label>
-										<select class="form-select" id="provincia" name="provincia"
-											[(ngModel)]="Paziente.idProvincia" required
-											(change)="onProvinciaChange($event)" #idProvincia="ngModel">
-											<option value="">Seleziona...</option>
-											@for(pr of province; track $index){
-											<option [value]="pr.ID">{{ pr.Provincia }}</option>
-											}
-										</select>
-										@if(idProvincia.invalid && idProvincia.dirty){
-										<div style="color:red;font-weight:bold">
-											@if(idProvincia.errors?.["required"]){
-											<small>Il campo provincia è obbligatorio</small>
-											}
-										</div>
-										}
-									</div>
-									<div class="col-12 col-md-6">
-										<label class="form-label" for="comune">Comune</label>
-										<select class="form-select" id="comune" name="comune"
-											[(ngModel)]="Paziente.idComune" disabled #idComune="ngModel">
-											<option value="">Seleziona...</option>
-											@for(comune of comuni; track $index){
-											<option [value]="comune.ID">{{ comune.Comune }}</option>
-											}
-										</select>
-										@if(idComune.invalid && idComune.dirty){
-										<div style="color:red;font-weight:bold">
-											@if(idComune.errors?.["required"]){
-											<small>Il campo comune è obbligatorio</small>
-											}
-										</div>
-										}
-									</div>
-								</div>
-							</section>
-							@if(!isAdmin){
-							<section class="mb-4">
-								<h2 class="section-title">Informazioni paziente</h2>
-								<div class="row g-3">
-									<div class="col-md-4">
-										<label class="form-label" for="gruppo">Gruppo sanguigno</label>
-										<select class="form-select" id="gruppo" name="gruppoSanguigno"
-											[(ngModel)]="Paziente.gruppoSanguigno" required #gruppoSanguigno="ngModel"
-											required>
-											<option [ngValue]="''">Seleziona</option>
-											<option value="0+">0+</option>
-											<option value="0-">0-</option>
-											<option value="A+">A+</option>
-											<option value="A-">A-</option>
-											<option value="B+">B+</option>
-											<option value="B-">B-</option>
-											<option value="AB+">AB+</option>
-											<option value="AB-">AB-</option>
-										</select>
-										@if(gruppoSanguigno.invalid && gruppoSanguigno.dirty){
-										<div style="color:red;font-weight:bold">
-											@if(gruppoSanguigno.errors?.["required"]){
-											<small>Il campo gruppo sanguigno è obbligatorio</small>
-											}
-										</div>
-										}
-									</div>
-									<div class="col-md-4">
-										<label class="form-label" for="peso">Peso (kg)</label>
-										<input class="form-control" id="peso" name="peso" type="number" step="0.1"
-											[(ngModel)]="Paziente.peso" placeholder="Es. 72.5" required #peso="ngModel">
-
-										@if(peso.invalid && peso.dirty){
-										<div style="color:red;font-weight:bold">
-											@if(peso.errors?.["required"]){
-											<small>Il campo peso è obbligatorio</small>
-											}
-										</div>
-										}
-									</div>
-									<div class="col-md-4">
-										<label class="form-label" for="altezza">Altezza (cm)</label>
-										<input class="form-control" id="altezza" name="altezza" type="number" step="0.1"
-											[(ngModel)]="Paziente.altezza" placeholder="Es. 175" required
-											#altezza="ngModel">
-										@if(altezza.invalid && altezza.dirty){
-										<div style="color:red;font-weight:bold">
-											@if(altezza.errors?.["required"]){
-											<small>Il campo altezza è obbligatorio</small>
-											}
-										</div>
-										}
-									</div>
-								</div>
-							</section>
+                      @if (peso.invalid && peso.dirty) {
+                        <div style="color: red; font-weight: bold">
+                          @if (peso.errors?.['required']) {
+                            <small>Il campo peso è obbligatorio</small>
+                          }
+                        </div>
+                      }
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label" for="altezza">Altezza (cm)</label>
+                      <input
+                        class="form-control"
+                        id="altezza"
+                        name="altezza"
+                        type="number"
+                        step="0.1"
+                        [(ngModel)]="Registrazione.altezza"
+                        placeholder="Es. 175"
+                        required
+                        #altezza="ngModel"
+                      />
+                      @if (altezza.invalid && altezza.dirty) {
+                        <div style="color: red; font-weight: bold">
+                          @if (altezza.errors?.['required']) {
+                            <small>Il campo altezza è obbligatorio</small>
+                          }
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </section>
+              } @else {
+                <section class="mb-4">
+                  <h2 class="section-title">Informazioni dottore</h2>
+                  <div class="row g-3">
+                    <div class="col-md-4">
+                      <label class="form-label" for="reparto">Reparto</label>
+                      <select class="form-select" id="reparto" name="reparto" [(ngModel)]="Registrazione.reparto" required #reparto="ngModel">
+                        <option value="">Seleziona</option>
+							@for (rep of reparti; track $index) {
+							<option [value]="rep.ID">{{ rep.Reparto }}</option>
 							}
-							@else{
-								<section class="mb-4">
-									<h2 class="section-title">Informazioni dottore</h2>
-									<div class="row g-3">
-										<div class="col-md-4">
-											<label class="form-label" for="reparto">Reparto</label>
-											<select class="form-select" id="reparto" name="reparto"
-												 required
-												required>
-												<option value="">Seleziona</option>
-											</select>
-											<!--@if(gruppoSanguigno.invalid && gruppoSanguigno.dirty){
-											<div style="color:red;font-weight:bold">
-												@if(gruppoSanguigno.errors?.["required"]){
-												<small>Il campo gruppo sanguigno è obbligatorio</small>
-												}
-											</div>
-											}-->
-										</div>
-										
-									</div>
-								</section>
-							}
-
-							@if(erroreRegistrazione){
-							<div class="alert alert-danger py-2" role="alert">
-								{{ erroreRegistrazione }}
+                      </select>
+                      @if(reparto.invalid && reparto.dirty){
+							<div style="color:red;font-weight:bold">
+								@if(reparto.errors?.["required"]){
+								<small>Il campo reparto è obbligatorio</small>
+								}
 							</div>
+						}
+                    </div>
+					<div class="col-md-4">
+						<label class="form-label" for="ruolo">Ruolo</label>
+						<input
+						class="form-control"
+						id="ruolo"
+						name="ruolo"
+						type="text"
+						[(ngModel)]="Registrazione.ruolo"
+						placeholder="Es. Specialista"
+						required
+						#ruolo="ngModel"
+						/>
+						@if (ruolo.invalid && ruolo.dirty) {
+						<div style="color: red; font-weight: bold">
+							@if (ruolo.errors?.['required']) {
+							<small>Il campo ruolo è obbligatorio</small>
 							}
-
-							<div class="d-flex justify-content-end pt-2">
-								<button type="submit" class="btn btn-primary px-4 py-2" [disabled]="f.invalid">Crea
-									account paziente</button>
-							</div>
-						</form>
+						</div>
+						}
 					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+					<div class="col-md-4">
+                      <label class="form-label" for="prezzo">Prezzo Visita</label>
+					  <div class="input-group">
+						
+						<input
+                        class="form-control"
+                        id="prezzo"
+                        name="prezzo"
+                        type="number"
+                        step="0.01"
+                        [(ngModel)]="Registrazione.prezzoVisita"
+                        placeholder="Es. 80,00"
+                        required
+                        #prezzo="ngModel"
+						min="0.01"
+                      />
+					  <span class="input-group-text">€</span>
+					  </div>
+                      
+                      @if (prezzo.invalid && prezzo.dirty) {
+                        <div style="color: red; font-weight: bold">
+                          @if (prezzo.errors?.['required']) {
+                            <small>Il campo prezzo visita è obbligatorio</small>
+                          }
+						  @if(prezzo.errors?.['min']){
+							<small>La visita non può essere gratuita</small>
+						  }
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </section>
+              }
+
+              @if (erroreRegistrazione) {
+                <div class="alert alert-danger py-2" role="alert">
+                  {{ erroreRegistrazione }}
+                </div>
+              }
+
+              <div class="d-flex justify-content-end gap-2 pt-2">
+                <a
+                  class="btn btn-outline-secondary px-4 py-2"
+                  [routerLink]="isAdmin ? '/home-admin' : '/'"
+                  >Indietro</a
+                >
+                <button type="submit" class="btn btn-primary px-4 py-2" [disabled]="f.invalid">
+                  @if (!isAdmin) {
+                    Crea account paziente
+                  } @else {
+                    Crea account dottore
+                  }
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

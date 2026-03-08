@@ -78,10 +78,10 @@
 							@if(!isPrenotazioneAnnullata(prenotazione)){
 								@if(!isPrenotazionePagata(prenotazione) && !isPrenotazioneAnnullata(prenotazione)){
 							@if(isAdmin){
-							<button type="button" class="btn btn-outline-primary btn-sm paga-btn" (click)="onPagaPrenotazione(prenotazione.ID)">Contrassegna come pagato</button>
+							<button type="button" class="btn btn-outline-primary btn-sm paga-btn" (click)="onPagaPrenotazione(prenotazione)">Contrassegna come pagato</button>
 							}
 							@if(!isAdmin){
-							<button type="button" class="btn btn-outline-primary btn-sm paga-btn" (click)="onPagaPrenotazione(prenotazione.ID)">Paga</button>
+							<button type="button" class="btn btn-outline-primary btn-sm paga-btn" (click)="onPagaPrenotazione(prenotazione)">Paga</button>
 							}
 							}
 							<button type="button" class="btn btn-outline-warning btn-sm modifica-btn" (click)="onModificaClick(prenotazione.ID)">Modifica</button>
