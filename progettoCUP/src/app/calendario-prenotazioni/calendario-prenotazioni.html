@@ -2,6 +2,9 @@
     <div class="panel-head mb-2">
         <h2 class="panel-title mb-2 text-primary-emphasis">Calendario disponibilità</h2>
         <p class="small text-muted mb-2">{{ descrizioneSettimana }}</p>
+        @if(dataOraAttualeLabel){
+        <p class="small text-muted mb-2">Data e ora attuale prenotazione: {{ dataOraAttualeLabel }}</p>
+        }
         <div class="d-flex gap-2 align-items-center flex-nowrap calendario-toolbar">
             <div class="input-group input-group-sm">
                 <input type="date" class="form-control form-control-sm" aria-label="Vai a data" required [min]="dataMinimaRicerca"

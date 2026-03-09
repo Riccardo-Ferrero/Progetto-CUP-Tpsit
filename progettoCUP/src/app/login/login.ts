@@ -26,6 +26,7 @@ export class Login {
     const ris = await risposta.json();
 
     if(ris.result == "success"){
+      localStorage.removeItem('alertPrenotazioneSuccesso');
       const isAdmin = String(ris?.amministratore || '').trim().toUpperCase() === 'S';
       const isDottore = String(ris?.dottore || '').trim().toUpperCase() === 'S';
       this.router.navigate([isAdmin ? '/home-admin' : isDottore ? '/visualizza-prenotazioni' : '/home']);

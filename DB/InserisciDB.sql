@@ -443,7 +443,7 @@ INSERT INTO Comuni (ID, Comune, IDProvincia, CAP, ValComune) VALUES
 (350,'Balmuccia',8,'13010',' ');
 
 
--- LA PASSWORD dei profili qua di seguito Ã¨ SEMPRE 12345678
+-- LA PASSWORD dei profili è SEMPRE 12345678
 
 -- ========================
 -- ACCOUNT DOTTORI 
@@ -496,7 +496,7 @@ VALUES
 INSERT INTO Dottori
 (IDUtente, IDReparto, Ruolo, PrezzoVisita, ValDottore)
 VALUES
-(LAST_INSERT_ID(), 5, 'Chirurgo', 120.00, ' ');
+(LAST_INSERT_ID(), 5, 'Direttore', 120.00, ' ');
 
 
 -- ========================
@@ -744,7 +744,27 @@ VALUES
 (10, 5, '2026-03-26 08:00:00', 'S', 'Esame diagnostico', ' '),
 (3, 1, '2026-03-25 11:00:00', 'N', 'Consulenza', ' '),
 (6, 5, '2026-03-25 11:00:00', 'N', 'Teleconsulto', ' '),
-(3, 2, '2026-03-17 16:00:00', 'S', 'Teleconsulto', ' ');
+(3, 2, '2026-03-17 16:00:00', 'S', 'Teleconsulto', ' '),
+
+(1, 1, '2026-03-11 09:00:00', 'S', 'Visita specialistica', ' '),
+(2, 1, '2026-03-12 11:00:00', 'S', 'Follow-up', ' '),
+(3, 1, '2026-03-13 15:00:00', 'S', 'Consulenza', ' '),
+
+(4, 2, '2026-03-11 10:00:00', 'S', 'Prima visita', ' '),
+(5, 2, '2026-03-12 14:00:00', 'S', 'Visita di controllo', ' '),
+(6, 2, '2026-03-13 16:00:00', 'S', 'Teleconsulto', ' '),
+
+(7, 3, '2026-03-11 08:00:00', 'S', 'Visita specialistica', ' '),
+(8, 3, '2026-03-12 12:00:00', 'S', 'Consulenza', ' '),
+(9, 3, '2026-03-13 17:00:00', 'S', 'Follow-up', ' '),
+
+(10, 4, '2026-03-11 13:00:00', 'S', 'Prima visita', ' '),
+(1, 4, '2026-03-12 09:00:00', 'S', 'Visita specialistica', ' '),
+(2, 4, '2026-03-13 11:00:00', 'S', 'Esame diagnostico', ' '),
+
+(3, 5, '2026-03-11 15:00:00', 'S', 'Consulenza', ' '),
+(4, 5, '2026-03-12 10:00:00', 'S', 'Teleconsulto', ' '),
+(5, 5, '2026-03-13 14:00:00', 'S', 'Visita di controllo', ' ');
 
 
 

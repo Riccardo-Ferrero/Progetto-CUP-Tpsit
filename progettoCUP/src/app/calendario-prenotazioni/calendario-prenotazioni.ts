@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class CalendarioPrenotazioni implements OnInit, OnChanges {
   @Input() idDottore: number = 0;
+  @Input() dataOraAttualeLabel: string = '';
   @Output() slotSelezionato = new EventEmitter<string>();
 
   giorniSettimana: { data: Date; nome: string; numero: string; mese: string }[] = [];

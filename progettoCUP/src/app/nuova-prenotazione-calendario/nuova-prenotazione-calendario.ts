@@ -89,12 +89,12 @@ export class NuovaPrenotazioneCalendario implements OnInit {
 
       const rispostaJson = await risposta.json();
       if (risposta.ok && rispostaJson?.result === 'success') {
-        localStorage.setItem('alertPrenotazioneSuccesso', 'La prenotazione è stata aggiunta con successo');
         localStorage.removeItem('prenotazione');
         if(this.isAdmin){
           this.router.navigate(['/home-admin']);
         }
         else{
+          localStorage.setItem('alertPrenotazioneSuccesso', 'La prenotazione è stata aggiunta con successo');
           this.router.navigate(['/home']);
         }
         

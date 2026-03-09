@@ -5,7 +5,7 @@
 			<div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3">
 				<div>
 					<p class="intestazione mb-1">Modifica prenotazione</p>
-					<h1 class="h3 mb-1">Aggiorna giorno, orario e tipo visita</h1>
+					<h1 class="h3 mb-1">Aggiorna prenotazione</h1>
 					<p class="text-muted mb-0">Puoi modificare solo data/ora e tipologia della visita.</p>
 				</div>
 				<div class="step-badge">Modifica</div>
@@ -50,14 +50,14 @@
 					</div>
 
 					<div class="helper-note">
-						Seleziona un nuovo slot nel calendario e aggiorna il tipo visita, poi conferma la modifica.
+						Puoi modificare il tipo visita anche senza cambiare lo slot nel calendario.
 					</div>
 
 					<div class="mt-3 d-flex gap-2">
 						<button type="button" class="btn btn-outline-secondary btn-sm px-4 flex-fill" (click)="onAnnullaClick()">
 							Annulla
 						</button>
-						<button type="button" class="btn btn-primary btn-sm px-4 flex-fill" [disabled]="chiaveSlotSelezionato === ''" (click)="onContinuaModificaClick()">
+						<button type="button" class="btn btn-primary btn-sm px-4 flex-fill" [disabled]="invioModificaInCorso || !tipoVisitaSelezionato" (click)="onContinuaModificaClick()">
 							Continua
 						</button>
 					</div>
@@ -65,7 +65,7 @@
 			</div>
 
 			<div class="col-12 col-xl-8">
-				<calendario-prenotazioni [idDottore]="idDottoreSelezionato" (slotSelezionato)="onSlotSelezionato($event)"></calendario-prenotazioni>
+				<calendario-prenotazioni [idDottore]="idDottoreSelezionato" [dataOraAttualeLabel]="dataOraCorrenteLabel" (slotSelezionato)="onSlotSelezionato($event)"></calendario-prenotazioni>
 			</div>
 		</div>
 	</div>

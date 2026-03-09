@@ -1046,7 +1046,13 @@ app.post("/datiPrenotazione", (richiesta, risposta) => {
     return;
   }
   console.log("/datiPrenotazione", richiesta.body);
-  const query = `SELECT pr.*,
+  const query = `SELECT pr.ID,
+                        pr.IDPaziente,
+                        pr.IDDottore,
+                        DATE_FORMAT(pr.DataOra, '%Y-%m-%d %H:%i:%s') AS DataOra,
+                        pr.Pagata,
+                        pr.TipoVisita,
+                        pr.ValPrenotazione,
                         d.PrezzoVisita AS PrezzoVisita,
                         u.Nome AS NomeDottore,
                         u.Cognome AS CognomeDottore,
@@ -1088,7 +1094,7 @@ app.post("/modificaPrenotazione", (richiesta, risposta) => {
   const idPrenotazione = body.idPrenotazione;
   const dataOra = body.dataOra;
   const tipoVisita = body.tipoVisita;
-  if (!idPrenotazione || !dataOra || !tipoVisita) {
+  if (!idPrenotazione || !tipoVisita) {
     risposta
       .status(400)
       .send({
@@ -1098,12 +1104,20 @@ app.post("/modificaPrenotazione", (richiesta, risposta) => {
     return;
   }
   console.log("/modificaPrenotazione", richiesta.body);
-  const query = `UPDATE Prenotazioni
-                   SET DataOra = ?, TipoVisita = ?
-                   WHERE ID = ?`;
+  const aggiornaDataOra = Boolean(dataOra);
+  const query = aggiornaDataOra
+    ? `UPDATE Prenotazioni
+         SET DataOra = ?, TipoVisita = ?
+         WHERE ID = ?`
+    : `UPDATE Prenotazioni
+         SET TipoVisita = ?
+         WHERE ID = ?`;
+  const params = aggiornaDataOra
+    ? [dataOra, tipoVisita, idPrenotazione]
+    : [tipoVisita, idPrenotazione];
   connection.query(
     query,
-    [dataOra, tipoVisita, idPrenotazione],
+    params,
     (error, results) => {
       if (error) {
         risposta.statusCode = 500;

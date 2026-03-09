@@ -14,12 +14,14 @@ export class ModificaPrenotazione {
   idPrenotazioneModifica: number = 0;
   idDottoreSelezionato: number = 1;
   chiaveSlotSelezionato: string = '';
+  dataOraCorrenteDb: string = '';
   invioModificaInCorso: boolean = false;
   isAdmin: boolean = false;
   isDottore: boolean = false;
 
   nomeDottoreCompleto: string = '-';
   repartoDottore: string = '-';
+  dataOraCorrenteLabel: string = '-';
   pagataLabel: string = 'No';
   validitaLabel: string = 'Valida';
   tipoVisitaSelezionato: string = '';
@@ -79,6 +81,8 @@ export class ModificaPrenotazione {
       this.pagataLabel = String(prenotazione?.Pagata || '').toUpperCase() === 'S' ? 'Sì' : 'No';
       this.validitaLabel = String(prenotazione?.ValPrenotazione || '').trim() === '' ? 'Valida' : 'Annullata';
       this.tipoVisitaSelezionato = String(prenotazione?.TipoVisita || '');
+      this.dataOraCorrenteDb = this.formatDataOraPerDb(prenotazione?.DataOra);
+      this.dataOraCorrenteLabel = this.formatDataOraPerLabel(this.dataOraCorrenteDb);
 
       if (this.tipoVisitaSelezionato && !this.tipiVisita.includes(this.tipoVisitaSelezionato)) {
         this.tipiVisita = [this.tipoVisitaSelezionato, ...this.tipiVisita];
@@ -99,6 +103,70 @@ export class ModificaPrenotazione {
     this.chiaveSlotSelezionato = slot;
   }
 
+  private formatDataOraPerDb(dataOra: any): string {
+    if (!dataOra) {
+      return '';
+    }
+
+    if (dataOra instanceof Date && !Number.isNaN(dataOra.getTime())) {
+      return this.formatDateToDbLocal(dataOra);
+    }
+
+    const valore = String(dataOra).trim();
+    if (!valore) {
+      return '';
+    }
+
+    if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(valore)) {
+      return valore;
+    }
+
+    if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/.test(valore)) {
+      return `${valore}:00`;
+    }
+
+    if (valore.includes('T')) {
+      const data = new Date(valore);
+      if (!Number.isNaN(data.getTime())) {
+        return this.formatDateToDbLocal(data);
+      }
+    }
+
+    return valore.slice(0, 19);
+  }
+
+  private formatDateToDbLocal(data: Date): string {
+    const anno = data.getFullYear();
+    const mese = String(data.getMonth() + 1).padStart(2, '0');
+    const giorno = String(data.getDate()).padStart(2, '0');
+    const ora = String(data.getHours()).padStart(2, '0');
+    const minuti = String(data.getMinutes()).padStart(2, '0');
+    const secondi = String(data.getSeconds()).padStart(2, '0');
+
+    return `${anno}-${mese}-${giorno} ${ora}:${minuti}:${secondi}`;
+  }
+
+  private formatDataOraPerLabel(dataOraDb: string): string {
+    const valore = String(dataOraDb || '').trim();
+    if (!valore || valore.length < 16) {
+      return '-';
+    }
+
+    const [dataParte, oraParte] = valore.split(' ');
+    if (!dataParte || !oraParte) {
+      return valore;
+    }
+
+    const [anno, mese, giorno] = dataParte.split('-');
+    const oraMinuti = oraParte.slice(0, 5);
+
+    if (!anno || !mese || !giorno) {
+      return valore;
+    }
+
+    return `${giorno}/${mese}/${anno} ${oraMinuti}`;
+  }
+
   onAnnullaClick() {
     this.mostraModalConfermaAnnulla = true;
   }
@@ -115,11 +183,18 @@ export class ModificaPrenotazione {
   }
 
   async onContinuaModificaClick() {
-    if (this.invioModificaInCorso || !this.chiaveSlotSelezionato || !this.idPrenotazioneModifica || !this.tipoVisitaSelezionato) {
+    if (this.invioModificaInCorso || !this.idPrenotazioneModifica || !this.tipoVisitaSelezionato) {
       return;
     }
 
-    const dataOraDb = `${this.chiaveSlotSelezionato}:00`;
+    const dataOraDb = this.chiaveSlotSelezionato
+      ? `${this.chiaveSlotSelezionato}:00`
+      : this.dataOraCorrenteDb;
+
+    if (!dataOraDb) {
+      return;
+    }
+
     this.invioModificaInCorso = true;
 
     try {
@@ -150,7 +225,6 @@ export class ModificaPrenotazione {
 
       if (risposta.ok && rispostaJson?.result === 'success') {
         localStorage.removeItem('idPrenotazioneModifica');
-        localStorage.setItem('alertPrenotazioneSuccesso', 'La prenotazione è stata modificata con successo');
         if(this.isAdmin){
           this.router.navigate(['/home-admin']);
         }
@@ -158,6 +232,7 @@ export class ModificaPrenotazione {
           this.router.navigate(['/visualizza-prenotazioni']);
         }
         else{
+          localStorage.setItem('alertPrenotazioneSuccesso', 'La prenotazione è stata modificata con successo');
           this.router.navigate(['/home']);
         }
         
